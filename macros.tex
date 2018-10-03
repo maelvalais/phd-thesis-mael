@@ -232,3 +232,8 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\Link}[3]{\mathit{Link}(#1,#2,#3)}
 
 \usepackage{madoko2}
+
+% Disable ligatures, e.g., \texttt{--directory=dir} where
+% the hyphens '--' are turned into '—' (ligature)
+\usepackage{microtype}
+\DisableLigatures[-]{family=tt*}

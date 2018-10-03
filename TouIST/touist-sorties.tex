@@ -24,16 +24,18 @@ Les solveurs externes doivent utiliser les conventions Minisat + (Q)DIMACS suiva
 \begin{itemize}
     \item accepter DIMACS ou QDIMACS sur l'entrée standard (stdin) ;
     \item afficher un modèle (ou un modèle partiel) au format DIMACS sur la sortie standard (stdout) ; le modèle peut éventuellement être étendu sur plusieurs lignes, chacune commençant par \mdcode{v}, \mdcode{V} ou rien (pour la compatibilité avec Minisat), et chaque ligne peut de manière optionnelle se terminer par 0.
-%\end{itemize}%mdk
+\begin{footnotesize}
 \begin{mdpre}%mdk
 \noindent\preindent{2}v~-1~2~-3~4~0\\
 \preindent{2}v~5~-6~0%mdk
 \end{mdpre}
+\end{footnotesize}
 %\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
 
 \item retourner 10 (comme code d'erreur) sur le problème est SAT, 20 s'il est UNSAT.%mdk
 %mdk
 \end{itemize}%mdk
+
 
 \noindent Les solveurs SAT que nous avons testés (\mdcode{brew} est disponible pour~\href{http://linuxbrew.sh}{linux} et~\href{https://brew.sh}{mac}):%mdk
 
@@ -82,15 +84,16 @@ which will give you \mdcode{caqe-mac}:%mdk
 \end{mdpre}
 \end{footnotesize}
 
-They also have a Homebrew tap repository but this version does not contain
-the needed \mdcode{--partial-assignments}.%mdk%mdk
+They also have a Homebrew tap repository but this version does not contain the needed \mdcode{--partial-assignments}.%mdk%mdk
 
 \item{}
 \href{https://github.com/perebor/qute}{qute} (2017-02-27, fork maelvalais/qute, minisat-based)%mdk
+\begin{footnotesize}
 \begin{mdpre}%mdk
 \noindent brew~install~touist/touist/qute\\
 touist~test/qbf/allumettes2.touist~--qbf~--solver="qute~--partial-certificate"%mdk
 \end{mdpre}%mdk
+\end{footnotesize}
 
 \item{}
 \href{http://lonsing.github.io/depqbf/}{depqbf} (2017-08-02, DepQBF 6.03, Minisat-based QCDCL)%mdk
@@ -228,7 +231,9 @@ With this format, you can easily filter the results. For example,
 the following command will only show the propositions that are \mdcode{{\mdcolor{navy}true}}:
 \begin{mdpre}%mdk
 \noindent\preindent{4}echo~a~and~b~\textbar{}~touist~-~--solve~\textbar{}~grep~\textasciicircum{}1%mdk
-\end{mdpre}\noindent**\mdcode{--solve~--interactive} allows the user to display the models one after
+\end{mdpre}
+
+\textbf{\mdcode{--solve~--interactive}} allows the user to display the models one after
 the other. Press enter or any other key to continue and \mdcode{q} or \mdcode{n} to stop.
 
 \textbf{\mdcode{--solve~--limit~N}} allows to display multiple models. With this option,
@@ -522,7 +527,8 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="qute~--partial-certificate"%m
 \href{http://lonsing.github.io/depqbf/}{depqbf} (2017-08-02, DepQBF 6.03, Minisat-based QCDCL)%mdk
 \begin{mdpre}%mdk
 \noindent brew~install~depqbf\\
-touist~test/qbf/allumettes2.touist~--qbf~--solver="depqbf~--qdo~--no-dynamic-nenofex"%mdk
+touist~test/qbf/allumettes2.touist~--qbf~--solver="depqbf\\
+\qquad\qquad --qdo~--no-dynamic-nenofex"%mdk
 \end{mdpre}%mdk
 
 \item{}

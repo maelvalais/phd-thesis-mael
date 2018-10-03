@@ -668,12 +668,12 @@
 \newcommand\prebr{\strut\newline\strut\ignorespaces}
 
 \newenvironment{mdpre}%
-  {\begin{mdparblock}[\mdpreskip]\ttfamily\raggedright\mdnohyphens
+  {\begin{footnotesize}\begin{mdparblock}[\mdpreskip]\ttfamily\raggedright\mdnohyphens
    \mdsetprespace
    \let\\\prebr
    \let\nobreakspace\prespace
   }%
-  {\end{mdparblock}}
+  {\end{mdparblock}\end{footnotesize}}
 
 \newlength\md@postskip
 \newenvironment{mdparblock}[1][\mdcompactskip]%

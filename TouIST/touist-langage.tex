@@ -111,7 +111,8 @@ Cette section présente les fonctionnalités liées au langage développé penda
 \noindent{\mdcolor{purple}\textless{}touist-file\textgreater{}}~::=~{\mdcolor{purple}\textless{}assign\textgreater{}}~{\mdcolor{purple}\textless{}touist-file\textgreater{}}\\
 ~~~~~~~~~~~~~~~~\textbar{}~{\mdcolor{purple}\textless{}formula\textgreater{}}~{\mdcolor{purple}\textless{}touist-file\textgreater{}}\\
 ~~~~~~~~~~~~~~~~\textbar{}~EOF%mdk
-\end{mdpre}\noindent Un fichier {\scshape TouIST} est  whitespace-separated\footnote{\noindent A whitespace is a space, tab or newline.%mdk
+\end{mdpre}\noindent Un fichier {\scshape TouIST} est 
+{\color{red} whitespace-separated\footnote{\noindent A whitespace is a space, tab or newline.%mdk
 \label{fn-whitespace}%mdk%mdk
 } list of
 assignments and formulas. Assignments are global and can be interleaved
@@ -862,6 +863,7 @@ is equivalent to%mdk
 \noindent The following table sums up the various \textquotedblleft{}limit\textquotedblright{} cases that may not be obvious.
 In this table, $k$ is a positive integer and $P$ is a set of propositions.%mdk
 
+
 \begin{mdcenter}%mdk
 \begin{mdtabular}{4}{\dimeval{(\linewidth)/4}}{1ex}%mdk
 \begin{tabular}{lccl}\midrule
@@ -882,6 +884,7 @@ In this table, $k$ is a positive integer and $P$ is a set of propositions.%mdk
 \end{tabular}\end{mdtabular}
 %mdk
 \end{mdcenter}%mdk
+
 
 \noindent How to read the table: for example, the row where $k>0$ and
 $\vert P\vert<k$ should be read "when using \mdcode{{\mdcolor{navy}atleast}}, all couples
@@ -994,3 +997,4 @@ to \textquotedblleft{}protect\textquotedblright{} the formula from being evaluat
 \noindent\noindent\[(a \vee b) \wedge (c \vee d) \wedge e
 \]%mdk
 
+} % fin de \color{red}
