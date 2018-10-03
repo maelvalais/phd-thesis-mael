@@ -17,7 +17,7 @@
 Les codages SAT dans les espaces de plans de \cite{MK99} ne peuvent pas être directement adaptés au CTE. Tous ces codages se réfèrent à trois étapes indexées (pas nécessairement consécutives) du plan, ce qui n'est pas possible dans un CTE car chaque règle ne peut se référer qu'à des noeuds présents sur une même branche de l'arbre. Pour contourner ce problème, il serait possible de dupliquer l'arbre en ajoutant, pour chaque variable de branchement $b_{i}$, deux autres variables de branchement $b^{\prime}_{i}$ et $b^{\prime\prime}_{i}$, et pour chaque noeud $X_{i}$, deux copies de noeud $X^{\prime}_{i}$ et $X^{\prime\prime}_{i}$ , et les règles d'équivalence $\bigwedge_{x_{i}\in X_{i}} \big((x_{i}\leftrightarrow x^{\prime}_{i})\wedge (x_{i}\leftrightarrow x^{\prime\prime}_{i})\big)$. Malheureusement, cela augmenterait inutilement le facteur de branchement. Nous proposons donc un nouveau codage dans les espaces de plans qui nous permet de ne faire référence qu'à des étapes consécutives du plan.
 
 Pour chaque variable $\f\in\F$, nous créons une variable propositionnelle $\openSingle{\f}$ pour exprimer que $\f$ se maintient à l'étape précédente et doit être protégé au moins jusqu'à l'étape en cours.
-Dans la figure~\ref{fig:causal-link}, la variable $f$ est une \textit {condition ouverte} à l'étape $\S_i$, impliquant que $\f\in\I$ ou une action $\b$ qui ajoute $\f$
+Dans la figure~\ref{fig:causal-link-cte}, la variable $f$ est une \textit {condition ouverte} à l'étape $\S_i$, impliquant que $\f\in\I$ ou une action $\b$ qui ajoute $\f$
 est exécutée dans une étape précédente $\S_{i-k}$.
 Les conditions ouvertes sont propagées vers l'arrière jusqu'à l'état initial ou jusqu'à une étape dans laquelle elles sont ajoutées par une action.
 
@@ -25,7 +25,7 @@ Les conditions ouvertes sont propagées vers l'arrière jusqu'à l'état initial
 \begin{figure}[hb!]\centering
 	\includegraphics[width=.4\textwidth]{figures/transitions}
     \caption{Lien causal: $\b$ produit $\f$ pour $\a$.}
-    \label{fig:causal-link}
+    \label{fig:causal-link-cte}
 \end{figure}
 
 Nous définissons l'ensemble des variables ``open'', noté $\openSet$, comme $\openSet = \{\openSingle{\f} ~|~ \f \in \F \}$. Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \openSet$.
