@@ -10,7 +10,7 @@
 \subsection{Intégration avec des solveurs externes}
 
 \noindent La plupart des solveurs SAT et QBF acceptent le format standard~\href{http://www.satcompetition.org/2009/format-benchmarks2009.html}{DIMACS} (resp.
-QDIMACS) comme langage d'entrée. Il suffit de donner la sortie DIMACS de \touist directement à un solveur et d'utiliser la table de correspondance (voir Section~\mdref{mapping-table}{3.2.2.1}).
+QDIMACS) comme langage d'entrée. Il suffit de donner la sortie DIMACS de \touist directement à un solveur et d'utiliser la table de correspondance (voir Section~\ref{mapping-table}).
 Mais il est également possible d'utiliser \touist pour effectuer à la fois l'appel d'un solveur externe et la traduction inverse du modèle DIMACS retourné par ce dernier vers les noms de variables propositionnelles en utilisant l'argument \mdcode{--solver}:%mdk
 \begin{footnotesize}
 \begin{mdpre}%mdk
@@ -101,7 +101,7 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="depqbf~--qdo~--no-dynamic-nen
 
 \item{}
 \href{http://fmv.jku.at/quantor/}{quantor} (2014-10-26, Quantor 3.2). It is not necessary to use this
-solver externally as it is included with \mdcode{touist} (see Section~\mdref{usage-qbf-solver}{3.2.5.1}).%mdk
+solver externally as it is included with \mdcode{touist} (see Section~\ref{usage-qbf-solver}).%mdk
 \begin{mdpre}%mdk
 \noindent brew~install~touist/touist/quantor\\
 touist~test/qbf/allumettes2.touist~--qbf~--solver="quantor"%mdk
@@ -138,8 +138,8 @@ and \mdcode{opam}) with the command%mdk
 \noindent\textbf{Note}.
 By default, \mdcode{touist} only comes with a SAT solver. Problems written in
 {\scshape TouIST} using the Satisfiability Modulo Theory (SMT) or Quantified
-Boolean Formulas (QBF) grammars can also be used (see Sections~\mdref{usage-smt}{3.2.4} and
-\mdref{usage-qbf}{3.2.5}).%mdk%mdk
+Boolean Formulas (QBF) grammars can also be used (see Sections~\ref{usage-smt} and
+\ref{usage-qbf}).%mdk%mdk
 
 \noindent\mdinline{vertical-align=middle}{\includegraphics[keepaspectratio=true,width=\dimwidth{1.00}]{figures/architecture}{}}%mdk
 
@@ -180,7 +180,7 @@ non-zero exit status anyway.%mdk
 \paragraph*{3.2.2.\hspace*{0.5em}Usage for propositional logic (SAT mode)}\label{usage-sat}%mdk%mdk
 
 \noindent The language accepted for propositional logic is described in
-\mdref{sec-propositional-logic-formulas}{2.7.4}. This mode is enabled by
+\ref{sec-propositional-logic-formulas}. This mode is enabled by
 default, but can be optionally expressed using the \mdcode{--sat} flag.%mdk
 
 \subsubsection{Mapping table for DIMACS output}\label{mapping-table}%mdk%mdk
@@ -333,7 +333,7 @@ information on timing and errors. With no N given (i.e., N=1):%mdk
 \begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
 
 \item time spent on translation and solving are displayed (see
-table~\mdref{timings}{12}).%mdk
+table~\ref{timings}).%mdk
 
 \item on syntax error, print more AST context (\mdcode{(loc)} for example).%mdk
 
@@ -363,7 +363,7 @@ Availability of timings using \mdcode{-v}:%mdk
 %sub
 \paragraph*{3.2.4.\hspace*{0.5em}Usage for Satisfiability Modulo Theory (SMT mode)}\label{usage-smt}%mdk%mdk
 
-\noindent The language accepted by the SMT mode is described in~\mdref{sec-smt-formulas}{2.7.5}.%mdk
+\noindent The language accepted by the SMT mode is described in~\ref{sec-smt-formulas}.%mdk
 
 By default, \mdcode{touist} is able to translate problems into the
 \href{http://smtlib.cs.uiowa.edu/language.shtml}{\mdcode{SMT-LIB}} format with the \mdcode{--smt=LOGIC} flag. In this mode,
@@ -444,7 +444,7 @@ way to do it is by hand.
 
 \noindent Most SAT and QBF solvers accept the standardized~\href{http://www.satcompetition.org/2009/format-benchmarks2009.html}{DIMACS} (resp.
 QDIMACS) as input language. You can give the DIMACS output of \mdcode{touist}
-directly to the solver and use the mapping table (see Section~\mdref{mapping-table}{3.2.2.1}).
+directly to the solver and use the mapping table (see Section~\ref{mapping-table}).
 But you can use {\scshape TouIST} to do both the call to the solver as well as the
 translation of the resulting DIMACS model back to propositions names, using
 the argument \mdcode{--solver}:%mdk
@@ -527,7 +527,7 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="depqbf~--qdo~--no-dynamic-nen
 
 \item{}
 \href{http://fmv.jku.at/quantor/}{quantor} (2014-10-26, Quantor 3.2). It is not necessary to use this
-solver externally as it is included with \mdcode{touist} (see Section~\mdref{usage-qbf-solver}{3.2.5.1}).%mdk
+solver externally as it is included with \mdcode{touist} (see Section~\ref{usage-qbf-solver}).%mdk
 \begin{mdpre}%mdk
 \noindent brew~install~touist/touist/quantor\\
 touist~test/qbf/allumettes2.touist~--qbf~--solver="quantor"%mdk

@@ -184,7 +184,7 @@ A tuple variable will always be expanded to a proposition or a
 \begin{mdbmarginx}{}{}{}{1.5em}%mdk
 \begin{mddefdata}%mdk
 Tuple variables are not (yet) compatible with the set-builder construct (in
-\mdref{set-builder}{2.6.3}). If one of the indexes is a set, the set will stay
+\ref{set-builder}). If one of the indexes is a set, the set will stay
 as-is.%mdk
 \end{mddefdata}%mdk
 \end{mdbmarginx}%mdk
@@ -252,7 +252,7 @@ matters. For example:%mdk
 \subsubsection{Local assignment (\mdcode{{\mdcolor{navy}let}} construct)}\label{let-binding}%mdk%mdk
 
 \noindent Sometimes, you want to use the same result in multiple places and you
-cannot use a global variable (presented in~\mdref{global-var}{2.2.2}) because of
+cannot use a global variable (presented in~\ref{global-var}) because of
 nested formulas. The \mdcode{{\mdcolor{navy}let}} construct lets you create temporary
 variables inside formulas:%mdk
 \begin{mdpre}%mdk
@@ -261,7 +261,7 @@ variables inside formulas:%mdk
 ~~~~\textbar{}~"let"~{\mdcolor{purple}\textless{}comma-list(\textless{}var\textgreater{})\textgreater{}}~"="~{\mdcolor{purple}\textless{}comma-list(\textless{}expr\textgreater{})\textgreater{}}~":"~{\mdcolor{purple}\textless{}formula\textless{}T\textgreater{}\textgreater{}}\\
 {\mdcolor{purple}\textless{}expr\textgreater{}}~::=~{\mdcolor{purple}\textless{}int\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}float\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}prop\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}bool\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}set\textgreater{}}%mdk
 \end{mdpre}\noindent The \mdcode{{\mdcolor{navy}let}} assignment can only be used in formulas (detailed
-in~\mdref{sec-formulas}{2.7}) and cannot be used in expressions (\mdcode{\textless{}expr\textgreater{}}, i.e.,
+in~\ref{sec-formulas}) and cannot be used in expressions (\mdcode{\textless{}expr\textgreater{}}, i.e.,
 integer, floating-point, boolean or set expressions).
 
 Example:%mdk
@@ -307,7 +307,7 @@ integer, float, boolean or set.
 \noindent A tuple proposition that is in an expression and that contains at least
 one set in its indexes will be expanded to a set of the cartesian product
 of the set indexes. This feature is called \textbf{set-building} and is
-described in~\mdref{set-builder}{2.6.3} and only works in expressions (not in
+described in~\ref{set-builder} and only works in expressions (not in
 formulas).%mdk
 
 In the following table, the two right-columns show how the propositions
@@ -419,7 +419,7 @@ operators that return a boolean are \mdcode{{\mdcolor{purple}\$P}~{\mdcolor{navy
 %mdk
 \end{mdcenter}%mdk
 
-\noindent Sets are detailed in~\mdref{sec-sets}{2.6}.%mdk
+\noindent Sets are detailed in~\ref{sec-sets}.%mdk
 
 \noindent\textbf{Note}.
 Booleans cannot be mixed with formulas. In a formula, the evaluation
@@ -502,7 +502,7 @@ version 3.5.2) to do that:%mdk
 \noindent{}[p({\mdcolor{purple}\$i},{\mdcolor{purple}\$j},{\mdcolor{purple}\$k})~{\mdcolor{navy}for}~{\mdcolor{purple}\$i},{\mdcolor{purple}\$j},{\mdcolor{purple}\$k}~{\mdcolor{navy}in}~{\mdcolor{purple}\$S1},{\mdcolor{purple}\$S2},{\mdcolor{purple}\$S3}]%mdk
 \end{mdpre}\noindent List comprehension allows you to generate sets containing any expression:
 numbers, propositions and even formulas. In order to use formulas, you
-must use the quoted notation (see Section~\mdref{quoted-formulas}{2.7.7}). The \mdcode{{\mdcolor{navy}when}}
+must use the quoted notation (see Section~\ref{quoted-formulas}). The \mdcode{{\mdcolor{navy}when}}
 keyword helps filter the generated elements (like in \mdcode{{\mdcolor{navy}bigand}} or
 \mdcode{{\mdcolor{navy}bigor}}). Examples:
 \begin{mdpre}%mdk
@@ -558,7 +558,7 @@ This notation is inspired from the concept of extension of a predicate (cf.
 \end{mdcenter}%mdk
 
 \noindent The three last operators of type \mdcode{\textless{}bool\textgreater{}} (\mdcode{{\mdcolor{navy}empty}}, \mdcode{{\mdcolor{navy}in}} and \mdcode{{\mdcolor{navy}subset}})
-have also been described in the boolean section (\mdref{sec-booleans}{2.5}).%mdk
+have also been described in the boolean section (\ref{sec-booleans}).%mdk
 
 The priority on operators is:%mdk
 
@@ -626,7 +626,7 @@ default operator priority is:
 &\mdcode{and}\\
 &\mdcode{or}\\
 &\mdcode{=\textgreater{}}, \mdcode{\textless{}=\textgreater{}}\\
-\emph{lowest priority}&newline-\mdcode{and} (\mdref{newline}{2.7.2})\\
+\emph{lowest priority}&newline-\mdcode{and} (\ref{newline})\\
 \midrule
 \end{tabular}\end{mdtabular}
 
@@ -845,7 +845,7 @@ will produce a disjunction of $\binom{20}{5} = 15 504$ conjunctions.%mdk
 
 \noindent\textbf{Note}.
 The notation \mdcode{p({}[{\mdcolor{purple}1}..{\mdcolor{purple}20}])} is called \textquotedblleft{}set-builder\textquotedblright{} and is defined
-in~\mdref{set-builder}{2.6.3}. Using this syntax, the formula \mdcode{{\mdcolor{navy}exact}({\mdcolor{purple}5},p({}[{\mdcolor{purple}1}..{\mdcolor{purple}20}])}
+in~\ref{set-builder}. Using this syntax, the formula \mdcode{{\mdcolor{navy}exact}({\mdcolor{purple}5},p({}[{\mdcolor{purple}1}..{\mdcolor{purple}20}])}
 is equivalent to%mdk
 \noindent\noindent\[{<>}_{x\in P}^k p(x)
 \]%mdk%mdk
@@ -911,7 +911,7 @@ the \textquotedblleft{}always true\textquotedblright{} and \textquotedblleft{}al
 \subsubsection{SMT formulas}\label{sec-smt-formulas}%mdk%mdk
 
 \noindent The {\scshape TouIST} language also accepts formulas of the Satisfiability Modulo Theory (SMT).
-To use the \mdcode{touist} program with SMT formulas, see Section~\mdref{usage-smt}{3.2.4}.%mdk
+To use the \mdcode{touist} program with SMT formulas, see Section~\ref{usage-smt}.%mdk
 
 \noindent\textbf{Todo}.
 Describe the SMT language%mdk%mdk
