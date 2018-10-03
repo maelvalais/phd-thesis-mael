@@ -1,5 +1,3 @@
-%%% CONFIGURATION
-
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
@@ -36,7 +34,6 @@
 \usepackage{color}
 \usepackage{makecell}
 \usepackage{lastpage}
-\usepackage{fancyhdr}
 \usepackage{datetime}
 \usepackage{eurosym}
 \usepackage{algorithmic}
@@ -49,8 +46,11 @@
 \usepackage{setspace}
 \usepackage{enumitem}
 
-\setstretch{1.3}
 
+
+
+\usepackage{fancyhdr}
+\setstretch{1.3}
 \renewcommand{\headrulewidth}{1pt}
 
 \fancyhead[LE,RO]{\thepage}
@@ -230,8 +230,5 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 % MACROS TLP-GP
 
 \newcommand{\Link}[3]{\mathit{Link}(#1,#2,#3)}
-
-\usepackage{newunicodechar}
-\newunicodechar{ç}{\c{c}}
 
 \usepackage{madoko2}

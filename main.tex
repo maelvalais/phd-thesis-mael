@@ -1,16 +1,12 @@
-%\documentclass[french]{report}
+\documentclass[a4paper,12pt,oneside]{extbook}
+\input{macros.tex}
 
-% 14pt
-%\documentclass[a4paper,14pt,oneside,fullcap,chkrefs,webpdf64,m3L,cmr,mathcenter,noSciVerse,amsmath]{extbook}
-
-% 12pt
-\documentclass[a4paper,12pt,oneside,fullcap,chkrefs,webpdf64,m3L,cmr,mathcenter,noSciVerse,amsmath]{extbook}
 
 \title{Traduction logique et résolution de problèmes -- Application à la planification}
 \author{Maël Valais}
 \date{Septembre 2018}
 
-\input{macros.tex}
+
 
 \begin{document}
 \tableofcontents
@@ -79,12 +75,12 @@ $\ifthen{P}{F_1}{F_2}$.
 %%%%%%%%%%%%%%%%%%%%%
 % CHAPITRE : TouIST
 %%%%%%%%%%%%%%%%%%%%%
-\chapter{Traduction automatique avec TouIST}
+\chapter{Traduction automatique avec \touist}
 %\section{État de l'art, les solveurs du moment}
 %\subsection{Introduction des logiques SAT, SMT, QBF}
 %\subsection{Le principe des solveurs SAT, SMT, QBF}
 
-\section{Historique de TouIST}
+\section{Historique de \touist}
 
 \input{TouIST/naissanceTouIST.tex}
 \input{TouIST/maturiteTouIST.tex}
@@ -106,8 +102,8 @@ $\ifthen{P}{F_1}{F_2}$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SOUS-CHAPITRE : EXPERIMENTATIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\chapter{Expérimentations : application à la planification}
-%\chapter{Etude comparative des codages d'arbres compacts pour la planification}
+%\chapter{Éxpérimentations : application à la planification}
+%\chapter{Étude comparative des codages d'arbres compacts pour la planification}
 \section{Étude comparative des codages pour la planification}
 
 \subsection{Le module TouISTPlan}
