@@ -130,7 +130,7 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="rareqs"%mdk
 \fred{SECTION DU MANUEL A UTILISER}
 
 
-\paragraph*{3.1.\hspace*{0.5em}Installation}\label{sec-installation}%mdk%mdk
+\paragraph{Installation}\label{sec-installation}%mdk%mdk
 
 \noindent The main tool that parses and solves the {\scshape TouIST} programs is written in
 Ocaml. It is easily installable (as long as you have installed \mdcode{ocaml}
@@ -147,7 +147,7 @@ Boolean Formulas (QBF) grammars can also be used (see Sections~\ref{usage-smt} a
 \noindent\mdinline{vertical-align=middle}{\includegraphics[keepaspectratio=true,width=\dimwidth{1.00}]{figures/architecture}{}}%mdk
 
 
-\paragraph*{3.2.\hspace*{0.5em}Usage}\label{cli}%mdk%mdk
+\paragraph{Usage}\label{cli}%mdk%mdk
 
 \noindent Any \mdcode{touist} command is of the form:%mdk
 \begin{mdpre}%mdk
@@ -160,7 +160,7 @@ The man page of \mdcode{touist} is available through \mdcode{man~touist} or \mdc
 It contains almost everything you need to know its features and arguments.%mdk
 
 %sub
-\paragraph*{3.2.1.\hspace*{0.5em}Exit status}\label{sec-exit-status}%mdk%mdk
+\paragraph{Exit status}\label{sec-exit-status}%mdk%mdk
 \begin{mdtabular}{3}{\dimeval{(\linewidth)/3}}{1ex}%mdk
 \begin{tabular}{cll}\midrule
 {\bfseries Code}&\multicolumn{1}{c}{{\bfseries Label}}&\multicolumn{1}{c}{{\bfseries Description}}\\
@@ -180,7 +180,7 @@ It contains almost everything you need to know its features and arguments.%mdk
 non-zero exit status anyway.%mdk
 
 %sub
-\paragraph*{3.2.2.\hspace*{0.5em}Usage for propositional logic (SAT mode)}\label{usage-sat}%mdk%mdk
+\paragraph{Usage for propositional logic (SAT mode)}\label{usage-sat}%mdk%mdk
 
 \noindent The language accepted for propositional logic is described in
 \ref{sec-propositional-logic-formulas}. This mode is enabled by
@@ -261,7 +261,7 @@ returning the models. This option will only work for small problems: the
 number of models explodes when the number of propositions is big.%mdk
 
 %sub
-\paragraph*{3.2.3.\hspace*{0.5em}Other general options}\label{usage-general-options}%mdk%mdk
+\paragraph{Other general options}\label{usage-general-options}%mdk%mdk
 
 \noindent The following general options must be using in conjunction of \mdcode{--smt}
 , \mdcode{--qbf} or \mdcode{--sat} (\mdcode{--sat} is used by default and can be omitted).%mdk
@@ -366,7 +366,7 @@ Availability of timings using \mdcode{-v}:%mdk
 \label{timings}%mdk%mdk
 
 %sub
-\paragraph*{3.2.4.\hspace*{0.5em}Usage for Satisfiability Modulo Theory (SMT mode)}\label{usage-smt}%mdk%mdk
+\paragraph{Usage for Satisfiability Modulo Theory (SMT mode)}\label{usage-smt}%mdk%mdk
 
 \noindent The language accepted by the SMT mode is described in~\ref{sec-smt-formulas}.%mdk
 
@@ -415,7 +415,7 @@ For example:%mdk
 \end{mdpre}\noindent which should be read as $x$ takes the value 4.
 
 %sub
-\paragraph*{3.2.5.\hspace*{0.5em}Usage for quantified boolean logic (QBF mode)}\label{usage-qbf}%mdk%mdk
+\paragraph{Usage for quantified boolean logic (QBF mode)}\label{usage-qbf}%mdk%mdk
 
 \noindent For now, the \mdcode{QDIMACS} format (which is the equivalent of \mdcode{DIMACS} for
 quantified boolean formulas) cannot be printed from a {\scshape TouIST} file.
@@ -445,7 +445,7 @@ valuations and explore the tree. As a consequence, they are also unable
 to visualize the tree (where each leaf would be a model). For now, the only
 way to do it is by hand.
 
-\paragraph*{3.3.\hspace*{0.5em}Using external solvers from \mdcode{touist} (\mdcode{--solver})}\label{sec-using-external-solvers-from-touist---solver}%mdk%mdk
+\paragraph{Using external solvers from \mdcode{touist} (\mdcode{--solver})}\label{sec-using-external-solvers-from-touist---solver}%mdk%mdk
 
 \noindent Most SAT and QBF solvers accept the standardized~\href{http://www.satcompetition.org/2009/format-benchmarks2009.html}{DIMACS} (resp.
 QDIMACS) as input language. You can give the DIMACS output of \mdcode{touist}
@@ -551,7 +551,7 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="rareqs"%mdk
 \paragraph*{Technical details}\label{sec-technical-details}%mdk%mdk
 
 %sub
-\paragraph*{4.1.\hspace*{0.5em}One single syntax error per run}\label{sec-one-single-syntax-error-per-run}%mdk%mdk
+\paragraph{One single syntax error per run}\label{sec-one-single-syntax-error-per-run}%mdk%mdk
 
 \noindent You might have noticed that on every run of \mdcode{touist}, only one error is
 shown at a time. Many compilers are able to show multiple errors across
