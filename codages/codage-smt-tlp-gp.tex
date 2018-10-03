@@ -31,7 +31,7 @@ Si un lien causal assure la protection d’un fluent $\f$ et qu'une action qui l
 
 \[
 \begin{matrix}
-\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{i=j} \BigforallTwo{k=1}{k=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Cond{\a}\cap\Add{\b}\right)} \Bigforall{\c\in\A\\\f\in\Del{\c}}\\ \left( \Link{\b_{j}}{\f}{\a_{i}} \wedge \c_{k} \Rightarrow \left( \begin{matrix} \tau(\c_{k}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\c_{k}\rightarrow\neg\f) \end{matrix} \right) \right)
+\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{i=j} \BigforallTwo{k=1}{k=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Cond{\a}\cap\Add{\b}\right)} \Bigforall{\otheraction\in\A\\\f\in\Del{\otheraction}}\\ \left( \Link{\b_{j}}{\f}{\a_{i}} \wedge \otheraction_{k} \Rightarrow \left( \begin{matrix} \tau(\otheraction_{k}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\otheraction_{k}\rightarrow\neg\f) \end{matrix} \right) \right)
 \end{matrix}
 \]
 
@@ -41,7 +41,7 @@ Si deux actions produisant respectivement une proposition $p$ et sa négation so
 
 \[
 \begin{matrix}
-\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{j=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Add{\a}\cap\Del{\b}\right)}\\ \left( \a_{i} \wedge \b_{j} \Rightarrow \left( \begin{matrix} \tau(\a_{i}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)%\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\c_{k}\rightarrow\neg\f) 
+\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{j=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Add{\a}\cap\Del{\b}\right)}\\ \left( \a_{i} \wedge \b_{j} \Rightarrow \left( \begin{matrix} \tau(\a_{i}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)%\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\otheraction_{k}\rightarrow\neg\f) 
 \end{matrix} \right) \right)
 \end{matrix}
 \]
