@@ -1,0 +1,52 @@
+%
+% SMT TLP-GP
+%
+
+\fred{Règles de TLP-GP (Maris, Régnier 2008)}
+
+\paragraph*{Etat initial et But}
+
+Les nœuds d'actions factices Init (produisant l'état initial) et Goal (nécessitant le but) sont tous deux vrais.
+
+\paragraph*{Production des préconditions par liens causaux}
+
+Si une action $\a_{i}$ est active dans le plan à une étape $i$, alors pour chacune de ses préconditions $\f$, il existe au moins un lien causal (noté $\Link{\b_{j}}{\f}{\a_{i}}$) d'une action $\b_{j}$, qui produit cette précondition à l'étape $j$, vers $\a_{i}$.
+
+\[ \BigforallTwo{i=1}{i=\length} \Bigforall{\a\in\A} \left( \a_{i} \Rightarrow \Bigforall{\f\in\Cond{\a}} \BigexistsTwo{j=1}{j=i}\Bigexists{\b\in\A\\\f\in\Add{\b}} \Link{\b_{j}}{\f}{\a_{i}} \right)
+\]
+
+\paragraph*{Activation des actions et ordre partiel}
+
+S’il existe un lien causal entre une action $\b_{j}$ qui produit une précondition $\f$ pour une action $\a_{i}$, alors $\b_{j}$ et $\a_{i}$ sont actives dans le plan et l’instant où $\b_{j}$ produit certainement $\f$ est antérieur ou égal à l’instant où $\a_{j}$ commence à nécessiter $\f$.
+
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{i=j} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Cond{\a}\cap\Add{\b}\right)}\\ \left( \Link{\b_{j}}{\f}{\a_{i}} \Rightarrow \left( \b_{j} \wedge \a_{i} \wedge \tau(\b_{j}\rightarrow\f) \leq \tau(\f\mid\rightarrow\a_{i}) \right) \right)
+\end{matrix}
+\]
+
+\paragraph*{Protection des liens causaux}
+
+Si un lien causal assure la protection d’un fluent $\f$ et qu'une action qui le détruit est active dans le plan, alors l’intervalle temporel correspondant au lien causal et l’intervalle temporel correspondant à l’activation de $\neg \f$ (la destruction de $\f$) par l’action sont disjoints.
+
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{i=j} \BigforallTwo{k=1}{k=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Cond{\a}\cap\Add{\b}\right)} \Bigforall{\c\in\A\\\f\in\Del{\c}}\\ \left( \Link{\b_{j}}{\f}{\a_{i}} \wedge \c_{k} \Rightarrow \left( \begin{matrix} \tau(\c_{k}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\c_{k}\rightarrow\neg\f) \end{matrix} \right) \right)
+\end{matrix}
+\]
+
+\paragraph*{Prévention des interactions négatives}
+
+Si deux actions produisant respectivement une proposition p et sa négation sont actives dans le plan, alors les intervalles temporels correspondants à l’activation de p et à l’activation de ¬p sont disjoints.
+
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{i=\length} \BigforallTwo{j=1}{j=\length} \Bigforall{(\a,\b)\in\A^{2}} \Bigforall{\f\in\left(\Add{\a}\cap\Del{\b}\right)}\\ \left( \a_{i} \wedge \b_{j} \Rightarrow \left( \begin{matrix} \tau(\a_{i}\rightarrow\neg\f) < \tau(\b_{j}\rightarrow\f)%\\ \vee \tau(\f\rightarrow\mid\a_{i}) < \tau(\c_{k}\rightarrow\neg\f) 
+\end{matrix} \right) \right)
+\end{matrix}
+\]
+
+\paragraph*{Bornes inférieure et supérieure}
+
+L’instant initial où les propositions de l’état initial sont vraies est antérieur à tous les instants de début des préconditions des actions du plan. L’instant final où les propositions du but sont vraies est postérieur à tous les instants de fin des effets des actions du plan.
+\fred{à ajouter}

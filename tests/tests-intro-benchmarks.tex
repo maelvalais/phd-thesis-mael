@@ -1,0 +1,109 @@
+Ce sont des benchmarks classiques utilisés pour les tests des compétitions IPC. Ils présentent des caractéristiques différentes qui les rendent complémentaires pour notre étude.
+
+\paragraph*{Domaines de la compétition IPC-1 :}
+\begin{itemize}
+\item \textbf{Gripper :} dans ce domaine, le robot, équipé de p pinces, doit déplacer n balles d'une table vers une autre. Trois opérateurs sont utilisables : Prendre une balle avec une pince, Poser une balle tenue dans une pince et se Déplacer d'une table à une autre. Les problèmes généraux à n balles et p pinces comportent beaucoup de symétries : il y a un grand nombre d'actions applicables à chaque état et le planificateur peut donc essayer de saisir chacune des différentes balles disponibles alors qu'elles sont identiques les unes aux autres. Les plans solutions produits comportent des suites de séquences d'actions $\langle$Prendre, Déplacer, Poser$\rangle$.
+\item \textbf{Ferry :} \fred{domaine FF} dans ce domaine, qui est équivalent à celui du Gripper à une pince, il s'agit de déplacer n voitures d'une berge à l'autre en utilisant un ferry qui ne peut contenir qu'une voiture. Trois opérateurs sont utilisables : Embarquer une voiture, la Débarquer, Traverser d'une rive à l'autre. Ce domaine est fortement symétrique : il y a un grand nombre d'actions applicables à chaque état, le planificateur pouvant essayer d'embarquer chacune des différentes voitures disponibles alors qu'elles sont identiques les unes aux autres. Les plans solutions produits comportent des suites de séquences d'actions $\langle$Embarquer, Traverser, Débarquer$\rangle$.
+\item \textbf{Logistics :} ce domaine décrit le transport de paquets (en nombre variable) dans des villes par des avions et des camions qui ont des capacités illimitées. Les plans contiennent beaucoup de parallélisme et sont moins contraints, comparativement  au nombre d'actions qu'ils contiennent, que dans d'autres domaines (par exemple blocks-word). Ce domaine, du point de vue des symétries qu'il contient est proche de celui des cubes. En effet, si on considère chaque ville comme étant une pile de paquets, c'est un problème de cubes, à la seule différence près que l'ordre des paquets n'a pas d'importance (comme dans les domaines du Gripper et du Ferry).
+\item \textbf{Mystery :}
+\end{itemize}
+
+\paragraph*{Domaines de la compétition IPC-2 :}
+\begin{itemize}
+\item \textbf{Blocks :} dans ce domaine, plus contraint que les précédents, le système doit construire, à partir d'un état initial préalablement défini, un ensemble de tours en déplaçant des cubes distincts. La taille de l'espace de recherche est importante (pour une pile de n cubes, il existe n! façons de les agencer) et la taille de l'espace d'états est bornée par 2p où p est le nombre de propositions logiques (ordre 0). Même en tenant compte des liens sémantiques qui existent entre les propositions, pour n cubes, le nombre d'états reste supérieur à n!. Ce domaine comporte des symétries en moins grand nombre que les précédents domaines mais il contient beaucoup d'états de même forme (états identiques à une permutation du nom des cubes près). Dans la représentation classique, trois prédicats (Sur, Sur-Table, Libre) sont nécessaires pour sa représentation STRIPS et trois opérateurs sont possibles : DéplacerDeTable(x,y), DéplacerSurTable(x,y), Déplacer(x,y,z). Dans la représentation du planificateur Prodigy, ce sont six opérateurs qui sont utilisés.
+\item \textbf{Elevator :}
+\item \textbf{Logistics :}
+\end{itemize}
+
+\paragraph*{Domaines de la compétition IPC-3 :}
+\begin{itemize}
+\item \textbf{Depots :}
+{\color{red}This domain was devised in order to see what would happen if two previously well-researched domains were joined together. These were the logistics and blocks domains. They are combined to form a domain in which trucks can transport crates around and then the crates must be stacked onto pallets at their destinations. The stacking is achieved using hoists, so the stacking problem is like a blocks-world problem with hands. Trucks can behave like "tables", since the pallets on which crates are stacked are limited.}
+\item \textbf{DriverLog :}
+{\color{red}This domain involves driving trucks around delivering packages between locations. The complication is that the trucks require drivers who must walk between trucks in order to drive them. The paths for walking and the roads for driving form different maps on the locations.}
+\item \textbf{ZenoTravel :}
+{\color{red}The final transportation domain involves transporting people around in planes, using different modes of movement: fast and slow. The key to this domain is that, where the expressive power of the numeric tracks is used, the fast movement consumes fuel faster than slow movement, making the search for a good quality plan (one using less fuel) much harder.}
+\item \textbf{Satellite :}
+{\color{red}The first of the domains inspired by space-applications is a first step towards the "Ambitious Spacecraft" described by David Smith at AIPS'00. It involves planning and scheduling a collection of observation tasks between multiple satellites, each equipped in slightly different ways.}
+\item \textbf{FreeCell :}
+{\color{red}In order to confirm that STRIPS planning is still advancing, we chose this domain from IPC2. It is the familiar solitaire game found on many computers, involving moving cards from an initial tableau, constrained by tight restrictions, to achieve a final suit-sorted collection of stacks.}
+\end{itemize}
+
+\paragraph*{Domaines de la compétition IPC-4 :}
+\begin{itemize}
+\item \textbf{Airport :}
+{\color{red}Developed by Jörg Hoffmann and Sebastian Trüg. Planners control the ground traffic on airports. The competition test suites were generated by exporting traffic situations arising during simulation runs in the airport simulation tool Astras (by Wolfgang Hatzack). The largest instances in the test suites are realistic encodings of Munich airport.}
+\item \textbf{PipesWorld :}
+{\color{red}Developed by Frederico Liporace and Jörg Hoffmann. Planners control the flow of oil derivatives through a pipeline network, obeying various constraints such as product compatibility, tankage restrictions, and (in the most complex domain version) goal deadlines. One interesting aspect of the domain is that, if one inserts something into the one end of a pipeline segment, something potentially completely different comes out at the other end. This gives rise to several subtle phenomena that can arise in the creation of a plan.}
+\item \textbf{PSR :}
+{\color{red}Developed by Sylvie Thiebaux and Jörg Hoffmann. Planners must resupply a number of lines in a faulty electricity network. The flow of electricity through the network, at any point in time, is given by a transitive closure over the network connections, subject to the states of the switches and electricity supply devices. The domain is therefore a good example of the usefulness of derived predicates in real-world applications.}
+\item \textbf{Satellite :}
+{\color{red}Adapted for IPC-4 by Jörg Hoffmann. Planners are asked to collect image data with a number of satellites. The domain was introduced by Maria Fox and Derek Long in IPC-3. All (but one) of the IPC-3 domain versions were re-used with the exact same suites of instances. Two of the IPC-3 domain versions were extended with time windows for the sending of the gathered data to earth, which is the most critical aspect of the problem in reality.}
+\end{itemize}
+
+\paragraph*{Domaines de la compétition IPC-5 :}
+\begin{itemize}
+\item \textbf{Openstacks :}
+{\color{red}The openstacks domain is based on the "minimum maximum simultaneous open
+stacks" combinatorial optimization problem, which can be stated as follows: 
+A manufacturer has a number of orders, each for a combination of different 
+products, and can only make one product at a time.}
+\item \textbf{Pathways :}
+{\color{red}This domain is inspired by the field of molecular biology, and specifically 
+biochemical pathways. "A pathway is a sequence of chemical reactions in a
+biological organism. Such pathways specify mechanisms that explain how
+cells carry out their major functions by means of molecules and reactions
+that produce regular changes. Many diseases can be explained by defects 
+in pathways, and new treatments often involve finding drugs that correct
+those defects" [1]. We can model parts of the functioning of a pathway as
+a planning problem by simply representing chemical reactions as actions.}
+\item \textbf{PipesWorld :}
+{\color{red}from IPC4}
+\item \textbf{Rovers :}
+{\color{red}from IPC3}
+\item \textbf{Storage :}
+{\color{red}"Storage" is a planning domain involving spatial reasoning. Basically, the
+domain is about moving a certain number of crates from some containers to
+some depots by hoists. Inside a depot, each hoist can move according to a
+specified spatial map connecting different areas of the depot. The test
+problems for this domain involve different numbers of depots, hoists,
+crates, containers, and depot areas. At the beginning of each problem
+file, we give the spatial map of the depot areas. While in this domain it
+is important to generate plans of good quality, for many test problems,
+even finding any solution can be quite hard for domain-independent
+planners.}
+\item \textbf{TPP :}
+{\color{red}This is a relatively recent planning domain that has been investigating in
+Operation Research (OR) for several years. The Travelling Purchase Problem
+(TPP) is a known generalization of the Travelling Salesman Problem, and is
+defined as follows. We have a set of products and a set of markets. Each
+market is provided with a limited amount of each product at a known
+price. The TPP consists in selecting a subset of markets such that a given
+demand of each product can be purchased, minimizing the routing cost and
+the purchasing cost. This problem arises in several applications, mainly
+in routing and scheduling contexts, and it is NP-hard. In OR, computing
+optimal or near optimal solutions for TPP instances is still an active
+research topic.}
+\item \textbf{Trucks :}
+{\color{red}Essentially, this is a logistics domain about moving packages between
+locations by trucks under certain constraints. The loading space of each
+truck is organized by areas: a package can be (un)loaded onto an area of a
+truck only if the areas between the area under consideration and the truck
+door are free. Moreover, some packages must be delivered within some
+deadlines. In this domain, it is important to find good quality plans.
+However, for many test problems, even finding one plan could be a rather
+difficult task.}
+\end{itemize}
+
+\paragraph*{Domaines de la compétition IPC-8 :}
+\begin{itemize}
+\item \textbf{ChildSnack :}
+{\color{red}This domain is to plan how to make and serve sandwiches for a group of children in which some are allergic to gluten. There are two actions for making sandwiches from their ingredients. The first one makes a sandwich and the second one makes a sandwich taking into account that all ingredients are gluten-free. There are also actions to put a sandwich on a tray and to serve sandwiches.
+Problems in this domain define the ingredients to make sandwiches at the initial state. Goals consist of having all kids served with a sandwich to which they are not allergic.}
+\item \textbf{Hiking :}
+{\color{red}Imagine you want to walk with your partner a long clockwise circular route over several days (e.g. in the "Lake District" in NW England), and you do one "leg" each day. You want to start at a certain point and do the walk in one direction, without ever walking backwards. You have two cars which you must use to carry your tent/luggage and to carry you and your partner to the start/end of a leg, if necessary. Driving a car between any two points is allowed, but walking must be done with your partner and must start from the place where you left off. As you will be tired when you've walked to the end of a leg, you must have your tent up ready there so you can sleep the night before you set off to do the next leg the morning.}
+\item \textbf{Visitall :}
+{\color{red}From the attached paper: "The heuristics used in state-of-the-art (satisficing) planners are a decade old and are based on the delete-relaxation. Several heuristics that take deletes into account have been formulated but they haven’t been shown to be cost-effective. One problem with delete-relaxation heuristics that aproximate h+, appears in instances with multiple conflicting goals. In these cases, that are very common, progress towards one goal means moving away from other goals. Such instances produce large plateaus where the heuristic is almost useless. Indeed, in some cases, state-of-the-art heuristics are no better than heuristics that ignore the problem structure completely and just count, for example, the number of unachievable goals. As an illustration of this, consider the Visit-All domain where an agent in the middle of a square grid nxn must visit all the cells in the grid. Solving optimally the delete relaxation h+ gives the exact goal distance as long as there exists a hamiltonian path visiting every cell. Recall that in a 1xn grid, no hamiltonian path exists."
+
+"The use of delete-relaxation heuristics to appraise the cost of achieving all goals together runs into a situation resembling Buridan’s ass: where a hungry and thirsty donkey, placed between a bundle of hay and a pail of water, dies of hunger and thirst for not finding a reason to choose one over the other.}
+\end{itemize}

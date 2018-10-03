@@ -1,0 +1,10 @@
+%\subsubsection{SMT : SAT Modulo Theories}
+
+Certains probl\`emes combinatoires n\'ecessitent n\'eanmoins de traiter des calculs sur les nombre naturels ou r\'eels. Ceci peut \^etre fait en utilisant seulement la logique propositionnelle (par exemple, $2+3=5$ pourrait \^etre cod\'e par $add_{2,3,5}$), mais c'est tr\`es inconfortable \`a moins qu'il n'y ait que quelques additions \`a faire. Ne parlons m\^eme pas des op\'erations de multiplication ou plus complexes. L'id\'ee derri\`ere la gen\`ese de SMT a \'et\'e de combiner des solveurs SAT avec un solveur arithm\'etique dans le but d'am\'eliorer le traitement de la partie arithm\'etique du raisonnement. Dans de nombreux cas, ceci n'am\'eliorera pas seulement l'efficacit\'e du solveur, mais permettra aussi d'exprimer les contraintes arithm\'etiques des probl\`emes d'une mani\`ere radicalement plus compacte.
+
+Pensez au jeu de Kamaji\footnote{\texttt{http://fr.wikipedia.org/wiki/Kamaji}}  o\`u le joueur doit grouper des nombres adjacents dans une grille de sorte que leur somme soit \'egale \`a un nombre fixe. R\'esoudre le jeu n\'ecessite essentiellement un raisonnement logique mais a aussi besoin d'un peu d'arithm\'etique (addition).
+
+
+Si $x_{i,j}$ pour chaque case $(i,j)$ est un entier et $G(i,j,i,k)$ repr\'esente le fait que les cases $(i,j)$ \`a $(i,k)$ de la ligne $i$ forment un groupe, la contrainte de somme pourrait \^etre exprim\'ee par :
+$$\sum_{m\in E}x_{i,m}=N$$
+o\`u $N$ est le nombre fixe et $E$ est $\{j,j+1,\ldots,k\}$. La logique propositionnelle pure n'est certainement pas adapt\'ee pour de telles phrases !

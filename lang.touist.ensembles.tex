@@ -1,0 +1,42 @@
+\subsection{Les ensembles}
+
+Nous avons vu comment définir des variables entières utilisées comme indices.
+Nous allons maintenant voir comment utiliser des ensembles génériques pour construire des formules avec les connecteurs généralisés. L'intérêt sera notamment de séparer les règles de résolution d'un problème qui seront définies par des formules permettant de résoudre tout problème de même nature, et des ensembles définissant un problème particulier. Par exemple, dans le cas du Sudoku, les formules permettront de résoudre n'importe quel Sudoku, et les ensembles définiront la grille de Sudoku que nous souhaitons résoudre en particulier.\\
+
+L'onglet "Sets" nous permet de définir de tels ensembles. Par exemple, nous souhaitons remplacer les chiffres contenus dans les cases du Sudoku par des lettres. Nous pouvons alors définir l'ensemble $L=\{A,B,C,D\}$ par \texttt{\$L=[A,B,C,D]} dans l'onglet "Sets" et remplacer \texttt{\$k in [1..4]} par \texttt{\$k in \$L} dans les formules.\\
+
+Exercice : résoudre le sudoku $4\times 4$ : 
+
+\begin{center}
+\texttt{
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	A & B & ~ & ~ \\ \hline
+	~ & D & ~ & ~ \\ \hline
+	~ & ~ & A & ~ \\ \hline
+	~ & ~ & C & B \\ \hline
+\end{tabular}
+}\\
+\end{center}
+
+Exercice : Coloration de cartes.\\
+
+Le théorème des 4 couleurs, qui fut conjecturé en 1852 par Francis Guthrie, affirme qu'on peut colorer toute carte géographique en utilisant seulement 4 couleurs tout en veillant à ce que deux pays limitrophes reçoivent des couleurs différentes. Il a été (enfin) démontré en 1976 par Appel et Haken. La démonstration a exigé l'usage de l'ordinateur pour étudier les 1478 cas critiques (plus de 1200 heures de calcul à l'époque). \\
+
+Soit l'ensemble de pays européens (on ne les considère pas tous, mais vous pouvez) : \\
+\begin{multline}
+P = \{Portugal, Espagne, France, Italie, Suisse, Belgique, PaysBas, Pologne, Autriche,\\ RepTcheque, Slovenie, Croatie, Luxembourg, Allemagne\}
+\end{multline}
+Formalisez le problème de la coloration de pays : 
+\begin{itemize}
+\item Chaque pays reçoit une et une seule couleur
+\item Deux pays limitrophes reçoivent des couleurs différentes
+\item Si A est limitrophe avec B, alors B l'est avec A. 
+\end{itemize}
+Vous définirez l'ensemble $P$ des pays et l'ensemble $C$ des couleurs (disons $\{Jaune, Rouge, Vert, Bleu\})$. \\
+
+\noindent Vous utiliserez les propositions : 
+\begin{itemize}
+\item \texttt{r(p,c)} : "le pays p reçoit la couleur c"
+\item \texttt{l(p1,p2)} : "le pays p1 est limitrophe avec le pays p2"
+\end{itemize}

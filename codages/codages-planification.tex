@@ -1,0 +1,414 @@
+%\section{Planification par compilation}
+\section{Planification par satisfaction de formules logiques}
+%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Classical STRIPS Planning}
+\subsection{Définitions préliminaires}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%In SAT planning, each copy of the variable set $X$ is indexed, making the writing of transitions easy; let $P$ and $Q$ two formulas and $x_i$ and $x_{i+1}$ two copies of one variable
+
+\begin{definition}
+Un \emph{problème de planification classique} STRIPS est un triplet $\langle \F, \I, \A , \G \rangle$ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
+Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \rangle$ où
+
+\begin{itemize}
+\item $\Cond{\a} \subseteq \F$ est l'ensemble des fluents requis pour exécuter $\a$ (%les 
+\emph{préconditions} de $\a$),
+\item $\Add{\a} \subseteq \F$ et $\Del{\a} \subseteq \F$ sont les ensembles de fluents respectivement ajoutés et supprimés par l'action $\a$ (%les 
+\emph{ajouts} et %les 
+\emph{retraits} de $\a$).
+\end{itemize}
+\end{definition}
+
+
+\fred{Ensemble des variables d'actions $X_{\A}$}
+
+
+\fred{A revoir:}
+Nous allons montrer que pour l'approche QBF, au-delà des améliorations sur les solveurs, d'autres travaux doivent être menés pour mettre au point des codages plus performants. Comme nous l'avons indiqué plus haut, cela a été réalisé pour SAT avec des améliorations significatives. Nous présentons ici deux nouveaux codages d'arbres compacts CTE (Compact Tree Encoding) de problèmes de planification en QBF: CTE-EFA basé sur des frame-axiomes explicatifs dans un espace d'états, et CTE-OPEN basé sur des liens de causalité dans un espace de plans. \fred{dans le chapitre EXPERIMENTATIONS:} Nous les comparons au codage de l'état de l'art CTE-NOOP basé sur des actions No-op et proposé dans \cite{DBLP:conf/ecai/CashmoreFG12}. En termes de temps d'exécution par rapport aux problèmes de référence, CTE-EFA et CTE-OPEN sont toujours plus efficaces que CTE-NOOP.
+
+
+%\begin{itemize}
+%\item QBFEVAL’16: largest number of participants ever.
+%\item QBF proof systems: theoretical frameworks of solving techniques.
+%\item CDCL (clause learning) and expansion: orthogonal solving approaches.
+%\item QBF solving by counterexample guided abstraction refinement (CEGAR) [CGJ+03, JM15b, JKMSC16, RT15].
+%\item New approaches, e.g., Skolem function computation [RS16].
+%\item 10 QBF-related papers at SAT 2016 conference (27\%).
+%\end{itemize}
+
+%The QBF approach seems to have several advantages: for comparable SAT / QBF encodings, the size of the generated formulas is more compact \cite{DBLP:conf/ecai/CashmoreFG12}, 
+
+%QBF is a young field of research \cite{DBLP:conf/aaai/CadoliGS98} compared to SAT 
+%\begin{itemize}
+%\item progrès actuels des solveurs QBF (Qell 10 fois plus rapide sur planning-CTE (qu'est ce que ça veut dire ?) que rareqs, rareqs qui est 2 fois plus rapide que depqbf, chercher refs)
+%\item ordre de performance des codages SAT (NOOP+GP, EFA, OPEN) et QBF (EFA, OPEN, NOOP) diffère
+%\end{itemize}
+
+
+%{\color{blue}
+%At the time being the SAT approach is actually the best as SAT solvers and encodings have been greatly improved since 1992. So, it would be useless to compare QBF solvers to SAT solvers: the result of the contest is known in advance \cite{DBLP:phd/ethos/Cashmore13}. We believe that, nevertheless, QBF approach to automated planning deserves the interest of the community before it proves to be faster than SAT approach. Our paper shows that beyond the implementation of solvers, further work has to be done on the encodings.
+
+%"Since the first complete QBF solver was presented decades after the first complete engine to solve SAT, research in this field remains at its infancy. compared to SAT (1960s), QBF still is a young field of research"
+%}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLANIFICATION SAT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Codages SAT de référence pour la planification classique}
+%
+
+\input{codages/codage-efa-sat.tex}
+
+\input{codages/codage-mk99plan.tex}
+
+\input{codages/codage-open-sat.tex}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLANIFICATION QBF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Codages QBF de référence pour la planification classique}
+%
+
+Deux approches différentes de la planification QBF ont été proposées par \cite{DBLP:conf/ecai/CashmoreFG12}:
+Le codage plat ou \textit{Flat Encoding} (FE), qui a été introduit par \cite{DBLP:conf/lpar/Rintanen01} et le codage d'arbre compact ou \textit{Compact Tree Encoding} (CTE)  %\citeauthor{DBLP:conf/ecai/CashmoreFG12} ont montré dans
+\cite{DBLP:conf/ecai/CashmoreFG12} %que les codages d'arbres compacts 
+qui surpasse le codage plat.
+Ces deux codages de planification utilisent la structure de branchement de QBF pour réutiliser un seul ensemble de clauses qui décrit une seule étape dans le plan. Les deux affectations possibles de chaque variable universelle y représentent la première et la seconde moitié du plan réparties autour de cette branche. Les affectations de chaque ensemble existentiel représentent des choix d'action dans une seule étape.
+
+\begin{figure}[h]\label{steps2}
+\begin{footnotesize}
+(a)\\[1em]
+  \xymatrix@C=0.1pc@R=1pc{
+  \text{S}_{0} (\textit{Init}) \ar@{>}[r] & \fbox{$x_{1}\equiv$ S$_{1}$} \ar@{>}[r]  & \fbox{$x_{2}\equiv$ S$_{2}$} \ar@{>}[r] & \fbox{$x_{3}\equiv$ S$_{3}$} \ar@{>}[r] & \fbox{$x_{4}\equiv$ S$_{4}$}
+  \ar@{>}[r] & \fbox{$x_{5}\equiv$ S$_{5}$} \ar@{>}[r] & \fbox{$x_{6}\equiv$ S$_{6}$} \ar@{>}[r] & \fbox{$x_{7}\equiv$ S$_{7}$} \ar@{>}[r] & \text{S}_{8} (\textit{Goal}) \\
+  }
+  ~\\[3em]
+(b)\\[-1em]
+   \hspace{0.8em}\xymatrix@C=0pc@R=1pc{
+   & & & & & \fbox{$x_{2}\equiv$ S$_{4}$} \ar@{.}[lld] \ar@{.}[rrd] \ar@/^1pc/[rdd] & & & & \\
+   & & & \fbox{$x_{1}\equiv$ S$_{2}$} \ar[rd] & & & & \fbox{$x_{1}^{\prime}\equiv$ S$_{6}$} \ar[rd] & & \\
+   \text{S}_{0} (\textit{Init}) \ar@{>}[rr] & & \fbox{$x_{0}\equiv$ S$_{1}$} \ar[ru]  & & \fbox{$x_{0}^{\prime}\equiv$ S$_{3}$} \ar@/^1pc/[ruu] & &  \fbox{$x_{0}^{\prime\prime}\equiv$ S$_{5}$} \ar[ru] & & \fbox{$x_{0}^{\prime\prime\prime}\equiv$ S$_{7}$} \ar@{>}[rr] & & \text{S}_{8} (\textit{Goal}) \\
+  }
+\vspace{2em}
+ \end{footnotesize}
+\caption{Transitions pour un plan en 8 étapes : (a) codage SAT/SMT et (b) codage d'arbre compact QBF (CTE)}
+\end{figure}
+
+
+\input{codages/codage-qbf-fe.tex}
+
+
+\input{codages/codage-noop-cte.tex}
+
+
+\subsection{Nouveaux codages d'arbres compacts QBF}
+
+Dans la suite, nous proposons deux nouveaux codages de problèmes de planification en QBF. Le premier, noté CTE-OPEN, est basé sur des liens de causalité dans les espaces de plans. Il a été initialement introduit pour SAT par \cite{MK99} mais doit être adapté en utilisant des variables supplémentaires pour les conditions ouvertes\fred{Référence à la section sur codages MK99 espaces de plans}. Le second, noté CTE-EFA, est basé sur des frame-axiomes explicatifs dans les espaces d'états introduits initialement pour SAT par \cite{KS92} et utilise des variables pour les fluents et les actions.
+
+
+% Définitions/intuitions retirées :
+% - A causal link between two actions states which preconditions of one action are added by the other.
+% - A no-op action is an artificial action which aims at keeping positive fluents that are not changed by any other action from a state to the next.
+% - Frame axioms are constraints that enforce that any fluent not affected by any action in some state must be kept as-is in the following state.
+% - A ``planning graph'' represents a plan candidate that belongs to the space of all possible plans (we refer to this by ``plan-space'').
+
+
+\input{codages/codage-open-cte.tex}
+
+
+\input{codages/codage-efa-cte.tex}
+
+
+%\subsection{Finding Minimal Plan Length}
+
+%\begin{figure}[ht]
+%\begin{center} \includegraphics[width=.45\textwidth]{images/dichotomie-1} \end{center}
+%\caption{incremental search}
+%\end{figure}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLANIFICATION SMT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Planification temporelle}
+
+Nous \'{e}tudions la planification temporelle propositionnelle dans un langage bas\'{e} sur les aspects temporels de PDDL2.1 \cite{DBLP:journals/jair/FoxL03}. Un fluent est une proposition atomique positive ou n\'{e}gative. Comme dans PDDL2.1, nous consid\'{e}rons que les changements des valeurs des fluents sont instantan\'{e}s mais que les conditions sur la valeur des fluents peuvent \^{e}tre impos\'{e}es sur un intervalle. Une action $\a$ est un quadruplet $\langle\cond{\a},\add{\a},\del{\a},\constr{a}\rangle$, o\`{u} l'ensemble des conditions $\cond{\a}$ est l'ensemble des fluents qui doivent \^{e}tre vrais pour que $\a$ soit ex\'{e}cut\'{e}e, l'ensemble des ajouts $\add{\a}$ est l'ensemble des fluents qui sont \'{e}tablis par $\a$, l'ensemble des retraits $\del{\a}$ est l'ensemble des fluents qui sont d\'{e}truits par $\a$, et l'ensemble de contraintes $\constr{a}$ est un ensemble de contraintes entre les temps relatifs des \'{e}v\'{e}nements qui se produisent pendant l'ex\'{e}cution de $\a$. Un \'{e}v\'{e}nement correspond \`{a} l'une des quatre possibilit\'{e}s: l'\'{e}tablissement ou la destruction d'un fluent par une action $\a$, ou le d\'{e}but ou la fin d'un intervalle sur lequel un fluent est requis par une action $\a$. Dans PDDL2.1, les \'{e}v\'{e}nements ne peuvent se produire qu'au d\'{e}but ou \`{a} la fin des actions, mais nous rel\^{a}chons cette hypoth\`{e}se de sorte que les \'{e}v\'{e}nements peuvent se produire \`{a} tout moment \`{a} condition que les contraintes $\constr{\a}$ soient satisfaites. Notons que $\add{\a} \cap \del{\a}$ peut \^{e}tre non vide. En effet, il n'est pas inhabituel pour une action durative d'\'{e}tablir un fluent au d\'{e}but de l'action et de le d\'{e}truire \`{a} sa fin. Nous pouvons \'{e}galement observer que la dur\'{e}e d'une action, le temps entre le premier et le dernier \'{e}v\'{e}nement de l'action, n'a pas besoin d'\^{e}tre explicitement stock\'{e}e.
+%Nous représentons des actions non-instantanées par un rectangle. La durée d'une action est donnée entre crochets après le nom de l'action. Les conditions sont écrites au-dessus d'une action, et les effets ci-dessous. L'action CHARGE (m, c) représentée sur la figure 1 représente le chargement d'un lot de béton c dans un mélangeur m. Nous avons Cond (LOAD (m, c)) = {Fluid (c), Empty (m), At-factory (m)}. On peut voir sur la figure que le mélangeur doit être vide au début du chargement, alors que le béton doit être fluide et le malaxeur à l'usine pendant toute la durée du chargement. Nous avons Del (LOAD (m, c)) = {Empty (m)} et Add (LOAD (m, c) = {On (m, c)} Nous pouvons voir sur la figure que dès que le chargement commence, le mélangeur n'est plus vide et à la fin du chargement le mélangeur contient le béton.
+
+
+Nous utilisons la notation $\a \rightarrow \f$ pour d\'{e}signer l'\'{e}v\'{e}nement que l'action $\a$ \'{e}tablit le fluent $\f$, $\a \rightarrow \neg\f$ pour d\'{e}signer l'\'{e}v\'{e}nement que $\a$ d\'{e}truit $\f$, et $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$, respectivement, pour indiquer le d\'{e}but et la fin de l'intervalle sur lequel $\a$ requiert la condition $\f.$ Si $\f$ est d\'{e}j\`{a} vrai (respectivement, faux) lorsque l'\'{e}v\'{e}nement
+$\a \rightarrow \f$ ($\a \rightarrow \neg\f$) se produit, nous consid\'{e}rons toujours que $\a$ \'{e}tablit (d\'{e}truit) $\f$. Un plan temporel peut contenir plusieurs instances de la m\^{e}me action, mais %puisque la plupart des plans temporels étudiés dans cet article contiennent au plus un exemple de chaque action, 
+par simplicit\'{e} de notation, nous ferons seulement la distinction entre actions et instances d'action si cela est absolument n\'{e}cessaire. Nous utilisons la notation $\tau(e)$ pour repr\'{e}senter l'instant dans un plan o\`{u} un \'{e}v\'{e}nement $e$ se produit.
+Pour une action donn\'{e}e (ou une instance d'action) $a$, $\events{\a}$ repr\'{e}sente les diff\'{e}rents \'{e}v\'{e}nements qui constituent sa d\'{e}finition, \`{a} savoir $\a \rightarrow \f$ pour tout $\f$ dans $\add{\a}$, $\a \rightarrow \neg\f$ pour tout $\f$ dans $\del{\a}$, $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$ pour tout $\f$ dans $\cond{a}$. La d\'{e}finition d'une action $\a$ inclut les contraintes $\constr{a}$ sur les instants relatifs aux \'{e}v\'{e}nements dans $\events{\a}$. %Par exemple, la structure interne de l'action de longueur fixe LOAD (m, c) représentée sur la figure 1 est définie par des contraintes telles que
+%τ (Fluide (c) → | CHARGE (m, c)) - τ (Fluide (c) | → CHARGE (m, c)) = 5
+%τ (LOAD (m, c) → On (m, c)) - τ (Fluide (c) → | LOAD (m, c)) = 0
+Comme dans PDDL2.1, nous consid\'{e}rons que la dur\'{e}e entre \'{e}v\'{e}nements dans $\events{\a}$ n'est pas n\'{e}cessairement fixe et que $\constr{\a}$ est un ensemble de contraintes d'intervalle sur des paires d'\'{e}v\'{e}nements, tels que
+$\tau(\f \rightarrow\mid \a) - \tau(\f \mid\rightarrow \a) \in [\alpha,\beta]$ pour des constantes $\alpha,\beta$. Nous utilisons $[\alpha_{\a}(e_1, e_2), \beta_{\a}(e_1, e_2)]$ pour d\'{e}signer l'intervalle de valeurs possibles pour la distance relative entre les \'{e}v\'{e}nements $e_1$, $e_2$ de l'action $\a$. Une dur\'{e}e fixe entre les \'{e}v\'{e}nements $e_1,e_2 \in \events{\a}$ peut, bien s\^{u}r, \^{e}tre mod\'{e}lis\'{e}e en d\'{e}finissant $\alpha_{\a}(e_1, e_2)=\beta_{\a}(e_1, e_2)$. De m\^{e}me, l'absence de contrainte peut \^{e}tre mod\'{e}lis\'{e}e par l'intervalle $[-\infty,+\infty]$. Nous introduisons maintenant deux contraintes fondamentales que tous les plans temporels doivent satisfaire :
+\begin{itemize}
+\item les \emph{contraintes inh\'{e}rentes} \`{a} l'ensemble des instances d'action $\A$ : pour toute $\a\in\A$, $\a$ satisfait $\constr{a}$, c'est-\`{a}-dire pour toutes les paires d'\'{e}v\'{e}nements $e_1,e_2\in \events{\a}$ nous avons $\tau(e_1) - \tau(e_2) \in [\alpha_\a(e_1,e_2),\beta_\a(e_1,e_2)]$ ;
+\item les \emph{contraintes d'effets contradictoires} sur l'ensemble des instances d'action $\A$ : pour toutes $\a_i,\a_j \in\A$, pour tout fluent positif $\f \in \del{\a_i} \cap \add{\a_j}$ nous avons $\tau(\a_i \rightarrow \neg\f) \neq \tau(\a_j \rightarrow \f)$.
+\end{itemize}
+
+Les contraintes inh\'{e}rentes d\'{e}finissent la structure interne de chaque instance d'action, alors que les contraintes d'effets contradictoires assurent que la valeur de v\'{e}rit\'{e} de chaque fluent ne soit jamais ind\'{e}finie lors de l'ex\'{e}cution d'un plan temporel. %Par exemple, si un plan contient une instance $\a$ de l'action LOAD (m, c) montrée à la figure 1 et une instance b d'une autre action CLEAN (m) avec Empty (m) ∈ Add (CLEAN (m)), alors le plan temporel doit satisfaire la contrainte d'effets contradictoires
+%τ (a → ¬EMPTY (m)) ≠ τ (b → EMPTY (m)).
+
+\begin{definition}
+Un probl\`{e}me de planification temporelle $\langle \I, \A, \G \rangle$ consiste en un ensemble d'actions $\A,$ un \'{e}tat initial $\I$ et un but $\G$, o\`{u} $\I$ et $\G$ sont des ensembles de fluents.
+\end{definition}
+\paragraph*{Notation} Si $\A$ est un ensemble d'instances d'actions, alors $\events{\A}$ est l'union des ensembles $\events{\a}$ (pour toutes les instances d'action $a\in \A$).
+
+\begin{definition}\label{def:plan-temporel}
+$P = \langle \A, \tau \rangle$, o\`{u} $\A$ est un ensemble fini d'instances d'actions $\{a_1,\ldots, a_n\}$ et $\tau$ est une fonction \`{a} valeurs r\'{e}elles sur $\events{\A}$, est un plan temporel pour le probl\`{e}me $\langle \I , \A^{\prime}, \G \rangle$ si
+\begin{enumerate}
+\item[(1)] $\A \subseteq \A^{\prime}$, et
+\item[(2)] $P$ v\'{e}rifie les contraintes inh\'{e}rentes et contradictoires sur $\A$;
+\end{enumerate}
+et lorsque $P$ est ex\'{e}cut\'{e} (c'est-\`{a}-dire que les fluents sont \'{e}tablis ou d\'{e}truits aux instants donn\'{e}s par $\tau$) \`{a} partir de l'\'{e}tat initial $\I$:
+\begin{enumerate}
+\item[(3)] pour toute $a_i \in \A$, chaque $\f \in \cond{a_i}$ est vrai lorsqu'il est requis, et
+\item[(4)] tous les fluents $g \in \G$ sont vrais \`{a} la fin de l'ex\'{e}cution de $P$.
+\item[(5)] $P$ est robuste sous des changements infinit\'{e}simaux dans les temps de d\'{e}marrage des actions.
+\end{enumerate}
+\end{definition}
+
+Les \'{e}v\'{e}nements sont instantan\'{e}s, alors que les actions ont non seulement une dur\'{e}e mais celle-ci peut aussi \^{e}tre de longueur variable. Ainsi, un plan temporel $P$ ne planifie pas directement ses instances d'action mais planifie tous les \'{e}v\'{e}nements dans ses instances d'actions.
+La condition (5) de la d\'{e}finition~\ref{def:plan-temporel} signifie que nous interdisons les plans qui exigent une synchronisation parfaite entre diff\'{e}rentes actions. % montrent comment 
+Cette condition peut \^{e}tre impos\'{e}e dans PDDL2.1 \cite{DBLP:conf/ecai/FoxLH04}. Nous exigeons que dans tous les plans, les fluents soient \'{e}tablis strictement avant le d\'{e}but de l'intervalle sur lequel ils sont requis. La seule exception \`{a} cette r\`{e}gle est lorsqu'un fluent $\f$ est \'{e}tabli et requis par la m\^{e}me action $\a$. Nous permettons la possibilit\'{e} d'une parfaite synchronisation au sein d'une action, ce qui signifie que nous pouvons avoir $\tau(\a\rightarrow\f)=\tau(\f\mid\rightarrow\a)$.
+De m\^{e}me, les fluents ne peuvent \^{e}tre d\'{e}truits qu'apr\`{e}s la fin de l'intervalle sur lequel ils sont requis. La seule exception \`{a} cette regle est quand un fluent $\f$ est requis et d\'{e}truit par une action $\a$, auquel cas on peut avoir $\tau(\f\rightarrow\mid\a)=\tau(\a\rightarrow\neg\f)$. %Par exemple, le fluide Empty (m) est simultanément requis et détruit par l'action LOAD (m, c) représentée sur la figure 1.
+
+\begin{definition}
+Un probl\`{e}me de planification temporelle $\langle \I, \A, \G \rangle$ est positif s'il n'y a pas de fluents n\'{e}gatifs dans les conditions d'actions ni dans le but $\G$.
+\end{definition}
+
+Dans cet article, nous ne consid\`{e}rerons que des probl\`{e}mes de planification temporelle positifs $\langle \I, \A, \G \rangle$. Il est bien connu que tout probl\`{e}me de planification peut \^{e}tre transform\'{e} en un probl\`{e}me positif \'{e}quivalent en temps lin\'{e}aire par l'introduction, pour chaque fluent positif $\f$, d'un nouveau fluent pour remplacer les occurrences de $\neg\f$ dans les conditions d'actions \cite{DBLP:books/daglib/0014222}. %Il est important de noter, cependant, que cette transformation peut ne pas conserver d'autres propri\'{e}t\'{e}s de l'instance. 
+En supposant que tous les probl\`{e}mes sont positifs, $\G$ et $\cond{\a}$ (pour toute action $\a$) sont compos\'{e}s de fluents positifs. Par convention, $\add{\a}$ et $\del{a}$ sont aussi compos\'{e}s exclusivement de fluents positifs. L'\'{e}tat initial $\I$, cependant, peut contenir des fluents n\'{e}gatifs.
+%Pour simplifier la pr\'{e}sentation, nous supposons dans cet article que l'ensemble des actions A a subi l'op\'{e}ration de filtrage consistant \`{a} \'{e}liminer les actions $\a$ de $\A$ qui ne peuvent \^{e}tre ex\'{e}cut\'{e}es puisque $\cond{\a}$ n'est pas un sous-ensemble de $\I\cup\add{\a}$.
+
+
+%\subsubsection{Codage SAT pour la planification classique}
+%Dans cette section, nous consid\'{e}rons la planification classique comme restriction de la planification temporelle d\'{e}crite dans la section pr\'{e}c\'{e}dente. Un probl\`{e}me de planification positif est donc ici un triplet $\langle \I , \A, \G \rangle$ tel que toutes les actions de $\A$ sont instantan\'{e}es (c'est-\`{a}-dire $\forall \a\in\A, \forall e_1,e_2\in \events{\a}, \tau(e_1)=\tau(e_2)$). De plus, nous consid\'{e}rons pour tout plan $P = \langle \A, \tau \rangle$, que $\tau$ est une fonction \`{a} valeurs enti\`{e}res de $\events{\A}$ dans $N=\{1,\ldots,n\}$ l'ensemble ordonn\'{e} des index d'\'{e}tapes de $P$.
+
+
+%
+% codage-open-sat (old)
+%
+%
+
+
+
+
+
+%\begin{frame}
+%\begin{figure}\label{steps}
+% \hspace{0.8em}\xymatrix@C=1pc@R=1pc{
+%  Init \ar[r] & \fbox{S$_{1}$} \ar[r]  & \fbox{S$_{2}$} \ar[r] & \fbox{S$_{3}$} \ar[r] & \fbox{S$_{4}$} \ar[r] & \fbox{S$_{5}$} \ar[r] & \fbox{S$_{6}$} \ar[r] & \fbox{S$_{7}$} \ar[r] & Goal \\
+%  }
+%  \vspace{2em}
+%   \hspace{0.8em}\xymatrix@C=0.2pc@R=1pc{
+%   & & & & & \fbox{S$_{4}$} \ar@{.}[lld] \ar@{.}[rrd] \ar@/^1pc/[rdd] \\
+%   & & & \fbox{S$_{2}$} \ar[rd] & & & & \fbox{S$_{6}$} \ar[rd] \\
+%  Init \ar[rr] & & \fbox{S$_{1}$} \ar[ru]  & & \fbox{S$_{3}$} \ar@/^1pc/[ruu] & & \fbox{S$_{5}$} \ar[ru] & & \fbox{S$_{7}$} \ar[rr] & & Goal \\
+%  }
+%\caption{Transitions of an 8-steps plan in SAT/SMT encoding and QBF compact tree encoding (CTE)}
+%\end{figure}
+%\end{frame}
+
+
+\subsection{Codages SMT de référence pour la planification temporelle}
+%
+
+\input{codages/codage-smt-tlp-gp.tex}
+
+\subsection{Nouveau codage SMT pour la planification temporelle}
+
+Nous introduisons une adaptation SMT du codage SAT bas\'{e} sur les conditions ouvertes que nous avons introduit dans la section \fred{ajout référence} pour la planification classique. Ici, les actions ne sont plus instantan\'{e}es et des contraintes sur les instants $\tau(e)$ auxquels se produisent des \'{e}v\'{e}nements $e\in\events{\A}$ doivent explicitement \^{e}tre ajout\'{e}es.
+
+
+Consid\'{e}rons donc maintenant un probl\`{e}me de planification temporelle positif $\langle \I, \A, \G \rangle$.
+Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous introduisons deux variables $\tau_{s}(\textit{open}_{f})$ et $\tau_{e}(\textit{open}_{f})$ qui nous permettent de d\'{e}finir un intervalle temporel de protection de lien causal depuis l'\'{e}tat initial ou une \'{e}tape contenant une action qui produit $\f$ vers une \'{e}tape qui contient l'instance d'action $\a$. Durant cet intervalle temporel, aucune action ne pourra d\'{e}truire $\f$.
+
+
+%%\paragraph*{Planning with Continuous Time}
+%%%\begin{alertblock}{Definition}
+%%For each action $a = \langle \cond{a},\add{a},\del{a} \rangle$:
+%%\begin{itemize}
+%%  \item $\forall f\in \cond{a}$ we define:
+%%    \begin{itemize}
+%%      \item $[\tau(f\mid\rightarrow a);\tau(f\rightarrow\mid a)]$
+%%%      \item $open_{f}$
+%%      \item $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$
+%%    \end{itemize}
+%%  \item $\forall f\in \add{a}$ we define $[\tau(a\mid\rightarrow f);\tau(a\rightarrow\mid f)]$
+%%  \item $\forall f\in \del{a}$ we define $[\tau(a\mid\rightarrow \neg f);\tau(a\rightarrow\mid \neg f)]$
+%%\end{itemize}
+%%%\begin{itemize}
+%%%  \item $A \wedge (f\in \cond{A}) \rightarrow f_{~[\tau(f\mid\rightarrow A);\tau(f\rightarrow\mid A)]}$
+%%%  \item $A \wedge (f\in \add{A}) \rightarrow f_{~[\tau(A\mid\rightarrow f);\tau(A\rightarrow\mid f)]}$
+%%%  \item $A \wedge (f\in \del{A}) \rightarrow \neg f_{~[\tau(A\mid\rightarrow \neg f);\tau(A\rightarrow\mid \neg f)]}$
+%%%\end{itemize}
+%%%\end{alertblock}
+
+
+%\begin{frame}{SMT Temporal Planning}
+%Classical planning: PSPACE-complete~\cite{DBLP:journals/ai/Bylander94}.
+%\end{frame}
+
+
+\paragraph*{Conditions ouvertes} Si une action $\a$ est ex\'{e}cut\'{e}e dans une \'{e}tape du plan, alors chaque condition de $\a$ doit \^{e}tre une condition ouverte \`{a} cette \'{e}tape (c'est-\`{a}-dire qu'un lien causal est requis pour cette condition). De plus, le d\'{e}but de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{length}]}}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
+\left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \bigwedge\limits_{\substack{\mathbf{f}\in \cond{\mathbf{\a}}}}\begin{pmatrix}open_{\mathbf{\f},\mathbf{i}}\hfill\\ \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \geq \tau_{s}(open_{\mathbf{f},\mathbf{i}})\right)\hfill\\
+ \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \leq \tau_{e}(open_{\mathbf{\f},\mathbf{i}})\right)\end{pmatrix}\right)\hfill\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+Dans la derni\`{e}re \'{e}tape du plan menant au but tous les fluents du but doivent \^{e}tre des conditions ouvertes ou ajout\'{e}es par des actions ex\'{e}cut\'{e}es dans cette \'{e}tape. Dans le cas o\`{u} une action $\a$ ajoute une condition ouverte $\f$, le d\'{e}but de l'intervalle de protection du lien causal correspondant est fix\'{e} \`{a} l'instant o\`{u} $\a$ produit $\f$.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\G}}}\begin{pmatrix}open_{\mathbf{\f},\mathbf{\length}} \hfill\\\vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\begin{pmatrix}\mathbf{\a}_{\mathbf{\length}}\hfill\\
+ \wedge \left(\tau(\mathbf{\a}_\mathbf{\length}\rightarrow \mathbf{\f}) = \tau_{s}(open_{\mathbf{\f},\mathbf{\length}})\right)\hfill\\
+  \wedge \left(\tau_{\textit{Goal}} = \tau_{e}(open_{\mathbf{f},\mathbf{\length}})\right)\hfill\end{pmatrix}\end{pmatrix}\hfill\\[-2em]
+%
+%\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{G}}}\left(\tau_{\textit{Goal}} = \tau_{e}(open_{\mathbf{f},\mathbf{length}})\right)\hfill\
+%%%
+\end{multline*}
+\end{small}
+
+
+\paragraph*{Propagation et fermeture}
+
+Aucune condition ne doit rester ouverte dans la premi\`{e}re \'{e}tape du plan si elle n'est pas fournie dans l'\'{e}tat initial.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}\setminus \mathbf{\I}}}\neg open_{\mathbf{\f},1}\hfill\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+Si une condition ouverte est fournie par l'\'{e}tat initial, alors le d\'{e}but de l'intervalle de protection du lien causal correspondant est fix\'{e} \`{a} l'instant initial $\tau_{\textit{Init}}$.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\I}}}\left(open_{\mathbf{\f},1} \Rightarrow \left(\tau_{\textit{Init}} = \tau_{s}(open_{\mathbf{\f},1})\right)\right)\hfill\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+Toute condition ouverte $\f$ dans une \'{e}tape doit \`{a} l'\'{e}tape pr\'{e}c\'{e}dente : (1) soit rester ouverte et dans ce cas l'intervalle de protection du lien causal correspondant reste le m\^{e}me pour ces deux \'{e}tapes, (2) soit \^{e}tre ajout\'{e}e (ferm\'{e}e) par une instance d'action $\a$ et dans ce cas le d\'{e}but de l'intervalle de protection du lien causal est fix\'{e} \`{a} l'instant de production de $\f$ par $\a$.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [2..\mathbf{\length}]}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}}}\hfill\\
+\begin{pmatrix}open_{\mathbf{\f},\mathbf{i}} \Rightarrow\hfill\\ \begin{pmatrix}\begin{pmatrix}open_{\mathbf{\f},\mathbf{i} - 1}\hfill\\ \wedge %\begin{pmatrix}
+\left(\tau_{s}(open_{\mathbf{\f},\mathbf{i} - 1}) = \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\hfill\\
+ \wedge \left(\tau_{e}(open_{\mathbf{f},\mathbf{i} - 1}) = \tau_{e}(open_{\mathbf{\f},\mathbf{i}})
+ \right)\end{pmatrix}\hfill\\
+ \vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\left(\mathbf{\a}_{\mathbf{i} - 1} \wedge \left(\tau(\mathbf{\a}_{\mathbf{i} - 1}\rightarrow \mathbf{\f}) = \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\right)\hfill\\
+ \end{pmatrix}\end{pmatrix}\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+
+\paragraph*{Protection des conditions ouvertes}
+
+Une condition ouverte dans une \'{e}tape donn\'{e}e ne peut pas \^{e}tre supprim\'{e}e \`{a} l'int\'{e}rieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalit\'{e} dans le plan.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}}}~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \del{\mathbf{\a}}}}\hfill\\
+\left(\left(open_{\mathbf{\f},\mathbf{i}} \wedge \mathbf{\a}_{\mathbf{j}}\right) \Rightarrow \begin{pmatrix}\left(\tau(\mathbf{\a}_\mathbf{j}\rightarrow \neg \mathbf{\f}) < \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\hfill\\
+ \vee \left(\tau_{e}(open_{\mathbf{\f},\mathbf{i}}) < \tau(\mathbf{\a}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\end{pmatrix}\right)\hfill\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+
+\paragraph*{Pr\'{e}vention des interactions n\'{e}gatives}
+
+Si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajout\'{e} par une autre action $\a$ \`{a} un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont diff\'{e}rents.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \add{\mathbf{\a}}}}~\bigwedge\limits_{\substack{\mathbf{\b}\in \mathbf{\A}\\((\mathbf{i} \neq \mathbf{j}) \vee (\mathbf{\a} \neq \mathbf{\b})) \wedge \mathbf{\f} \in \del{\mathbf{\b}}}}\hfill\\
+\left(\left(\mathbf{\a}_{\mathbf{i}} \wedge \mathbf{\b}_{\mathbf{j}}\right) \Rightarrow %\begin{pmatrix}
+\left(\tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{\f}) \neq \tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\hfill%\\
+% \vee \left(\tau(\mathbf{\b}_\mathbf{j}\rightarrow\mid \neg \mathbf{\f}) < \tau(\mathbf{\a}_\mathbf{i}\mid\rightarrow \mathbf{\f})\right)
+%\end{pmatrix}
+\right)\hfill\\[-2em]
+%%%%%%%%%%
+\end{multline*}
+\end{small}
+
+De m\^{e}me, si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est n\'{e}cessaire \`{a} une autre action $\a$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a), \tau(\f\rightarrow\mid\a)]$, alors cet instant ne peut \^{e}tre contenu dans cet intervalle.
+
+\begin{small}
+\begin{multline*}
+~\\[-3em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \cond{\mathbf{\a}}}}~\bigwedge\limits_{\substack{\mathbf{\b}\in \mathbf{\A}\\((\mathbf{i} \neq \mathbf{j}) \vee (\mathbf{\a} \neq \mathbf{\b})) \wedge \mathbf{\f} \in \del{\mathbf{\b}}}}\hfill\\
+\left(\left(\mathbf{\a}_{\mathbf{i}} \wedge \mathbf{\b}_{\mathbf{j}}\right) \Rightarrow \begin{pmatrix}\left(\tau(\mathbf{f}\rightarrow\mid\mathbf{\a}_\mathbf{i}) < \tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\hfill\\
+ \vee \left(\tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f}) < \tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i})\right)\end{pmatrix}\right)\hfill\\[-2em]
+%%%
+\end{multline*}
+\end{small}
+
+
+%\paragraph*{SMT Encoding: bound the plan with Init and Goal states}
+\paragraph*{Bornes du plan temporel}
+Enfin, nous devons ajouter une contrainte pour maintenir le plan dans un intervalle de temps born\'{e} par l'\'{e}tape initiale qui produit l'\'{e}tat initial $\I$ et l'\'{e}tape finale qui n\'{e}cessite tous les fluents du but $\G$.
+\begin{small}
+\begin{multline*}
+~\\[-2em]
+\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]}}~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
+\left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \begin{pmatrix}\bigwedge\limits_{\substack{\mathbf{\f}\in \cond{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \right)\hfill\\%
+ \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{f}\rightarrow\mid\mathbf{\a}_\mathbf{i})\right) \end{pmatrix}\hfill\\
+ \wedge \bigwedge\limits_{\substack{\mathbf{\f}\in \add{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{\f}) \right)\hfill\\%
+ \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{f})\right) \end{pmatrix}\hfill\\
+ \wedge \bigwedge\limits_{\substack{\mathbf{\f}\in \del{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \neg \mathbf{\f}) \right)\hfill\\%
+ \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \neg \mathbf{\f})\right) \end{pmatrix} \end{pmatrix}\right)\\[1em]
+ %%%
+% \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{length}]}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}}} \left(\neg \mathbf{A}_{\mathbf{i}} \Rightarrow \left(t_{\mathbf{A},\mathbf{i}} = -1\right)\right)\hfill\\
+\end{multline*}
+\end{small}
+
+

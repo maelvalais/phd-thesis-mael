@@ -1,0 +1,91 @@
+%
+% codage CTE-EFA
+%
+\subsubsection{Nouveau codage QBF dans les espaces d'états: CTE-EFA}
+
+Dans ce codage, nous définissons l'ensemble des variables propositionnelles comme $\X = \A \cup \F$. Chaque étape est maintenant définie par une transition (comme dans CTE-OPEN) ainsi que par l'état résultant (valuation des fluents de $\F$). La formule est une adaptation au CTE des règles bien connues de codage SAT de \cite{KS92} basées sur des frame-axiomes explicatifs dans les espaces d'états.
+
+\paragraph*{Quantificateurs}
+
+A chaque profondeur $i$ de l'arbre, il existe une seule variable $\a_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\f_{i}$ pour chaque fluent utilisée pour déterminer l'état.
+A la même profondeur $i$, les valeurs de ces variables dépendent du n\oe ud (correspondant à une transition dans le plan et à l'état résultant) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
+
+\begin{small}
+\[
+\begin{matrix}
+\displaystyle \bigexists_{\a \in \A} \a_{\depth}. \bigexists_{\f\in \F} \f_{\depth}.%\\
+\displaystyle {\bigforall b_{\depth}.}\\
+\displaystyle \bigexists_{\a \in \A} \a_{\depth-1}. \bigexists_{\f\in \F} \f_{\depth-1}.%\\
+\displaystyle {\bigforall b_{\depth-1}.}\\
+\displaystyle \dots\\ 
+%\dots
+\displaystyle \bigexists_{\a \in \A} \a_{1}. \bigexists_{\f\in \F} \f_{1}.%\\
+\displaystyle {\bigforall b_{1}.}%\\
+\displaystyle \bigexists_{\a \in \A} \a_{0}. \bigexists_{\f\in \F} \f_{0}.
+\end{matrix}
+\]
+\end{small}%\\
+
+\paragraph*{But}
+
+Dans l'état après la dernière transition du plan (c'est-à-dire la feuille la plus à droite de l'arbre), tous les fluents du but doivent être atteints.
+
+%\begin{scriptsize}
+\[ \BigforallTwo{i=1}{\depth} b_{i} \Rightarrow \Bigforall{\f\in G} {\f}_{0} \]	
+%\end{scriptsize}
+
+\paragraph*{Conditions et effets des actions}
+
+Si une action $\a$ est exécutée dans une transition du plan, alors chaque effet de $\a$ se produit dans l'état résultant et chaque précondition de $\a$ est requise dans l'état précédent.
+%\begin{scriptsize}
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a \in \A} \left(\a_{i} \Rightarrow \left( \Bigforall{\f\in \Add{\a}} \f_{i} \right) \wedge \left( \Bigforall{\f\in \Del{\a}} \neg \f_{i} \right) \right) \]
+%\end{scriptsize}
+
+%\begin{scriptsize}
+\[ \BigforallTwo{i=1}{\depth} \Bigforall{\a\in \A}
+\left(\a_{i} \wedge \leftselect{i} \Rightarrow \Bigforall{\f \in \Cond{\A}} \f_{0}\right)\]
+\[\BigforallTwo{i=1}{\depth} \Bigforall{\a\in \A}
+\left(\a_{0} \wedge \rightselect{i} \Rightarrow \Bigforall{\f \in \Cond{\A}} \f_{i}\right)\]
+%\end{scriptsize}
+
+De plus, une action qui n'a pas toutes ses préconditions dans l'état initial ne peut pas être exécutée dans la première transition du plan (c'est-à-dire la feuille la plus à gauche de l'arbre):
+
+%\begin{scriptsize}
+\[ \BigforallTwo{i=1}{\depth}\neg b_{i} \Rightarrow \Bigforall{\a\in \A\\ \Cond{\a} \not\subset I} \neg {\a}_{0} \]
+%\end{scriptsize}
+
+\paragraph*{Frame-axiomes explicatifs}
+
+%{\color{blue}We only give here one of the four rules for explanatory frame axioms, the others being very similar. \color{red} Fred: j'ai ajouté les 4 règles + celles pour l'étape initiale}
+Si la valeur d'un fluent change entre deux états consécutifs, alors une action qui produit cette modification est exécutée dans la transition du plan entre ces états.
+
+\begin{small}
+\[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
+\left(\left(\neg\f_{0} \wedge \f_{i} \wedge \leftselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{i}\right)\right)\]
+
+\[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
+\left(\left(\neg\f_{i} \wedge \f_{0} \wedge \rightselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{0}\right)\right)\]
+\end{small}
+
+\begin{small}
+\[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
+\left(\left(\f_{0} \wedge \neg\f_{i} \wedge \leftselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{i}\right)\right)\]
+\[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
+\left(\left(\f_{i} \wedge \neg\f_{0} \wedge \rightselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{0}\right)\right)\]
+\end{small}
+
+Une règle supplémentaire est également requise pour décrire les frame-axiomes explicatifs pour la première transition du plan à partir de l'état initial (c'est-à-dire la feuille la plus à gauche de l'arbre):
+
+%\begin{scriptsize}
+\[ \Bigforall{\f\in \F\setminus I} \left(\left(\f_{0}\wedge \BigforallTwo{i=1}{\depth}\neg b_{i}\right) \Rightarrow \Bigexists{\a\in \A\\ \f\in\Add{\a}\\\Cond{\a} \subset I} {\a}_{0} \right) \]
+\[ \Bigforall{\f\in I} \left(\left(\neg\f_{0}\wedge \BigforallTwo{i=1}{\depth}\neg b_{i}\right) \Rightarrow \Bigexists{\a\in \A\\ \f\in\Del{\a}\\\Cond{\a} \subset I} {\a}_{0} \right) \]
+%\end{scriptsize}
+
+\paragraph*{Prévention des interactions négatives}
+
+Contrairement à CTE-NOOP et CTE-OPEN, les effets contradictoires sont déjà interdits par les règles précédentes (effets des actions).
+Cette règle doit donc seulement empêcher les interactions entre les préconditions et les retraits des actions. Si une action supprime un fluent nécessaire à une autre action, ces deux actions ne peuvent pas être exécutées dans une même transition du plan.
+
+%\begin{scriptsize}
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a \in \A} \Bigforall{\f\in \Cond{\a}} \Bigforall{\b \in \A \\ \a \neq \b \\ \f \in \Del{\b}}\left(\neg \a_{i} \vee \neg \b_{i}\right) \]
+%\end{scriptsize}

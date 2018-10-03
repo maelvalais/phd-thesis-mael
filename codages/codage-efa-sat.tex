@@ -1,0 +1,75 @@
+%
+% codage SAT-EFA
+%
+%\subsection{Codage SAT de référence dans les espaces d'états}
+
+\fred{Présenter le codage KS92,95 SAT-EFA classique}
+
+\fred{Attention, ici copier/coller ouvrage SAT 2008 Maris, Régnier, Vidal}
+{\color{red}
+
+\subsubsection{Codage dans les espaces d'états avec frame-axiomes explicatifs}
+
+\begin{figure}\label{steps:sat}
+\begin{footnotesize}
+%(a)\\[1em]
+
+\fred{Rajouter la figure que j'ai enlevée ici !!!}
+%   \xymatrix@C=0.1pc@R=1pc{
+%   \text{S}_{0} (\textit{Init}) \ar@{->}[r] & \fbox{$x_{1}\equiv$ S$_{1}$} \ar@{>}[r]  & \fbox{$x_{2}\equiv$ S$_{2}$} \ar@{>}[r] & \fbox{$x_{3}\equiv$ S$_{3}$} \ar@{>}[r] & \fbox{$x_{4}\equiv$ S$_{4}$}
+%   \ar@{>}[r] & \fbox{$x_{5}\equiv$ S$_{5}$} \ar@{>}[r] & \fbox{$x_{6}\equiv$ S$_{6}$} \ar@{>}[r] & \fbox{$x_{7}\equiv$ S$_{7}$} \ar@{>}[r] & \text{S}_{8} (\textit{Goal})
+%   }
+\end{footnotesize}
+\vspace{1em}
+\caption{Transitions of an 8-step plan in SAT/SMT encoding}
+\end{figure}
+
+
+Les codages dans les espaces d'états sont basés sur les transitions entre les étapes successives du plan en partant de l'état initial pour arriver au but.
+%Le parallélisme y est codé grâce à la notion d'indépendance entre actions simultanées. 
+Pour conserver les fluents non affectés par les actions qui doivent être exécutées dans une étape du plan, on va coder la notion de frame-axiome.
+Nous décrivons d'abord la technique la plus efficace en termes de compacité et
+de temps de résolution \cite{MK99} qui utilise des frame-axiomes explicatifs.
+Nous présentons ensuite une variation de ce codage utilisant des actions
+particulières appelées no-ops \cite{KMS96}.
+Les règles du codage dans les espaces d'états produisent des propositions de la
+forme $a(i)$ qui représentent le fait que l'action $a$ est appliquée à un niveau
+$i$ du plan ssi $a(i)$ a la valeur de vérité vrai, et des propositions de la
+forme $f(i)$ qui représentent le fait que le fluent $f$ est présent au niveau
+$i$ ssi $f(i)$ a la valeur de vérité vrai. Le présence de $f$ au niveau $i$
+signifie qu'il est présent après l'application successive de toutes les
+actions associées à des propositions qui sont vraies, du niveau 1 jusqu'au
+niveau $i$. Ce codage comporte cinq règles~:
+
+\begin{enumerate}
+\item \codrule{état initial et but~:} les fluents de l'état initial sont vrais au
+  niveau $0$, ceux qui n'en font pas partie sont faux au niveau $0$, et les
+  fluents du but sont vrais au niveau $k$.
+  \codage{\noindent\left[\biget{f \in I} f(0) \right] \land \left[\biget{f \in (F \setminus I)}\neg f(0) \right] \land \left[\biget{f \in B}f(k) \right]}
+\item \label{codage:ee2} \codrule{Préconditions et effets des actions~: } si une
+  action appartient au plan, alors ses préconditions sont vérifiées et
+  ses effets sont produits.\codage{\biget{i \in [1,k]} \biget{a \in A} \left[
+      a_i \Rightarrow \left( \biget{f \in \mathrm{Prec}(a)} f(i-1) \right) \land
+      \left( \biget{f \in \mathrm{Add}(a)} f(i) \right) \land \left( \biget{f
+          \in \mathrm{Del}(a)} \neg f(i) \right) \right]}
+\item \label{codage:ee3} \codrule{Frame-axiomes explicatifs de retrait~:} si un
+  fluent devient faux entre deux niveaux successifs du plan, alors une action au
+  moins qui le retire doit avoir été appliquée. Il faut que le fluent existe à
+  un instant donné, il doit donc appartenir à $I$ ou à $F_a$. Il lui faut aussi
+  pouvoir être retiré par une action, il doit donc aussi appartenir à $F_d$.
+ \codage{\biget{i \in [1,k]} \biget{f \in ((I \cup F_a) \cap F_d)} \left[ f(i-1) \land \neg f(i) \Rightarrow \bigou{a \in A \suchthat f \in \mathrm{Del}(a)} a(i) \right]}
+\item \label{codage:ee4} \codrule{Frame-axiomes explicatifs d'ajout~:} si un
+  fluent devient vrai entre deux niveaux successifs du plan, alors une action au
+  moins qui l'établit doit avoir été appliquée.  Il faut que le fluent puisse ne
+  pas exister à un instant donné, donc ne pas appartenir à $I$ ou appartenir à
+  $F_d$. Il lui faut aussi pouvoir être ajouté par une action donc appartenir à
+  $F_a$.
+  \codage{\biget{i \in [1,k]} \biget{f \in (((F \setminus I) \cup F_d) \cap F_a)} \left[\neg f(i-1) \land f(i) \Rightarrow \bigou{a \in A | f \in \mathrm{Add}(a)} a(i) \right]}
+\item \label{codage:ee5} \codrule{Interférences~:} deux actions non
+  indépendantes ne peuvent pas être exécutées au même niveau. Les effets
+  contradictoires sont déjà pris en compte par la règle \ref{codage:ee2}~; il
+  suffit donc d'interdire à un même niveau les actions uniquement interférentes.
+  \codage{\biget{i \in [1,k]} \biget{\{a_m, a_n\} \subseteq A \suchthat m < n \land (a_m\|_e a_n) \land \lnot (a_m\|_i a_n)} \left[ \neg a_m(i) \lor \neg a_n(i) \right]}
+\end{enumerate}
+
+}

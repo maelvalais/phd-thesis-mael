@@ -1,0 +1,32 @@
+\fred{Intro à faire}
+
+\section{Introduction générale au domaine}
+
+\fred{La compilation de problèmes en logique bla bla résolution avec des solveurs bla bla}
+
+\section{Le cadre de travail}
+
+\subsection{Les solveurs pour les logiques classiques}
+
+\subsubsection{SAT : satisfaction de formules booléennes}
+
+\subsubsection{SMT : SAT Modulo Theories}
+\input{introduction/intro-sat-smt-qbf.tex}
+
+\subsubsection{QBF : formules booléennes quantifiées}
+Quantified Boolean Formula (QBF) est connu comme étant le problème de référence pour la classe de complexité PSPACE (\cite{Stockmeyer:1973:WPR:800125.804029}). C'est une extension de la logique propositionnelle permettant de quantifier sur les variables propositionnelles. 
+
+Par exemple, $\forall p \exists q.p \leftrightarrow q$ se lit : pour toute valeur de vérité de $p$, il existe une valeur de vérité de $q$ tel que $p \leftrightarrow q$ est vrai. Cette formule est vraie (il suffit de choisir la même valeur pour $q$ que pour $p$). Alors que  $\exists p \forall q.p \lor q$ ne l'est pas. Ainsi, une formule booléenne quantifiée est toujours SOIT vraie SOIT fausse. 
+
+De fait, à toute formule QBF peut être associée une formule propositionnelle sans variables car par définition : 
+$\forall p.\Phi$ est vraie ssi $\Phi_{[p:=\top]} \wedge \Phi_{[p:=\bot]}$ l'est, et $\exists p.\Phi$ est vraie ssi $\Phi_{[p:=\top]} \vee \Phi_{[p:=\bot]}$. 
+
+La formule QBF peut être exponentiellement plus compacte que la formule propositionnelle correspondante. 
+
+Par exemple à la formule $\forall p \exists q.p \leftrightarrow q$ correspond la formule propositionnelle \\
+$\Big ( (\top \leftrightarrow \top)\vee (\top \leftrightarrow \bot) \Big ) \wedge \Big ( (\bot \leftrightarrow \top)\vee (\bot \leftrightarrow \bot) \Big )$
+
+\subsection{La planification par compilation automatique}
+\input{introduction/intro-planif.tex}
+
+\section{Présentation de la thèse}

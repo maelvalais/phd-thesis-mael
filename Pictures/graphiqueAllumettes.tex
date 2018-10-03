@@ -1,0 +1,35 @@
+\tikzset{%
+    prend1/.style={->,dotted,very thick,>=latex},
+    prend2/.style={->,very thick,>=latex}%
+}
+
+\begin{tikzpicture}
+% définition des noeuds
+\node (t0) at (0.5,0) {4};
+\node (t11) at (-1,-1) {2};
+\node (t12) at (2,-1) {3};
+\node (t21) at (-2,-2) {0};
+\node (t22) at (0,-2) {1};
+\node (t23) at (1,-2) {1};
+\node (t24) at (3,-2) {2};
+\node (t31) at (0,-3) {0};
+\node (t32) at (1,-3) {0};
+\node (t33) at (2,-3) {0};
+\node (t34) at (4,-3) {1};
+\node (t4) at (4,-4) {0};
+% 0 joue
+\draw[prend2] (t0)--(t11);
+\draw[color=red][prend1] (t0)--(t12);
+% 1 joue
+\draw[prend2] (t11)--(t21);
+\draw[prend1] (t11)--(t22);
+\draw[color=red][prend2] (t12)--(t23);
+\draw[color=red][prend1] (t12)--(t24);
+% 0 joue
+\draw[prend1] (t22)--(t31);
+\draw[color=red][prend1] (t23)--(t32);
+\draw[color=red][prend2] (t24)--(t33);
+\draw[prend1] (t24)--(t34);
+% 1 joue
+\draw[prend1] (t34)--(t4);
+\end{tikzpicture}

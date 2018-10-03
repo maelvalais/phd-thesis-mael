@@ -1,0 +1,160 @@
+%
+% codage CTE-NOOP
+%
+
+
+%In their paper, \citeauthor{DBLP:conf/ecai/CashmoreFG12} also give a correctness proof that applies to any CTE encoding implementing any transition function. In the following, we stay in this 
+
+
+\subsubsection{Codages d'arbres compacts QBF avec actions No-op}
+
+
+%\noindent A \textit{state} $\S$ is a valuation of the fluent set $\F$.
+\begin{figure} \centering\mbox{
+ \xymatrix@C=0.6pc@R=1.2pc{ %changer @C=0.55pc pour article en double colonne
+    & & & & \X_i \ar@{-}[llld]_{b_i=\bot} \ar@{-}[rrrd]^{b_i=\top} \ar@*{[blue]}@/^1.5pc/[rddddd]_{\color{blue} \rightselect{i}} & \\
+    & \X_{i-1} \ar@{.}[ld] \ar@{-}[rd]^{b_{i-1}=\top} & & &  & & & \X_{i-1} \ar@{-}[ld]_{b_{i-1}=\bot} \ar@{.}[rd]\\
+    & & \X_{i-2}  \ar@{.}[ld]_{b_{i-2}=\bot} \ar@{.}[rddd]_>>>>>{b_{\{i-2, \ldots, 1\}}=\top} & & & & \X_{i-2} \ar@{.}[lddd]^>>>>>{b_{\{i-2, \ldots, 1\}}=\bot} \ar@{.}[rd]^{b_{i-2}=\top} & &\\
+    & & & & & & & & & \\
+    & & & & & & & & & \\
+    & & & \X_{0} \ar@*{[red]}@/^1.5pc/[ruuuuu]_{\color{red} \leftselect{i}} & & \X_{0} & \\
+ } }
+\caption{Les deux types de transitions possibles dans un CTE suivant la structure de branchement d'une QBF: $\X_0\rightarrow \X_i$ ({\color{red}d'une feuille vers un n\oe ud à gauche}) et $\X_i\rightarrow \X_0$ ({\color{blue}d'un n\oe ud vers une feuille à droite}). Notons que $i$ fait référence à n'importe quel niveau (excepté pour le niveau feuille), pas seulement la racine.} \label{fig:plantree}
+\end{figure}
+
+% \mael{Peut-être ajouter des définition
+% \begin{itemize}
+% \item A state $\S$ is defined as a subset of $\F$,
+% \item A \emph{compound action} $\hat{\a}$ is a set of actions,
+% \item A \emph{plan} is a sequence of states $\S_0, \dots, \S_n$ such that 
+% \[ \displaystyle \forall_{i = 1}^{n} \S_{i-1} = (\S_i \setminus \cup_{\a \in \hat{\a}} \Del{\a}) \cup_{\a \in \hat{\a} \Add{\a}} \text{and} \S_{i-1}\]
+% \item An action $A$ is \emph{applicable} iff from a state $S$
+% \end{itemize}
+
+% }
+
+Tous les codages QBF étudiés dans cet article utilisent des variables propositionnelles pour les actions. Le codage d'arbre compact proposé dans \cite{DBLP:conf/ecai/CashmoreFG12} est basé sur le \textit{graphe de planification} introduit dans \cite{BF97} et utilise des actions No-op supplémentaires comme frame-axiomes. Nous nommerons ce codage CTE-NOOP.
+Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \{\noopSingle{f}\mid \f\in\F\}$.
+
+Dans une formule CTE, il faut pouvoir sélectionner deux étapes consécutives du plan afin de définir des transitions (Figure~\ref{fig:plantree}). Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$.
+
+Pour CTE-NOOP, il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action et une seule variable $\noop{\f}{i}\in X_{i}$ (action No-op) pour chaque fluent utilisée pour déterminer une transition dans le plan. A la même profondeur $i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$. Pour plus de détails, on pourra se reporter aux explications données dans les transparents en ligne\footnote{\url{https://www.irit.fr/~Frederic.Maris/documents/coplas2018/slides.pdf}}.
+
+Une limite supérieure à la longueur du plan est $2^{k+1}-1$, où $k$ est le nombre d'alternances de quantificateurs dans la formule booléenne quantifiée associée au problème de planification. Dans le cas d'un CTE, $k$ est aussi la profondeur de l'arbre compact. Le nombre d'états possibles pour un problème de planification donné est limité par $2^{\mid \F \mid}$. Ainsi, l'existence d'un plan peut être déterminée en utilisant un codage QBF linéaire avec au plus $k=\mid \F \mid$.
+
+
+
+\paragraph*{Quantificateurs}
+
+%In a CTE formula, we want to select two consecutive steps in order to define transitions (Figure~\ref{fig:plantree}).
+Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$. Il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\noop{\f}{i}\in X_{i}$ pour chaque action No-op correspondant au maintien du fluent $\f$. A la même profondeur~$i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
+
+\begin{small}
+\[
+\begin{matrix}
+\displaystyle \bigexists_{\a \in \A} \a_{\depth}. \bigexists_{\f\in \F} \noop{\f}{\depth}.%\\
+\displaystyle {\bigforall b_{\depth}.}\\
+\displaystyle \bigexists_{\a \in \A} \a_{\depth-1}. \bigexists_{\f\in \F} \noop{\f}{\depth-1}.%\\
+\displaystyle {\bigforall b_{\depth-1}.}\\
+\displaystyle \dots\\ 
+%\dots
+\displaystyle \bigexists_{\a \in \A} \a_{1}. \bigexists_{\f\in \F} \noop{\f}{1}.%\\
+\displaystyle {\bigforall b_{1}.}%\\
+\displaystyle \bigexists_{\a \in \A} \a_{0}. \bigexists_{\f\in \F} \noop{\f}{0}.
+\end{matrix}
+\]
+\end{small}\\
+
+Dans ce qui suit, un \textit{n\oe ud} désigne maintenant un n\oe ud qui n'est pas une feuille. % et $\depth$ est la profondeur de l'arbre.
+Le prédécesseur d'un n\oe ud au niveau $i$ est la feuille la plus à droite du sous-arbre gauche. Le successeur d'un noeud au niveau $i$ est la feuille la plus à gauche du sous-arbre droit.
+Afin de sélectionner ces transitions, nous introduisons l'opérateur feuille-vers-n\oe ud $\leftselect{i}$ défini comme:
+%\begin{scriptsize}
+\[\leftselect{i} \equiv \neg b_{i} \wedge \BigforallTwo{j=1}{i-1} b_{j}.\]
+%\end{scriptsize}
+Symétriquement, nous introduisons l'opérateur n\oe ud-vers-feuille $\rightselect{i}$ défini comme:
+%\begin{scriptsize}
+\[\rightselect{i} \equiv b_{i} \wedge \BigforallTwo{j=1}{i-1} \neg b_{j}.\]
+%\end{scriptsize}
+
+
+\paragraph*{Première étape du plan}
+
+Une action ne peut pas être exécutée dans la première étape du plan si l'ensemble de ses préconditions ne sont pas présentes dans l'état initial du problème. De même, une action No-op d'un fluent $\f$ ne peut pas être exécutée dans cette première étape si le fluent $\f$ n'est pas dans l'état initial.
+
+\begin{small}
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{\depth} \neg b_{i} \Rightarrow \left( \left(\Bigforall{\substack{\a \in \A\\\neg \left(\Cond{\a}\subseteq \I\right)}} \neg \a_{0} \right)
+\wedge \left(\Bigforall{\f\in \left(\F\setminus \I\right)}\neg \noop_{\f,0}\right)\right)\\
+\end{matrix}
+\]
+\end{small}\\
+
+\paragraph*{Dernière étape du plan}
+
+Dans la dernière étape du plan, tous les buts doivent être produits par une action (dans $\A$ ou No-op).
+
+\begin{small}
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{\depth} b_{i} \Rightarrow \Bigforall{\f\in \G}\left(\left(\Bigexists{\substack{\a\in\A\\ \f \in \Add{\a}}} \a_{0}\right) \vee \noop{\f}{0}\right)
+\end{matrix}
+\]
+\end{small}\\
+
+\paragraph*{Préconditions des actions}
+
+Si une action est exécutée dans une étape du plan alors chacune de ses préconditions doit être produite à l'étape précédente par une action (dans $\A$ ou No-op).
+
+\begin{small}
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{\depth} \Bigforall{\a\in\A} \Bigforall{\f\in \Cond{\a}} \left(\left(\a_{i} \wedge \leftselect{i} \right) \Rightarrow \left(\noop{\f}{0} \vee \bigvee\limits_{\substack{\b \in \A \\ \f \in \Add{\b}}} \b_{0}\right)\right)\\
+\BigforallTwo{i=1}{\depth} \Bigforall{\a\in\A} \Bigforall{\f\in \Cond{a}}\left(\left(\a_{0} \wedge \rightselect{i} \right) \Rightarrow \left(\noop{\f}{i} \vee \bigvee\limits_{\substack{\b \in \A \\ \f \in \Add{\b}}} \b_{i}\right)\right)
+\end{matrix}
+\]
+\end{small}\\
+
+De même, si une action No-op est exécutée dans une étape du plan alors le fluent correspondant doit être produit à l'étape précédente par une action (dans $\A$ ou No-op).
+
+\begin{small}
+\[
+\begin{matrix}
+\BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F} \left(\left(\noop{\f}{i} \wedge \leftselect{i} \right) \Rightarrow \left(\noop{\f}{0} \vee \bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{0}\right)\right)\\
+\BigforallTwo{i=1}{\depth}\Bigforall{\f\in \F}\left(\left(\noop{\f}{0} \wedge \rightselect{i} \right) \Rightarrow \left(\noop{\f}{i} \vee \bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{i}\right)\right)
+\end{matrix}
+\]
+\end{small}\\
+
+\paragraph*{Prévention des interactions négatives}
+
+Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape. De même, une action qui détruit un fluent $\f$ ne peut être exécutée à une même étape que l'action No-op de $\f$.
+%\begin{scriptsize}
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a \in \A} \Bigforall{\f\in \left(\Add{\a} \cup \Cond{\a}\right)} \Bigforall{\b \in \A \\ \a \neq \b \\ \f \in \Del{\b}}\left(\neg \a_{i} \vee \neg \b_{i}\right) \]
+%\end{scriptsize}
+
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a\in \A} \Bigforall{\f \in \Del{\a}}\left(\neg \noop{\f}{i} \vee \neg \a_{i}\right) \]
+
+
+%\begin{multline*}
+%\displaystyle\mathop{\exists \mathbf{A}_{2}}_{\mathbf{A}\in \mathbf{O}} .\displaystyle\mathop{\exists Noop_{\mathbf{f},2}}_{\mathbf{f}\in \mathbf{F}} .\exists b_{2}. \displaystyle\mathop{\exists \mathbf{A}_{1}}_{\mathbf{A}\in \mathbf{O}} .\displaystyle\mathop{\exists Noop_{\mathbf{f},1}}_{\mathbf{f}\in \mathbf{F}} .\exists b_{1}. \displaystyle\mathop{\exists \mathbf{A}_{0}}_{\mathbf{A}\in \mathbf{O}} .\displaystyle\mathop{\exists Noop_{\mathbf{f},0}}_{\mathbf{f}\in \mathbf{F}}.\\
+%
+%\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}\\\neg \left(\mathbf{Cond}_{\mathbf{A}}\subseteq \mathbf{I}\right)}}\left(\neg \mathbf{A}_{0} \vee \left(\bigvee\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}b_{\mathbf{i}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{f}\in \left(\mathbf{F}\setminus \mathbf{I}\right)}}\left(\neg Noop_{\mathbf{f},0} \vee \left(\bigvee\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}b_{\mathbf{i}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{G}}}\left(\left(\bigvee\limits_{\substack{\mathbf{A}\in \mathbf{O}\\\mathbf{f} \in \mathbf{Add}_{\mathbf{A}}}}\mathbf{A}_{0}\right) \vee Noop_{\mathbf{f},0} \vee \left(\bigvee\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}\neg b_{\mathbf{i}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{Cond}_{\mathbf{A}}}}\left(\neg \mathbf{A}_{\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{B}\in \mathbf{O}\\\mathbf{f} \in \mathbf{Add}_{\mathbf{B}}}}\mathbf{B}_{0}\right) \vee Noop_{\mathbf{f},0} \vee b_{\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{j}\in [1..\mathbf{i} - 1]}}\neg b_{\mathbf{j}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{F}}}\left(\neg Noop_{\mathbf{f},\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{B}\in \mathbf{O}\\\mathbf{f} \in \mathbf{Add}_{\mathbf{B}}}}\mathbf{B}_{0}\right) \vee Noop_{\mathbf{f},0} \vee b_{\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{j}\in [1..\mathbf{i} - 1]}}\neg b_{\mathbf{j}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{Cond}_{\mathbf{A}}}}\left(\neg \mathbf{A}_{0} \vee \left(\bigvee\limits_{\substack{\mathbf{B}\in \mathbf{O}\\\mathbf{f} \in \mathbf{Add}_{\mathbf{B}}}}\mathbf{B}_{\mathbf{i}}\right) \vee Noop_{\mathbf{f},\mathbf{i}} \vee \neg b_{\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{j}\in [1..\mathbf{i} - 1]}}b_{\mathbf{j}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{F}}}\left(\neg Noop_{\mathbf{f},0} \vee \left(\bigvee\limits_{\substack{\mathbf{B}\in \mathbf{O}\\\mathbf{f} \in \mathbf{Add}_{\mathbf{B}}}}\mathbf{B}_{\mathbf{i}}\right) \vee Noop_{\mathbf{f},\mathbf{i}} \vee \neg b_{\mathbf{i}} \vee \left(\bigvee\limits_{\substack{\mathbf{j}\in [1..\mathbf{i} - 1]}}b_{\mathbf{j}}\right)\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [0..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}}}\bigwedge\limits_{\substack{\mathbf{f}\in \left(\mathbf{Cond}_{\mathbf{A}}\cup\mathbf{Add}_{\mathbf{A}}\right)}}\bigwedge\limits_{\substack{\mathbf{B}\in \mathbf{O}\\\left(\mathbf{A} \neq \mathbf{B}\right) \wedge \left(\mathbf{f} \in \mathbf{Del}_{\mathbf{B}}\right)}}\left(\neg \mathbf{A}_{\mathbf{i}} \vee \neg \mathbf{B}_{\mathbf{i}}\right)\\
+%
+% \wedge \bigwedge\limits_{\substack{\mathbf{i}\in [0..\mathbf{depth}]}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{F}}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}\\\left(\mathbf{f} \in \mathbf{Del}_{\mathbf{A}}\right)}}\left(\neg Noop_{\mathbf{f},\mathbf{i}} \vee \neg \mathbf{A}_{\mathbf{i}}\right)
+% \end{multline*}
+ 

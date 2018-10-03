@@ -1,0 +1,61 @@
+Dans cette section, nous allons présenter à l'aide de notre exemple du \game l'extension de \touist à QBF.
+
+Le langage de QBF permet d'exprimer naturellement et de manière concise l'existence de stratégies gagnantes ainsi que décrit dans \cite{DBLP:series/txtcs/KroeningS16}. Les coups du joueur 0 (pour lequel on cherche une stratégie gagnante) seront existentiellement quantifiés alors que ceux de son adversaire seront universellement quantifiés. (On cherche les coups du joueur $0$ qui le mèneront à la victoire quels que soient les coups joués par le joueur $1$.)
+
+\touist a été étendu pour être compatible avec le solveur QBF \emph{Quantor 3.2} \cite{Biere:2004:RE:2103144.2103150}. La sélection de ce prouveur dans \touist autorise \emph{de facto} l'utilisation des quantificateurs $\forall$ et $\exists$ (respectivement définis par \verb+exists+ et \verb+forall+ dans \touist).
+
+\begin{figure}
+\centering
+\input{Pictures/graphiqueAllumettes.tex}
+\caption{Solutions pour le \game (4 all./2 joueurs), en rouge : stratégie gagnante du joueur 0}
+\label{fig:solutions}
+\vspace{-0.5cm}\end{figure}
+
+\tikzset{%
+    prend1/.style={->,dotted,very thick,>=latex},
+    prend2/.style={->,very thick,>=latex}%
+}
+
+
+\figurename~\ref{fig:solutions} présente l'ensemble exhaustif des solutions de notre exemple. La racine de l'arbre représente le nombre initial d'allumettes, et chaque flèche l'action de retirer $1$ (\tikz{\draw[prend1] (0,0) -- (1,0)}) ou $2$ (\tikz{\draw[prend2] (0,0) -- (1,0)}) allumette(s). Au bout de la flèche, le nombre d'allumettes après exécution de l'action concernée. D'après cette figure, on voit que si le joueur $0$ commence (ce qui est imposé par (\ref{eq:initialState})) et qu'il retire une seule allumette (il en reste donc 3) on voit qu'il a une stratégie gagnante : 
+\begin{itemize}
+\item si le joueur $1$ retire ensuite $2$ allumettes il en restera $1$ seule que le joueur $0$ peut retirer pour gagner (puisque le joueur $1$ ne pourra ensuite plus retirer d'allumette) ;
+
+\item si le joueur $1$ retire une seule allumette, il en restera  $2$ et le joueur $0$ pourra au coup suivant les retirer en un seul coup et le joueur $1$ perd.
+\end{itemize}
+
+Nous tirons parti de QBF pour écrire cette stratégie dans \touist. Si on note $\Phi$ la conjonction des formules (\ref{eq:initialState}) à (\ref{eq:turnChange}) alors la recherche d'une stratégie gagnante pour le joueur $0$ s'écrit simplement :
+\vspace{-0.2cm}
+\begin{align}
+\begin{split}
+&\exists \takes{0}
+\forall \takes{1}\\
+&\qquad\exists \takes{2}
+\forall \takes{3} \\
+&\quad\exists \takes{4}\text{ . }\neg \lost \land \Phi
+\end{split}
+\end{align}
+
+\noindent
+Autrement dit, on cherche à satisfaire le fait qu'il existe une action du joueur $0$ au tour $0$ telle que quelle que soit l'action du joueur $1$ au tour $1$, il existe une action du joueur $0$ au tour $2$, telle que pour toute action du joueur $1$ au tour $3$ il existe une action du joueur $0$ (qui sera donc le dernier à jouer) telle que le joueur $0$ ne perd pas et que les contraintes inhérentes au \game soient satisfaites.
+
+% \warning{[DOMI : ] Je ne suis pas sûr de ce qui suit car je n'arrive pas à faire fonctionner le prog des allumettes avec la dernière version de \touist (ça plante).}
+
+L'exécution du programme dans \touist indique que cette formule est vraie, ce qui signifie l'existence d'une stratégie gagnante pour le joueur $0$. Le solveur retourne la valeur des (ici une seule) variables existentielles correspondant au prochain coup du joueur $0$. À ce stade, le joueur adverse doit fournir son coup qui fixe la valeur des variables universelles correspondant à ses possibles prochains coups. On exécute alors de nouveau le programme modifié de la façon suivante (de manière à prendre en compte le calcul de la valuation de $\takes{0}$) :
+\begin{align*}
+\begin{split}
+&\exists \takes{0}
+\exists \takes{1}\\
+&\qquad\exists \takes{2}
+\forall \takes{3} \\
+&\quad\exists \takes{4}\text{ . }\neg \lost \land c_0 \land c_1 \land  \Phi
+\end{split}
+\end{align*}
+où $c_0$ est soit $\takes{0}$ soit $\neg \takes{0}$ en fonction du coup du joueur $0$, et similairement pour $c_1$ en fonction du coup choisi par l'adversaire. La  situation après ces deux coups est la nouvelle situation initiale pour le solveur et la recherche du coup suivant du joueur $0$... jusqu'à sa victoire ! On réitère ce processus jusqu'à ce que toutes les variables aient reçu une valeur. 
+%On obtient alors :
+%\begin{gather*}
+%\interpret[\takes{0}] = 0, 
+%\interpret[\takes{1}] = 1 
+%\interpret[\takes{2}] = 0
+%\end{gather*}
+%qui se lit : pour que le joueur $0$ gagne il doit prendre $1$ allumette, le joueur $1$ en prend $2$, puis le joueur $0$ en prend $1$.
