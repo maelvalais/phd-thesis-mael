@@ -80,7 +80,8 @@ Download the version \emph{CAQE qbfeval 2017 (2017-07-19) binary release without
 which will give you \mdcode{caqe-mac}:%mdk
 \begin{footnotesize}
 \begin{mdpre}%mdk
-\noindent touist~test/qbf/allumettes2.touist~--qbf~--solver="./caqe-mac~--partial-assignments"%mdk
+\noindent touist~test/qbf/allumettes2.touist~--qbf
+    --solver="./caqe-mac~--partial-assignments"%mdk
 \end{mdpre}
 \end{footnotesize}
 
@@ -91,7 +92,8 @@ They also have a Homebrew tap repository but this version does not contain the n
 \begin{footnotesize}
 \begin{mdpre}%mdk
 \noindent brew~install~touist/touist/qute\\
-touist~test/qbf/allumettes2.touist~--qbf~--solver="qute~--partial-certificate"%mdk
+touist~test/qbf/allumettes2.touist~--qbf\\
+\qquad\qquad --solver="qute~--partial-certificate"%mdk
 \end{mdpre}%mdk
 \end{footnotesize}
 
@@ -99,7 +101,8 @@ touist~test/qbf/allumettes2.touist~--qbf~--solver="qute~--partial-certificate"%m
 \href{http://lonsing.github.io/depqbf/}{depqbf} (2017-08-02, DepQBF 6.03, Minisat-based QCDCL)%mdk
 \begin{mdpre}%mdk
 \noindent brew~install~depqbf\\
-touist~test/qbf/allumettes2.touist~--qbf~--solver="depqbf~--qdo~--no-dynamic-nenofex"%mdk
+touist~test/qbf/allumettes2.touist~--qbf
+\qquad\qquad --solver="depqbf~--qdo~--no-dynamic-nenofex"%mdk
 \end{mdpre}%mdk
 
 \item{}
@@ -160,7 +163,8 @@ The man page of \mdcode{touist} is available through \mdcode{man~touist} or \mdc
 It contains almost everything you need to know its features and arguments.%mdk
 
 %sub
-\paragraph{Exit status}\label{sec-exit-status}%mdk%mdk
+\paragraph{Exit status}\label{sec-exit-status}\mbox{}\\
+
 \begin{mdtabular}{3}{\dimeval{(\linewidth)/3}}{1ex}%mdk
 \begin{tabular}{cll}\midrule
 {\bfseries Code}&\multicolumn{1}{c}{{\bfseries Label}}&\multicolumn{1}{c}{{\bfseries Description}}\\
@@ -180,7 +184,7 @@ It contains almost everything you need to know its features and arguments.%mdk
 non-zero exit status anyway.%mdk
 
 %sub
-\paragraph{Usage for propositional logic (SAT mode)}\label{usage-sat}%mdk%mdk
+\subsection{Usage for propositional logic (SAT mode)}\label{usage-sat}%mdk%mdk
 
 \noindent The language accepted for propositional logic is described in
 \ref{sec-propositional-logic-formulas}. This mode is enabled by
@@ -208,7 +212,7 @@ line (i.e., \mdcode{p~cnf~x~y}; comments must be before the prelude line in the
 \subsubsection{SAT solver}\label{usage-sat-solver}%mdk%mdk
 
 \noindent By default, \mdcode{touist} embeds~\href{http://minisat.se}{Minisat}
-(see~[\cite{sorensson02minisatv1_13}{6}]), a SAT solver written in C++ at the
+(see~\cite{Sorensson02minisatv1_13}), a SAT solver written in C++ at the
 Chalmers University of Technology, Sweden. It is distributed under the
 MIT license. To be able to embed it into OCaml, we use the
 binding~\href{https://github.com/c-cube/ocaml-minisat}{ocaml-minisat} which relies on a C version of Minisat
@@ -379,7 +383,7 @@ to fill the correct field in the \mdcode{SMT-LIB} file.%mdk
 \subsubsection{SMT solver}\label{smt-solver}%mdk%mdk
 
 \noindent{\scshape TouIST} can embed an optional SMT solver,~\href{http://yices.csl.sri.com}{Yices 2.5.2} (see
-[\cite{dutertre:cav2014}]). It is developed by SRI (Stanford Research Institute,
+\cite{Dutertre:cav2014}). It is developed by SRI (Stanford Research Institute,
 California) and is written in C. It is free to use for non-commercial
 purposes. Its code is licensed under a restrictive non-commercial EULA
 which the user must agree before using (see the~\href{http://yices.csl.sri.com/yices-newnewlicense.html}{license}). To
@@ -425,7 +429,7 @@ You can still solve problems using both \mdcode{--qbf} and \mdcode{--solve}
 \subsubsection{QBF solver}\label{usage-qbf-solver}%mdk%mdk
 
 \noindent\mdcode{touist} can embed an optional QBF solver,~\href{http://fmv.jku.at/quantor/}{Quantor 3.2} (see
-[\cite{biere2004}]). It is developed at the Johannes Kepler University, Austria.
+\cite{Biere2004}). It is developed at the Johannes Kepler University, Austria.
 Its source is under a (non-restrictive) BSD license. To enable the QBF
 solver, you must install the OCaml binding~\href{https://github.com/c-cube/ocaml-qbf}{\mdcode{qbf}} which embeds
 the Quantor source:%mdk

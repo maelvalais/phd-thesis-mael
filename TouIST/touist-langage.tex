@@ -104,95 +104,91 @@ En outre, les formules peuvent être tapées à la main dans la fenêtre d'édit
 
 %\chapter{Language reference}\label{sec-language-reference}%mdk%mdk
 
+\mael{à enlever}
 Cette section présente les fonctionnalités liées au langage développé pendant la thèse.
 
 \subsection{Structure d'un fichier {\scshape TouIST} file}\label{sec-structure-of-a-touist-file}%mdk%mdk
+
 \begin{mdpre}%mdk
 \noindent{\mdcolor{purple}\textless{}touist-file\textgreater{}}~::=~{\mdcolor{purple}\textless{}assign\textgreater{}}~{\mdcolor{purple}\textless{}touist-file\textgreater{}}\\
 ~~~~~~~~~~~~~~~~\textbar{}~{\mdcolor{purple}\textless{}formula\textgreater{}}~{\mdcolor{purple}\textless{}touist-file\textgreater{}}\\
 ~~~~~~~~~~~~~~~~\textbar{}~EOF%mdk
-\end{mdpre}\noindent Un fichier {\scshape TouIST} est 
-{\color{red} whitespace-separated\footnote{\noindent A whitespace is a space, tab or newline.%mdk
+\end{mdpre}\noindent Un fichier {\scshape TouIST} est une liste séparée par des blancs\mdfootnote{2}{\noindent Un blanc est soit un espace, une tabulation ou une%mdk
 \label{fn-whitespace}%mdk%mdk
-} list of
-assignments and formulas. Assignments are global and can be interleaved
-with formulas as long as they are not nested in formulas (for local
-variables, you can use \mdcode{{\mdcolor{navy}let}}; see Sec.~\ref{let-binding}). Comments begin
-with "\mdcode{{\mdcolor{darkgreen};;}}". Two backslashes (\mdcode{\textbackslash{}\textbackslash{}}) in a formula will produce a new
-line in the latex view.
+}
+d'assignements et de formules. Les assignements sont globaux et peuvent
+être mélangés avec les formules tant qu'ils ne sont pas imbriqués dans des
+formules (pour les variables locales, il est possible d'utiliser \mdcode{{\mdcolor{navy}let}};
+voir Sec.~\mdref{let-binding}{2.2.3}).
+
+Les commentaires commencent par "\mdcode{{\mdcolor{darkgreen};;}}". Deux anti-slashs (\mdcode{\textbackslash{}\textbackslash{}}) dans
+une formule produira une nouvelle ligne dans la vue $\mbox{\LaTeX}$.%mdk
+
+nouvelle ligne.%mdk
 
 \noindent\textbf{Note}.
-The whitespace-separated list of formulas is actually going to be
-converted to a conjunction; it avoids many intermediate \mdcode{and}.
-\textbf{Warning:} each formula in this list is going to be put in
-parentheses:%mdk
+La liste de formules séparée par des blancs sera au final transformée en
+conjonction de formules ; cela évite les nombreux \mdcode{and} entre les
+formules de lignes différentes.%mdk
+
+\textbf{Attention :} chaque formule de cette liste est implicitement
+parenthésée :%mdk
 \begin{mdpre}%mdk
 \noindent a~or~b\\
 c~=\textgreater{}~a%mdk
-\end{mdpre}\noindent will be translated to
+\end{mdpre}\noindent sera transformé en :
 \begin{mdpre}%mdk
 \noindent(a~or~b)~and~(c~=\textgreater{}~a)%mdk
 \end{mdpre}\label{newline-and-note}%mdk%mdk
 
-\subsection{Variables}\label{sec-variables}%mdk%mdk
+\section{2.2.\hspace*{0.5em}Les variables}\label{sec-les-variables}%mdk%mdk
 
-\noindent First, we describe what a variable is. Then, we detail how to assign
-variables (with global or local assignments).%mdk
+\noindent Une variable, par exemple \mdcode{{\mdcolor{purple}\$var}}, permet entre autres d'utiliser les
+opérateurs \mdcode{{\mdcolor{navy}bigand}} et \mdcode{{\mdcolor{navy}bigor}}. Plus récemment, nous avons introduit
+la possibilité d'y assigner une formule (formules entre guillemets, voir
+Sec.~\mdref{quoted-formulas}{2.7.7}).%mdk
 
-\subsubsection{Syntax of a variable}\label{sec-syntax-of-a-variable}%mdk%mdk
+Nous décrirons d'abord toutes les formes que peut prendre une variable.
+Ensuite, nous détaillerons comment assigner une variable à une valeur
+(par des assignations globales ou locales).%mdk
+
+\subsection{2.2.1.\hspace*{0.5em}Syntaxes des variables}\label{sec-syntaxes-des-variables}%mdk%mdk
 \begin{mdpre}%mdk
 \noindent{\mdcolor{purple}\textless{}expr\textgreater{}}~::=~{\mdcolor{purple}\textless{}int\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}float\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}prop\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}bool\textgreater{}}\textbar{}{\mdcolor{purple}\textless{}set\textgreater{}}\\
-~~~~\textbar{}~"""{\mdcolor{purple}\textless{}formula-simple\textgreater{}}"""~{\mdcolor{darkgreen}\textless{}-~quoted~formula,~since~TouIST~\textgreater{}=~3.5.1}\\
+~~~~\textbar{}~"""{\mdcolor{purple}\textless{}formula-simple\textgreater{}}"""~{\mdcolor{darkgreen}\textless{}-~formule~entre~guillemets~(TouIST~\textgreater{}=~3.5.1)}\\
 {\mdcolor{purple}\textless{}var\textgreater{}}~::=~"\$"~TERM~~~~~~~~~~~~~~~~~~~~~~~~~~~~{\mdcolor{darkgreen}\textless{}-~simple-var}\\
 ~~~~\textbar{}~"\$"~TERM~"("~{\mdcolor{purple}\textless{}comma-list(\textless{}expr\textgreater{})\textgreater{}}~")"~~~{\mdcolor{darkgreen}\textless{}-~tuple-var}%mdk
 \end{mdpre}
 \begin{mddefinitions}%mdk
 
-\mddefterm{\noindent{\bfseries Simple variable (\textquotedblleft{}simple-var\textquotedblright{})}}%mdk
+\mddefterm{\noindent{\bfseries Les variables simples (\textquotedblleft{}simple-var\textquotedblright{})}}%mdk
 
 \begin{mdbmarginx}{}{}{}{1.5em}%mdk
 \begin{mddefdata}%mdk
-A simple variable is of the form \mdcode{{\mdcolor{purple}\$my\_var}}. In a formula, a simple
-variable is always expected to be a proposition or a
-\mdref{quoted-formulas}{quoted formula}. In an expression, a simple
-variable can contain an integer, a floating-point, a proposition, a boolean
-or a set.
-%mdk
-\end{mddefdata}%mdk
-\end{mdbmarginx}%mdk
-
-\mddefterm{\noindent{\bfseries Tuple variable (can be seen as a \emph{predicate})}}%mdk
-
-\begin{mdbmarginx}{}{}{}{1.5em}%mdk
-\begin{mddefdata}%mdk
-A tuple variable is a simple variable followed by a comma-separated list of
-indexes in braces, e.g., \mdcode{{\mdcolor{purple}\$var}({\mdcolor{purple}\$i},a,{\mdcolor{purple}4})}. The leading variable (\mdcode{{\mdcolor{purple}\$var}})
-must always contain a proposition. The nested indexes (e.g., \mdcode{{\mdcolor{purple}\$i}})
-can be integers, floats, propositions or booleans.
-%mdk
-\end{mddefdata}%mdk
-\end{mdbmarginx}%mdk
-
-\begin{mdbmarginx}{}{}{}{1.5em}%mdk
-\begin{mddefdata}%mdk
-A tuple variable will always be expanded to a proposition or a
-\mdref{quoted-formulas}{quoted formula}. For example, if
-\mdcode{{\mdcolor{purple}\$var}=p} and \mdcode{{\mdcolor{purple}\$i}=q}, then it will expand to \mdcode{p(q,a,{\mdcolor{purple}4})}
-%mdk
-\end{mddefdata}%mdk
-\end{mdbmarginx}%mdk
-
-\begin{mdbmarginx}{}{}{}{1.5em}%mdk
-\begin{mddefdata}%mdk
-Tuple variables are not (yet) compatible with the set-builder construct (in
-\ref{set-builder}). If one of the indexes is a set, the set will stay
-as-is.%mdk
+Une variable simple est de la forme \mdcode{{\mdcolor{purple}\$my\_var}}. Dans une formule, une%mdk
 \end{mddefdata}%mdk
 \end{mdbmarginx}%mdk
 %mdk
 \end{mddefinitions}%mdk
 
-\noindent Here are some examples of variables:%mdk
+\noindent{}     variable simple devrait toujours être une proposition ou une
+    ~\mdref{quoted-formulas}{formule entre guillemets}. Dans une expression, une
+     variable simple peut contenir un entier, une virgule flottante, une
+     proposition, un booléen ou un ensemble.
+* Variable n-uplet (peut être vu comme un \emph{prédicat})
+  : Une variable n-uplet est une variable simple suivie d'une liste de d'indices
+    séparés par des virgules et entre parenthèses, par exemple,
+    \mdcode{~{\mdcolor{purple}\$var}({\mdcolor{purple}\$i},a,{\mdcolor{purple}4})}. La variable principale (\mdcode{{\mdcolor{purple}\$var}})
+    doit toujours contenir une proposition. Les indices imbriqués (par exemple \mdcode{{\mdcolor{purple}\$i}})
+    peuvent être des entiers, des flottants, des propositions ou des booléens. 
+  : Une variable de tuple sera toujours transformée en une proposition ou à une
+    \mdref{quoted-formulas}{formule entre guillemets}. Par exemple, si
+    \mdcode{{\mdcolor{purple}\$var}=p}et \mdcode{{\mdcolor{purple}\$i}=q}, il sera transformé en \mdcode{p(q,a,{\mdcolor{purple}4})}
+  : Les variables n-uplets ne sont pas (encore) compatibles avec la notation
+    set-builder (cf. Sec.~\mdref{set-builder}{2.6.3}). Si l'un des indices est un ensemble,
+    l'ensemble restera tel quel.%mdk
+
+Quelques exemples de variables:%mdk
 
 \begin{mdcenter}%mdk
 \begin{mdtabular}{2}{\dimeval{(\linewidth)/2}}{1ex}%mdk
@@ -209,20 +205,28 @@ as-is.%mdk
 %mdk
 \end{mdcenter}%mdk
 
-\subsubsection{Global assignment}\label{global-var}%mdk%mdk
+\subsection{Assignements globaux}\label{global-var}%mdk%mdk
 
-\noindent We call \textquotedblleft{}global variables\textquotedblright{} any variable that is assigned at the same
-depth as the subformulas of the {\scshape TouIST} formula. A {\scshape TouIST} formula is
+\noindent Nous appelons \guillemotleft{} variables globales \guillemotright{}%mdk
+
+{\color{red}
+\noindent
+e call \textquotedblleft{}global variables\textquotedblright{} any variable that is assigned at the same
+ depth as the subformulas of the {\scshape TouIST} formula. A {\scshape TouIST} formula is
 the formula formed by the conjunction of each blank-separated {\scshape TouIST}
 statement (a blank is a newline, a space or a tabulation). For example,
 in the following {\scshape TouIST} formula:%mdk
+
 \begin{mdpre}%mdk
 \noindent a~and~(b~or~c)~d~e~=\textgreater{}~f~~~~\\
 g~h~\textless{}=\textgreater{}~i\\
 k~or~l\\
 m%mdk
-\end{mdpre}\noindent the subformulas \mdcode{a~and~(b~or~c)}, \mdcode{d}, \mdcode{e~or~f}, \mdcode{h~\textless{}=\textgreater{}~i},
-\mdcode{k~or~l} are subformulas of the {\scshape TouIST} formula but \mdcode{(b~or~c)} is not
+\end{mdpre}
+
+\noindent
+hesubformulas \mdcode{a~and~(b~or~c)}, \mdcode{d}, \mdcode{e~or~f}, \mdcode{h~\textless{}=\textgreater{}~i},
+  \mdcode{k~or~l} are subformulas of the {\scshape TouIST} formula but \mdcode{(b~or~c)} is not
 (instead, it is a sub-subformula).
 
 It is equivalent to%mdk
