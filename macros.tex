@@ -231,7 +231,7 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 
 \newcommand{\Link}[3]{\mathit{Link}(#1,#2,#3)}
 
-%\usepackage{madoko2}
+\usepackage{madoko2}
 
 % Disable ligatures, e.g., \texttt{--directory=dir} where
 % the hyphens '--' are turned into '—' (ligature)
@@ -266,10 +266,8 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 % http://tex.stackexchange.com/questions/140616/how-to-typeset-latex-code-inside-a-table-environment
 \newcolumntype{V}[1]{>{\topsep=0pt\@minipagetrue}p{#1}<{\vspace{-\baselineskip}}}
 
-% {\theorembodyfont{\rmfamily}
-%   \newtheorem{exo}{Exercice}
-%   \newtheorem{rem}{Remarque}
-% }
+\newtheorem{exo}{Exercice}
+\newtheorem{rem}{Remarque}
 
 % redefine existing green color
 \newcommand{\brightgreen}[1]{{\color{green}#1}}
@@ -292,4 +290,4 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\BIGAND}[1]{\bigwedge_{#1}}
 \newcommand{\BIGOR}[1]{\bigvee_{#1}}
 \newcommand{\BIGANDC}[2]{\bigwedge_{#1|#2}} % bigand with constraint
-\newcommand{\BIGORC}[2]{\bigvee_{#1|#2}}    % bigor with constraint
+\newcommand{\BIGORC}[2]{\bigvee_{#1|#2}} % bigor with constraint

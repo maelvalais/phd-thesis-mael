@@ -9,122 +9,121 @@
 %
 \subsection{Intégration avec des solveurs externes}
 
-\noindent La plupart des solveurs SAT et QBF acceptent le format standard~\href{http://www.satcompetition.org/2009/format-benchmarks2009.html}{DIMACS} (resp.
-QDIMACS) comme langage d'entrée. Il suffit de donner la sortie DIMACS de \touist directement à un solveur et d'utiliser la table de correspondance (voir Section~\ref{mapping-table}).
-Mais il est également possible d'utiliser \touist pour effectuer à la fois l'appel d'un solveur externe et la traduction inverse du modèle DIMACS retourné par ce dernier vers les noms de variables propositionnelles en utilisant l'argument \mdcode{--solver}:%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent\preindent{4}touist~{}[--sat\textbar{}--qbf]~--solver="\textless{}cmd-and-arguments\textgreater{}"~{}[--verbose]%mdk
-\end{mdpre}
-\end{footnotesize}
-\noindent A des fins de débogage, il est possible d'ajouter \mdcode{--verbose} pour afficher les entrée et sorties stdin/stdout/stderr.
-Le code de sortie de \touist sera alors le même qu'en utilisant \mdcode{--solve}.
+% \noindent La plupart des solveurs SAT et QBF acceptent le format standard~\href{http://www.satcompetition.org/2009/format-benchmarks2009.html}{DIMACS} (resp.
+% QDIMACS) comme langage d'entrée. Il suffit de donner la sortie DIMACS de \touist directement à un solveur et d'utiliser la table de correspondance (voir Section~\ref{mapping-table}).
+% Mais il est également possible d'utiliser \touist pour effectuer à la fois l'appel d'un solveur externe et la traduction inverse du modèle DIMACS retourné par ce dernier vers les noms de variables propositionnelles en utilisant l'argument \mdcode{--solver}:%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent\preindent{4}touist~{}[--sat\textbar{}--qbf]~--solver="\textless{}cmd-and-arguments\textgreater{}"~{}[--verbose]%mdk
+% \end{mdpre}
+% \end{footnotesize}
+% \noindent A des fins de débogage, il est possible d'ajouter \mdcode{--verbose} pour afficher les entrée et sorties stdin/stdout/stderr.
+% Le code de sortie de \touist sera alors le même qu'en utilisant \mdcode{--solve}.
 
-Les solveurs externes doivent utiliser les conventions Minisat + (Q)DIMACS suivantes :
-\begin{itemize}
-    \item accepter DIMACS ou QDIMACS sur l'entrée standard (stdin) ;
-    \item afficher un modèle (ou un modèle partiel) au format DIMACS sur la sortie standard (stdout) ; le modèle peut éventuellement être étendu sur plusieurs lignes, chacune commençant par \mdcode{v}, \mdcode{V} ou rien (pour la compatibilité avec Minisat), et chaque ligne peut de manière optionnelle se terminer par 0.
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent\preindent{2}v~-1~2~-3~4~0\\
-\preindent{2}v~5~-6~0%mdk
-\end{mdpre}
-\end{footnotesize}
-%\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
+% Les solveurs externes doivent utiliser les conventions Minisat + (Q)DIMACS suivantes :
+% \begin{itemize}
+%     \item accepter DIMACS ou QDIMACS sur l'entrée standard (stdin) ;
+%     \item afficher un modèle (ou un modèle partiel) au format DIMACS sur la sortie standard (stdout) ; le modèle peut éventuellement être étendu sur plusieurs lignes, chacune commençant par \mdcode{v}, \mdcode{V} ou rien (pour la compatibilité avec Minisat), et chaque ligne peut de manière optionnelle se terminer par 0.
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent\preindent{2}v~-1~2~-3~4~0\\
+% \preindent{2}v~5~-6~0%mdk
+% \end{mdpre}
+% \end{footnotesize}
+% %\begin{itemize}[noitemsep,topsep=\mdcompacttopsep]%mdk
 
-\item retourner 10 (comme code d'erreur) sur le problème est SAT, 20 s'il est UNSAT.%mdk
-%mdk
-\end{itemize}%mdk
+% \item retourner 10 (comme code d'erreur) sur le problème est SAT, 20 s'il est UNSAT.%mdk
+% %mdk
+% \end{itemize}%mdk
 
 
-\noindent Les solveurs SAT que nous avons testés (\mdcode{brew} est disponible pour~\href{http://linuxbrew.sh}{linux} et~\href{https://brew.sh}{mac}):%mdk
+% \noindent Les solveurs SAT que nous avons testés (\mdcode{brew} est disponible pour~\href{http://linuxbrew.sh}{linux} et~\href{https://brew.sh}{mac}):%mdk
 
-\begin{itemize}%mdk
+% \begin{itemize}%mdk
 
-\item{}
-\href{http://minisat.se}{minisat}%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent brew~install~minisat\\
-touist~test/sat/sudoku.touist~--solver="minisat~/dev/stdin~/dev/stdout"%mdk
-\end{mdpre}%mdk
-\end{footnotesize}
+% \item{}
+% \href{http://minisat.se}{minisat}%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent brew~install~minisat\\
+% touist~test/sat/sudoku.touist~--solver="minisat~/dev/stdin~/dev/stdout"%mdk
+% \end{mdpre}%mdk
+% \end{footnotesize}
 
-\item{}
-\href{http://fmv.jku.at/picosat}{picosat} (2015, version 965, SAT Race'15)%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent brew~install~touist/touist/picosat\\
-touist~test/sat/sudoku.touist~--solver="picosat~--partial"%mdk
-\end{mdpre}%mdk
-\end{footnotesize}
+% \item{}
+% \href{http://fmv.jku.at/picosat}{picosat} (2015, version 965, SAT Race'15)%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent brew~install~touist/touist/picosat\\
+% touist~test/sat/sudoku.touist~--solver="picosat~--partial"%mdk
+% \end{mdpre}%mdk
+% \end{footnotesize}
 
-\item{}
-\href{https://www.labri.fr/perso/lsimon/glucose}{glucose} (2016, version 4.1, syrup est la version parallèle)%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent brew~install~touist/touist/glucose\\
-touist~test/sat/sudoku.touist~--solver="glucose~-model"\\
-touist~test/sat/sudoku.touist~--solver="glucose-syrup~-model"%mdk
-\end{mdpre}%mdk
-\end{footnotesize}%mdk
-\end{itemize}%mdk
+% \item{}
+% \href{https://www.labri.fr/perso/lsimon/glucose}{glucose} (2016, version 4.1, syrup est la version parallèle)%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent brew~install~touist/touist/glucose\\
+% touist~test/sat/sudoku.touist~--solver="glucose~-model"\\
+% touist~test/sat/sudoku.touist~--solver="glucose-syrup~-model"%mdk
+% \end{mdpre}%mdk
+% \end{footnotesize}%mdk
+% \end{itemize}%mdk
 
-\noindent Les solveurs QBF que nous avons testés:%mdk
+% \noindent Les solveurs QBF que nous avons testés:%mdk
 
-\begin{itemize}%mdk
+% \begin{itemize}%mdk
 
-\item{}
-\href{https://www.react.uni-saarland.de/tools/caqe/index.html}{caqe} (2017-07-19, CAQE qbfeval 2017, version binaire sans certification).
-Download the version \emph{CAQE qbfeval 2017 (2017-07-19) binary release without certification}
-which will give you \mdcode{caqe-mac}:%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent touist~test/qbf/allumettes2.touist~--qbf
-    --solver="./caqe-mac~--partial-assignments"%mdk
-\end{mdpre}
-\end{footnotesize}
+% \item{}
+% \href{https://www.react.uni-saarland.de/tools/caqe/index.html}{caqe} (2017-07-19, CAQE qbfeval 2017, version binaire sans certification).
+% Download the version \emph{CAQE qbfeval 2017 (2017-07-19) binary release without certification}
+% which will give you \mdcode{caqe-mac}:%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent touist~test/qbf/allumettes2.touist~--qbf
+%     --solver="./caqe-mac~--partial-assignments"%mdk
+% \end{mdpre}
+% \end{footnotesize}
 
-They also have a Homebrew tap repository but this version does not contain the needed \mdcode{--partial-assignments}.%mdk%mdk
+% They also have a Homebrew tap repository but this version does not contain the needed \mdcode{--partial-assignments}.%mdk%mdk
 
-\item{}
-\href{https://github.com/perebor/qute}{qute} (2017-02-27, fork maelvalais/qute, minisat-based)%mdk
-\begin{footnotesize}
-\begin{mdpre}%mdk
-\noindent brew~install~touist/touist/qute\\
-touist~test/qbf/allumettes2.touist~--qbf\\
-\qquad\qquad --solver="qute~--partial-certificate"%mdk
-\end{mdpre}%mdk
-\end{footnotesize}
+% \item{}
+% \href{https://github.com/perebor/qute}{qute} (2017-02-27, fork maelvalais/qute, minisat-based)%mdk
+% \begin{footnotesize}
+% \begin{mdpre}%mdk
+% \noindent brew~install~touist/touist/qute\\
+% touist~test/qbf/allumettes2.touist~--qbf\\
+% \qquad\qquad --solver="qute~--partial-certificate"%mdk
+% \end{mdpre}%mdk
+% \end{footnotesize}
 
-\item{}
-\href{http://lonsing.github.io/depqbf/}{depqbf} (2017-08-02, DepQBF 6.03, Minisat-based QCDCL)%mdk
-\begin{mdpre}%mdk
-\noindent brew~install~depqbf\\
-touist~test/qbf/allumettes2.touist~--qbf
-\qquad\qquad --solver="depqbf~--qdo~--no-dynamic-nenofex"%mdk
-\end{mdpre}%mdk
+% \item{}
+% \href{http://lonsing.github.io/depqbf/}{depqbf} (2017-08-02, DepQBF 6.03, Minisat-based QCDCL)%mdk
+% \begin{mdpre}%mdk
+% \noindent brew~install~depqbf\\
+% touist~test/qbf/allumettes2.touist~--qbf
+% \qquad\qquad --solver="depqbf~--qdo~--no-dynamic-nenofex"%mdk
+% \end{mdpre}%mdk
 
-\item{}
-\href{http://fmv.jku.at/quantor/}{quantor} (2014-10-26, Quantor 3.2). It is not necessary to use this
-solver externally as it is included with \mdcode{touist} (see Section~\ref{usage-qbf-solver}).%mdk
-\begin{mdpre}%mdk
-\noindent brew~install~touist/touist/quantor\\
-touist~test/qbf/allumettes2.touist~--qbf~--solver="quantor"%mdk
-\end{mdpre}%mdk
+% \item{}
+% \href{http://fmv.jku.at/quantor/}{quantor} (2014-10-26, Quantor 3.2). It is not necessary to use this
+% solver externally as it is included with \mdcode{touist} (see Section~\ref{usage-qbf-solver}).%mdk
+% \begin{mdpre}%mdk
+% \noindent brew~install~touist/touist/quantor\\
+% touist~test/qbf/allumettes2.touist~--qbf~--solver="quantor"%mdk
+% \end{mdpre}%mdk
 
-\item{}
-\href{http://sat.inesc-id.pt/~mikolas/sw/areqs/}{rareqs} (2012, v1.1, CEGAR)%mdk
-\begin{mdpre}%mdk
-\noindent brew~install~touist/touist/rareqs\\
-touist~test/qbf/allumettes2.touist~--qbf~--solver="rareqs"%mdk
-\end{mdpre}%mdk
-%mdk
-\end{itemize}%mdk
+% \item{}
+% \href{http://sat.inesc-id.pt/~mikolas/sw/areqs/}{rareqs} (2012, v1.1, CEGAR)%mdk
+% \begin{mdpre}%mdk
+% \noindent brew~install~touist/touist/rareqs\\
+% touist~test/qbf/allumettes2.touist~--qbf~--solver="rareqs"%mdk
+% \end{mdpre}%mdk
+% %mdk
+% \end{itemize}%mdk
 
 
 %
 % AUTRES SORTIES
 %
 \subsection{Autres sorties (\LaTeX...)}
-

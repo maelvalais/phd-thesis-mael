@@ -1,5 +1,5 @@
 %\section{Planification par compilation}
-\section{Planification classique par satisfaction de formules logiques}
+\section{Planification classique SAT et QBF}
 %
 
 
@@ -26,6 +26,24 @@ Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \ra
 \end{itemize}
 \end{definition}
 
+{\color{red}
+%Les codages d'un problème de planification sous forme de base de clauses seront formalisés par des règles de réécriture. Ces règles seront exprimées par rapport à un problème de planification $\Pi=\langle F, A, I, B\rangle$ et un entier $k\geq 0$ qui représentera le nombre de niveaux des plans produits. Nous utiliserons également les sous-ensembles de $F$ suivants~: $F_p = \bigcup_{a\in   A} \mathrm{Prec}(A)$, $F_a = \bigcup_{a\in A} \mathrm{Add}(A)$, $F_d = \bigcup_{a\in A} \mathrm{Del}(A)$ dénotant respectivement les ensembles de fluents se trouvant en précondition, en ajout et en retrait des actions. Les règles des codages seront parfois exprimées sous forme non clausale pour des raisons de compacité, mais la transformation sous forme de clauses est immédiate.
+
+Soient $A=\{a_1, \ldots, a_n\}$ un ensemble fini quelconque et $f$ une règle de
+réécriture.  Pour une action $a\in A$, soit $P[a]$ une propriété que peut (ou
+non) vérifier $a$. Soit $P_A=\{a\in A \suchthat P[a]\
+\mathrm{vraie}\}=\{b_1,\ldots,b_m\}$~:
+\begin{itemize}
+\item $\biget{a\in A} f(a)$ dénote $F=f(a_1) \land\ldots\land f(a_n)$. Si $A=\emptyset$, alors $F=\top$.
+\item $\bigou{a\in A} f(a)$ dénote $F=f(a_1) \lor\ldots\lor f(a_n)$. Si $A=\emptyset$, alors $F=\bot$.
+\item $\biget{a\in A \suchthat P[a]} f(a)$ dénote $F=f(b_1) \land\ldots\land f(b_m)$. Si $P_A=\emptyset$, alors $F=\top$.
+\item $\bigou{a\in A \suchthat P[a]} f(a)$ dénote $F=f(b_1) \lor\ldots\lor f(b_m)$. Si $P_A=\emptyset$, alors $F=\bot$.
+\end{itemize}
+
+Pour deux formules $F_1$ et $F_2$ et une propriété $P$, la règle de réécriture
+« si $P$ est satisfaite, alors $F_1$ sinon $F_2$ » sera notée
+$\ifthen{P}{F_1}{F_2}$.
+}
 
 \fred{Ensemble des variables d'actions $X_{\A}$}
 
@@ -153,7 +171,7 @@ Dans la suite, nous proposons deux nouveaux codages de problèmes de planificati
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLANIFICATION SMT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Planification temporelle par satisfaction de formules logiques}
+\section{Planification temporelle SMT}
 %
 
 
