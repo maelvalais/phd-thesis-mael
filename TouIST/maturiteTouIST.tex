@@ -1,7 +1,7 @@
-\subsection{Vue d'ensemble de \nameTool}\label{sec:sat_interface}
+\subsection{Vue d'ensemble de \touist}\label{sec:sat_interface}
 
 
-\nameTool\ est composé de trois modules, mais l'utilisateur standard ne verra que l'un d'entre eux : l'interface. Dans la suite nous insistons principalement sur cette dernière plut\^ot que sur le traducteur et le solveur. L'architecture globale est illustr\'{e}e par la figure~\ref{fig:architectureTouisT}: 
+\touist\ est composé de trois modules, mais l'utilisateur standard ne verra que l'un d'entre eux : l'interface. Dans la suite nous insistons principalement sur cette dernière plut\^ot que sur le traducteur et le solveur. L'architecture globale est illustr\'{e}e par la figure~\ref{fig:architectureTouisT}: 
 
 \begin{figure}[htbp]
 \centering
@@ -10,7 +10,7 @@
   \label{fig:architectureTouisT}
 \end{figure}
 
-Avec \nameTool\ , on accède à un éditeur puissant et convivial pour éditer des formules logiques complexes et des contraintes variées comme :
+Avec \touist\ , on accède à un éditeur puissant et convivial pour éditer des formules logiques complexes et des contraintes variées comme :
 
 $$\bigwedge_{i \in \{1..9\}} (P_i \IMPL Q_{i+1})$$
 
@@ -19,7 +19,7 @@ qui abrège confortablement :\\
 $(P_1 \Rightarrow Q_2) \AND (P_2 \IMPL Q_3) \AND \ldots (P_9\IMPL Q_{10})$. 
 \\
 
-Une fois qu'un ensemble de formules a été donné à l'interface, sa satisfiabilité peut \^etre vérifiée : l'interface peut l'envoyer au prouveur qui retourne un modèle, affich\'{e} comme le montre la figure \ref{fig:ExampleOfAModel} si un tel mod\`{e}le existe. Ensuite par l'intermédiaire de l'interface, l'utilisateur peut par exemple demander d'autres modèles (bouton ``Next'' de l'interface). Contrairement à \satoulouse\ qui aurait nécessité de modifier les formules pour interdire le modèle et de relancer le solveur, \nameTool\ conserve une instance du solveur en attente, ce qui permet d'obtenir les modèles suivants bien plus rapidement.
+Une fois qu'un ensemble de formules a été donné à l'interface, sa satisfiabilité peut \^etre vérifiée : l'interface peut l'envoyer au prouveur qui retourne un modèle, affich\'{e} comme le montre la figure \ref{fig:ExampleOfAModel} si un tel mod\`{e}le existe. Ensuite par l'intermédiaire de l'interface, l'utilisateur peut par exemple demander d'autres modèles (bouton ``Next'' de l'interface). Contrairement à \satoulouse\ qui aurait nécessité de modifier les formules pour interdire le modèle et de relancer le solveur, \touist\ conserve une instance du solveur en attente, ce qui permet d'obtenir les modèles suivants bien plus rapidement.
 
 \begin{figure}[htbp]
 \centering

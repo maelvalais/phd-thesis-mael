@@ -28,7 +28,7 @@ Ainsi, il est possible de mettre à disposition à l'utilisateur la puissance de
 
 L'avantage de ce type d'outil tient au fait qu'un même solveur SAT peut être utilisé pour résoudre de nombreux autres problèmes combinatoires aussi facilement que pour le Sudoku : ils suffit de formaliser les contraintes. Ces problèmes vont de la gestion des emplois du temps, la coloration de cartes ou même le stockage de produits chimiques qui doivent être stockés dans des salles identiques/contiguës/non-contiguës en fonction de leur degré de compatibilité.
 
-\subsection{Limites de \satoulouse\ et genèse de \nameTool}
+\subsection{Limites de \satoulouse\ et genèse de \touist}
 Mais pendant ces années, nous avons remarqué quelques limitations dommageables de \satoulouse\ : de nombreux bugs, des défauts dans l'interface, le manque de modularité (si l'on souhaite changer le prouveur SAT utilisé), l'ambiguïté et les limites de son langage, etc.
 
 Par exemple, des problèmes impliquant des contraintes de cardinalité, comme les règles du jeu de Takuzu\footnote{Connu aussi sous le nom de Binero.\\ \url{http://fr.wikipedia.org/wiki/Takuzu}} qui nécessitent de compter des 0 et des 1, ne peuvent être facilement formalisés : il manque des fonctionnalités permettant d'exprimer des choses comme ``exactement 5 parmi 10 propositions sont vraies''. 
@@ -48,12 +48,12 @@ Un autre inconvénient de \satoulouse, pas nécessairement lié à l'enseignemen
 Enfin, l'extension à des théories plus riches est également quelque chose qui peut intéresser les chercheurs, les ingénieurs ou les étudiants de cycles supérieurs. \satoulouse\ n'est certainement pas adapté pour la satisfiabilité modulo théories ou pour résoudre des problèmes de planification alors que la même architecture logicielle pourrait être utilisée en changeant juste le solveur.
 
 
-Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \nameTool\ qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé ``twist''.
- \nameTool\ est bien sûr à la disposition du public pour téléchargement à partir du site suivant :
+Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \touist\ qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé ``twist''.
+ \touist\ est bien sûr à la disposition du public pour téléchargement à partir du site suivant :
 \begin{center}\url{ https://github.com/touist/touist }\end{center}
 \color{black}
 
-Pour résumer, voici quelques fonctionnalités offertes par \nameTool\ et que \satoulouse\ ne propose pas :
+Pour résumer, voici quelques fonctionnalités offertes par \touist\ et que \satoulouse\ ne propose pas :
 \begin{itemize}
 \item définition d'ensembles de domaines : $\bigwedge_{i\in A}$ vs. $\bigwedge_{i\in\{Paris,London,Roma,Madrid\}}$
 \item liaisons multiples sur les indices: $\bigwedge_{i\in A,j\in B}$ vs. $\bigwedge_{i\in \cdots} \bigwedge_{j\in \cdots}$
