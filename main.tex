@@ -14,7 +14,7 @@
 %%%%%%%%%%%%%%%%%%%%
 % INTRODUCTION
 %%%%%%%%%%%%%%%%%%%%
-\chapter{Introduction}
+\chapter{Introduction}\label{chap:intro}
 \input{introduction/intro.tex}
 
 
@@ -22,7 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%
 % CHAPITRE : CODAGES
 %%%%%%%%%%%%%%%%%%%%
-\chapter{Codages logiques de problèmes}
+\chapter{Codages logiques de problèmes}\label{chap:codages}
 
 \section{Définition des langages utilisés}
 \subsection{Logique propositionnelle (SAT)}
@@ -75,7 +75,7 @@ $\ifthen{P}{F_1}{F_2}$.
 %%%%%%%%%%%%%%%%%%%%%
 % CHAPITRE : TouIST
 %%%%%%%%%%%%%%%%%%%%%
-\chapter{Traduction automatique avec \touist}
+\chapter{Traduction automatique avec \touist}\label{chap:touist}
 %\section{État de l'art, les solveurs du moment}
 %\subsection{Introduction des logiques SAT, SMT, QBF}
 %\subsection{Le principe des solveurs SAT, SMT, QBF}
@@ -126,13 +126,12 @@ Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 % CONCLUSION
 %%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Conclusion et perspectives}
+\chapter{Conclusion et perspectives}\label{chap:conclusion}
 \input{conclusion.tex}
 
+\input{TouIST/reference.tex}
+
 \appendix
-\chapter{Annexes}
-\section{Grammaire BNF du langage \touist}
-\input{TouIST/touist-grammaire.tex}
 
 \printbibliography
 

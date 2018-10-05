@@ -30,3 +30,11 @@ $\Big ( (\top \leftrightarrow \top)\vee (\top \leftrightarrow \bot) \Big ) \wedg
 \input{introduction/intro-planif.tex}
 
 \section{Présentation de la thèse}
+
+Dans cette thèse, nous nous sommes intéressés aux codages de problèmes en logique et tout particulièrement aux codages et à la résolution automatique de problèmes de planification en utilisant des solveurs.
+
+Dans le chapitre~\ref{chap:codages}, nous présentons tout d'abord les langages logiques que nous allons utiliser et 
+nous nous plaçons dans un premier temps dans le cadre classique de la planification. Nous présentons des codages SAT de référence dans les espaces d'états \cite{KS92,KS95} et dans les espaces de plans \cite{MK99} avant d'introduire un nouveau codage dans les espaces de plans basé sur le découpage des liens causaux en modélisant la notion de condition ouverte. Nous présentons ensuite un codage QBF de référence basé sur l'utilisation d'une représentation d'arbre compact et des actions No-ops comme frame-axiomes \cite{DBLP:conf/ecai/CashmoreFG12,DBLP:phd/ethos/Cashmore13}. Nous introduisons alors deux nouveaux codages QBF compacts inspirés par les codages SAT précédemment introduits. Enfin, nous nous plaçons dans le cadre étendu de la planification temporelle et détaillons un codage SMT de référence \cite{MarisRegnier08} avant d'en présenter une adaptation plus compacte basée sur le découpage des liens causaux que nous avons proposé pour la planification classique.
+
+Dans le chapitre~\ref{chap:touist} \fred{$\rightarrow$ Maël}
+Nous comparons ensuite les performances des codages QBF de référence de problèmes de planification présentés dans la section~\ref{chap:codages:qbf:reference} et de nos nouveaux codages introduits dans la section~\ref{chap:codages:qbf:nouveaux}. Après avoir présenté le module TouISTPlan et les problèmes de planification de référence issus de différentes compétitions internationales de planification (IPC), nous montrons que nos codages sont plus efficace en terme de temps de résolution.
