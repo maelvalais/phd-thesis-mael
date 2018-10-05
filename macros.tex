@@ -116,7 +116,9 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 
 
 \newcommand{\touist}{{\sc \texttt {TouIST}}}
+\newcommand{\touistplan}{{\sc \texttt {TouISTPlan}}}
 \newcommand{\satoulouse}{{\sc \texttt {SAToulouse}}}
+\newcommand{\panda}{{\sc \texttt {Panda}}}
 %\newcommand{\touist}{\textsc{TouIST}\xspace}
 %\renewcommand{\satoulouse}{\textsc{SAToulouse}\xspace}
 
@@ -182,7 +184,6 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand {\mael}[1] {{\color{cyan}[\undeline{Maël}: #1]}}
 \newcommand {\fred}[1] {{\color{purple}[\underline{Fred}: #1]}}
 \newtheorem{definition}{Définition}
-\newcommand{\Definition}[1]{\begin{definition}#1\end{definition}}
 
 
 %%% MACROS NIM
@@ -230,9 +231,65 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 
 \newcommand{\Link}[3]{\mathit{Link}(#1,#2,#3)}
 
-\usepackage{madoko2}
+%\usepackage{madoko2}
 
 % Disable ligatures, e.g., \texttt{--directory=dir} where
 % the hyphens '--' are turned into '—' (ligature)
 \usepackage{microtype}
 \DisableLigatures[-]{family=tt*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{soul}
+\usepackage{amsfonts}
+\usepackage{alltt}
+\usepackage{listings}
+\usepackage{proof}
+\usepackage{wrapfig}
+\usepackage{multicol,multirow,booktabs,array}
+\usepackage{cleveref} % \cref{} va mettre "Figure " devant la référence
+\usepackage{placeins} % \FloatBarrier
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{comment}
+\usepackage{listings}
+\renewcommand{\ttdefault}{txtt} % to resolve a problem with bold fonts in alltt
+
+\lstset{language=ada,basicstyle=\ttfamily}
+
+\usepackage{proof}
+\inferLineSkip=4pt  % increase spacing between lines; default is 2pt
+
+
+
+% For putting verbatim in tabular
+% http://tex.stackexchange.com/questions/140616/how-to-typeset-latex-code-inside-a-table-environment
+\newcolumntype{V}[1]{>{\topsep=0pt\@minipagetrue}p{#1}<{\vspace{-\baselineskip}}}
+
+% {\theorembodyfont{\rmfamily}
+%   \newtheorem{exo}{Exercice}
+%   \newtheorem{rem}{Remarque}
+% }
+
+% redefine existing green color
+\newcommand{\brightgreen}[1]{{\color{green}#1}}
+\definecolor{darkgreen}{rgb}{0,0.7,0}
+\newcommand{\green}[1]{{\color{darkgreen}#1}}
+
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\blue}[1]{{\color{blue}#1}}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\newcommand{\grey}[1]{{\color{grey}#1}}
+\newcommand{\black}[1]{{\color{black}#1}}
+
+%\renewcommand{\emph}[1]{{\color{red}#1}}
+
+
+% Logique
+
+\newcommand{\IMPLL}[0]{\Longrightarrow} % another implication, to make
+                                % a difference with reduction relations
+\newcommand{\BIGAND}[1]{\bigwedge_{#1}}
+\newcommand{\BIGOR}[1]{\bigvee_{#1}}
+\newcommand{\BIGANDC}[2]{\bigwedge_{#1|#2}} % bigand with constraint
+\newcommand{\BIGORC}[2]{\bigvee_{#1|#2}}    % bigor with constraint

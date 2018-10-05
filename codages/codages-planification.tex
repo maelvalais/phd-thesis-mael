@@ -1,5 +1,5 @@
 %\section{Planification par compilation}
-\section{Planification par satisfaction de formules logiques}
+\section{Planification classique par satisfaction de formules logiques}
 %
 
 
@@ -153,11 +153,15 @@ Dans la suite, nous proposons deux nouveaux codages de problèmes de planificati
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLANIFICATION SMT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Planification temporelle par satisfaction de formules logiques}
+%
 
 
-\subsection{Planification temporelle}
+%\subsection{Planification temporelle}
+\subsection{Définitions préliminaires}
 
-Nous \'{e}tudions la planification temporelle propositionnelle dans un langage bas\'{e} sur les aspects temporels de PDDL2.1 \cite{DBLP:journals/jair/FoxL03}. Un fluent est une proposition atomique positive ou n\'{e}gative. Comme dans PDDL2.1, nous consid\'{e}rons que les changements des valeurs des fluents sont instantan\'{e}s mais que les conditions sur la valeur des fluents peuvent \^{e}tre impos\'{e}es sur un intervalle. Une action $\a$ est un quadruplet $\langle\cond{\a},\add{\a},\del{\a},\constr{a}\rangle$, o\`{u} l'ensemble des conditions $\cond{\a}$ est l'ensemble des fluents qui doivent \^{e}tre vrais pour que $\a$ soit ex\'{e}cut\'{e}e, l'ensemble des ajouts $\add{\a}$ est l'ensemble des fluents qui sont \'{e}tablis par $\a$, l'ensemble des retraits $\del{\a}$ est l'ensemble des fluents qui sont d\'{e}truits par $\a$, et l'ensemble de contraintes $\constr{a}$ est un ensemble de contraintes entre les temps relatifs des \'{e}v\'{e}nements qui se produisent pendant l'ex\'{e}cution de $\a$. Un \'{e}v\'{e}nement correspond \`{a} l'une des quatre possibilit\'{e}s: l'\'{e}tablissement ou la destruction d'un fluent par une action $\a$, ou le d\'{e}but ou la fin d'un intervalle sur lequel un fluent est requis par une action $\a$. Dans PDDL2.1, les \'{e}v\'{e}nements ne peuvent se produire qu'au d\'{e}but ou \`{a} la fin des actions, mais nous rel\^{a}chons cette hypoth\`{e}se de sorte que les \'{e}v\'{e}nements peuvent se produire \`{a} tout moment \`{a} condition que les contraintes $\constr{\a}$ soient satisfaites. Notons que $\add{\a} \cap \del{\a}$ peut \^{e}tre non vide. En effet, il n'est pas inhabituel pour une action durative d'\'{e}tablir un fluent au d\'{e}but de l'action et de le d\'{e}truire \`{a} sa fin. Nous pouvons \'{e}galement observer que la dur\'{e}e d'une action, le temps entre le premier et le dernier \'{e}v\'{e}nement de l'action, n'a pas besoin d'\^{e}tre explicitement stock\'{e}e.
+%Nous \'{e}tudions la planification temporelle propositionnelle dans un langage bas\'{e} sur les aspects temporels de PDDL2.1 \cite{DBLP:journals/jair/FoxL03}. 
+Un fluent est une proposition atomique positive ou n\'{e}gative. Comme dans PDDL2.1, nous consid\'{e}rons que les changements des valeurs des fluents sont instantan\'{e}s mais que les conditions sur la valeur des fluents peuvent \^{e}tre impos\'{e}es sur un intervalle. Une action $\a$ est un quadruplet $\langle\cond{\a},\add{\a},\del{\a},\constr{a}\rangle$, o\`{u} l'ensemble des conditions $\cond{\a}$ est l'ensemble des fluents qui doivent \^{e}tre vrais pour que $\a$ soit ex\'{e}cut\'{e}e, l'ensemble des ajouts $\add{\a}$ est l'ensemble des fluents qui sont \'{e}tablis par $\a$, l'ensemble des retraits $\del{\a}$ est l'ensemble des fluents qui sont d\'{e}truits par $\a$, et l'ensemble de contraintes $\constr{a}$ est un ensemble de contraintes entre les temps relatifs des \'{e}v\'{e}nements qui se produisent pendant l'ex\'{e}cution de $\a$. Un \'{e}v\'{e}nement correspond \`{a} l'une des quatre possibilit\'{e}s: l'\'{e}tablissement ou la destruction d'un fluent par une action $\a$, ou le d\'{e}but ou la fin d'un intervalle sur lequel un fluent est requis par une action $\a$. Dans PDDL2.1, les \'{e}v\'{e}nements ne peuvent se produire qu'au d\'{e}but ou \`{a} la fin des actions, mais nous rel\^{a}chons cette hypoth\`{e}se de sorte que les \'{e}v\'{e}nements peuvent se produire \`{a} tout moment \`{a} condition que les contraintes $\constr{\a}$ soient satisfaites. Notons que $\add{\a} \cap \del{\a}$ peut \^{e}tre non vide. En effet, il n'est pas inhabituel pour une action durative d'\'{e}tablir un fluent au d\'{e}but de l'action et de le d\'{e}truire \`{a} sa fin. Nous pouvons \'{e}galement observer que la dur\'{e}e d'une action, le temps entre le premier et le dernier \'{e}v\'{e}nement de l'action, n'a pas besoin d'\^{e}tre explicitement stock\'{e}e.
 %Nous représentons des actions non-instantanées par un rectangle. La durée d'une action est donnée entre crochets après le nom de l'action. Les conditions sont écrites au-dessus d'une action, et les effets ci-dessous. L'action CHARGE (m, c) représentée sur la figure 1 représente le chargement d'un lot de béton c dans un mélangeur m. Nous avons Cond (LOAD (m, c)) = {Fluid (c), Empty (m), At-factory (m)}. On peut voir sur la figure que le mélangeur doit être vide au début du chargement, alors que le béton doit être fluide et le malaxeur à l'usine pendant toute la durée du chargement. Nous avons Del (LOAD (m, c)) = {Empty (m)} et Add (LOAD (m, c) = {On (m, c)} Nous pouvons voir sur la figure que dès que le chargement commence, le mélangeur n'est plus vide et à la fin du chargement le mélangeur contient le béton.
 
 
@@ -284,7 +288,7 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 \begin{small}
 \begin{multline*}
 ~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{length}]}}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
+\BigforallTwo{i=1}{\length}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
 \left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \bigwedge\limits_{\substack{\mathbf{f}\in \cond{\mathbf{\a}}}}\begin{pmatrix}open_{\mathbf{\f},\mathbf{i}}\hfill\\ \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \geq \tau_{s}(open_{\mathbf{f},\mathbf{i}})\right)\hfill\\
  \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \leq \tau_{e}(open_{\mathbf{\f},\mathbf{i}})\right)\end{pmatrix}\right)\hfill\\[-2em]
 %%%

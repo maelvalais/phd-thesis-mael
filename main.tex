@@ -22,7 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%
 % CHAPITRE : CODAGES
 %%%%%%%%%%%%%%%%%%%%
-\chapter{Codages logiques de problèmes}\label{chap:codages}
+\chapter{Codages logiques de problèmes et traduction automatique avec \touist}\label{chap:codages}
 
 \section{Définition des langages utilisés}
 \subsection{Logique propositionnelle (SAT)}
@@ -58,8 +58,8 @@ $\ifthen{P}{F_1}{F_2}$.
 %\section{Codages SAT}
 %\subsection{Un exemple de codage : le jeu de Nim}
 
-%\chapter{Planification par satisfaction de formules logiques}
-\input{codages/codages-planification.tex}
+%
+
 
 
 %\section{Jeux avec QBF}
@@ -84,9 +84,7 @@ $\ifthen{P}{F_1}{F_2}$.
 
 \input{TouIST/naissanceTouIST.tex}
 \input{TouIST/maturiteTouIST.tex}
-
-\section{L'entrée : le langage de \touist}
-
+\input{TouIST/tutoriel.tex}
 \input{TouIST/touist-langage.tex}
 
 
@@ -97,7 +95,11 @@ $\ifthen{P}{F_1}{F_2}$.
 \section{Les sorties de \touist}
 \input{TouIST/touist-sorties.tex}
 
-
+%%%%%%%%
+% CHAPITRE PLANIFICATION
+%%%%%%%%
+\chapter{Planification par satisfaction de formules logiques}
+\input{codages/codages-planification.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SOUS-CHAPITRE : EXPERIMENTATIONS
@@ -129,7 +131,7 @@ Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 \chapter{Conclusion et perspectives}\label{chap:conclusion}
 \input{conclusion.tex}
 
-\input{TouIST/reference.tex}
+%\input{TouIST/reference.tex}
 
 \appendix
 
