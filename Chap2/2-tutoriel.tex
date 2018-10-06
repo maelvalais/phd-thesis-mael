@@ -1,52 +1,10 @@
+% Pré-requis : afin de tirer bénéfice de ces séances de C/TD/TP, vous devez au préalable maîtriser les savoirs et savoir-faire suivant :
+% - connaître les notions de : variable propositionnelle, valuation, modèle, conséquence logique, (in)satisfiabilité
+% - utiliser correctement les connecteurs logiques pour la modélisation de problèmes
+% - évaluer une conséquence logique, rechercher d'un modèle, tirer les bonnes conclusions quant à  leur (in)existence
 
-Ceci n'est pas une séance de TP, vous devez considérer que vous êtes en cours/TD/TP intégrés sur machine. C'est un mélange de cours, de TD et de TP :
-\begin{itemize}
-\item la partie cours porte essentiellement sur les connecteurs généralisés($\bigwedge_{i\in E}$ et $\bigvee_{i\in E}$) et la description de la syntaxe de \touist ; 
-\item la partie TD porte sur l'aspect formalisation des problèmes, et mobilisation des cours précédents pour l'exploitation des résultats du prouveur ; 
-\item la partie TP, consiste à mettre tout cela en oeuvre à l'aide de \touist. 
-\end{itemize}
-
-Prérequis : afin de tirer bénéfice de ces séances de C/TD/TP, vous devez au préalable maîtriser les savoirs et savoir-faire suivant : 
-\begin{itemize}
-\item connaître les notions de : variable propositionnelle, valuation, modèle, conséquence logique, (in)satisfaisabilité
-\item utiliser correctement les connecteurs logiques pour la modélisation de problèmes
-\item évaluer une conséquence logique, rechercher d'un modèle, tirer les bonnes conclusions quant à  leur (in)existence
-\end{itemize}
-
-Objectifs : 
-À l'issue de ces séances, vous devrez être capable de transformer un problème de type combinatoire (dont le sudoku est un exemple typique) en un problème de satisfiabilité d'un ensemble de formules logiques. Pour cela , vous devrez tirer parti des facilités expressives offertes par les connecteurs généralisés dans \touist. Puis, vous devez pouvoir, à partir des modèles obtenus (ou de leur absence) conclure quant aux solutions du problème concret dont vous serez partis. 
-
-\section{Premiers pas}
-\subsection{Démarrage}
-\begin{itemize}
-\item Vérifiez si \touist est déjà installé : rechercher le fichier "touist.jar". Si plusieurs versions sont présentes, choisissez la plus récente. Les dossiers des précédentes versions de touist peuvent être supprimés.
-\item Sinon, ouvrez un navigateur et allez \href{https://www.irit.fr/touist/}{ici} puis appuyez sur "Download".
-\item Décompressez le zip et lancez "touist.jar"
-\end{itemize}
-
-\medskip
-Le {\bf manuel de référence} du langage est disponible \href{https://www.irit.fr/touist/doc/reference-manual.html}{ici} (ou \href{https://www.irit.fr/touist/doc/reference-manual.pdf}{ici} en PDF).
-
-\subsection{Interface graphique}
-Dans le cadre de gauche vous saisirez les formules ou ensembles voulus, dans celui de droite vous aurez le rendu visuel. 
-\begin{itemize}
-\item Tapez \verb?p and q => p?
-\item Vous pouvez aussi faire vos saisies en utilisant le mini-éditeur dans le menu complètement à gauche : cliquez sur la case $a => b$, remplacez \$b par p, effacez \$a et cliquez sur "$a\wedge b$" et remplacez \$a par p et \$b par q.
-\item On verra le rôle des \$ et l'onglet "Sets" (Ensembles) plus tard. 
-\end{itemize}
-
-\begin{center}
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		 Logique propositionnelle & Langage \touist  \\ \hline
-		 $\neg p$ & \texttt{not p} \\ \hline
-		 $p \wedge q$ & \texttt{p and q} \\ \hline
-		 $p \vee q$ & \texttt{p or q} \\ \hline
-		 $p \oplus q$ & \texttt{p xor q} \\ \hline
-		 $p \rightarrow q$ & \texttt{p => q} \\ \hline
-		 $p \leftrightarrow q$ & \texttt{p <=> q} \\ \hline
-	\end{tabular}
-\end{center}
+% Objectifs : 
+% À l'issue de ces séances, vous devrez être capable de transformer un problème de type combinatoire (dont le sudoku est un exemple typique) en un problème de satisfiabilité d'un ensemble de formules logiques. Pour cela , vous devrez tirer parti des facilités expressives offertes par les connecteurs généralisés dans \touist. Puis, vous devez pouvoir, à partir des modèles obtenus (ou de leur absence) conclure quant aux solutions du problème concret dont vous serez partis.
 
 \subsection{Utilisation du prouveur}
 \subsubsection{Vérifier si une formule admet un modèle (= est satisfiable)}
