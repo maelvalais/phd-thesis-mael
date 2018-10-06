@@ -15,7 +15,7 @@
 % INTRODUCTION
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}\label{chap:intro}
-\input{introduction/intro.tex}
+\import{Chap1/}{intro.tex}
 
 
 
@@ -30,17 +30,17 @@
 % SOUS-CHAPITRE : TouIST
 %%%%%%%%%%%%%%%%%%%%%
 \section{Traduction automatique avec \touist}\label{chap:touist}
-\input{Chap2/0-intro.tex}
-\input{Chap2/1-vue-ensemble.tex}
-\input{Chap2/2-tutoriel.tex}
-\input{Chap2/3-nim.tex}
-\input{Chap2/4-touistplan.tex}
+\import{Chap2/}{0-intro.tex}
+\import{Chap2/}{1-vue-ensemble.tex}
+\import{Chap2/}{2-tutoriel.tex}
+\import{Chap2/}{3-nim.tex}
+\import{Chap2/}{4-touistplan.tex}
 
 %%%%%%%%
 % CHAPITRE PLANIFICATION
 %%%%%%%%
 \chapter{Planification par satisfaction de formules logiques}
-\input{codages/codages-planification.tex}
+\import{Chap3/1-codages/}{codages-planification.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SOUS-CHAPITRE : EXPERIMENTATIONS
@@ -52,10 +52,8 @@
 \subsection{Présentation des benchmarks utilisés}
 Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 
-\input{tests/tests-intro-benchmarks.tex}
-
-% PLANIFICATION
-\input{tests/tests-planification.tex}
+\import{Chap3/2-tests/}{tests-intro-benchmarks.tex}
+\import{Chap3/2-tests/}{tests-planification.tex}
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -63,11 +61,11 @@ Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 %%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Conclusion et perspectives}\label{chap:conclusion}
-\input{conclusion.tex}
+\import{Conclusion/}{conclusion.tex}
 
 \appendix
 
-\input{Appendix/touist-reference.tex}
+\import{Appendix/}{touist-reference.tex}
 
 
 
