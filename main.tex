@@ -23,56 +23,18 @@
 % CHAPITRE : CODAGES & TOUIST
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Codages logiques de problèmes et traduction automatique avec \touist}\label{chap:codages}
-
-%\section{Définition des langages utilisés}
-%\subsection{Logique propositionnelle (SAT)}
-%\subsection{Extensions de la logique propositionnelle (QBF, SMT)}
-
-\section{Un exemple de codage : le jeu de Nim}
-\subsection{Description du jeu de Nim}
-\input{2-gameDescription.tex}
-\subsection{Formalisation d'une stratégie gagnante à l'aide de QBF}
-\input{3-QBFandTouist.tex}
-
-%\section{Codages SAT}
-%\subsection{Un exemple de codage : le jeu de Nim}
-
-%
-
-
-
 %\section{Jeux avec QBF}
 %\fred{ajouter le jeu de Nim (JIAF2017), partie adaptation du solveur QBF pour résolution interactive à mettre dans le chapitre sur TouIST}
-
-
-%\section{Extension aux logiques dynamiques}
-
-\section{Conclusion}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%
 % SOUS-CHAPITRE : TouIST
 %%%%%%%%%%%%%%%%%%%%%
 \section{Traduction automatique avec \touist}\label{chap:touist}
-%\section{État de l'art, les solveurs du moment}
-%\subsection{Introduction des logiques SAT, SMT, QBF}
-%\subsection{Le principe des solveurs SAT, SMT, QBF}
-
-\section{Historique de \touist}
-
-\input{TouIST/naissanceTouIST.tex}
-\input{TouIST/maturiteTouIST.tex}
-\input{TouIST/tutoriel.tex}
-\input{TouIST/touist-langage.tex}
-
-
-
-\section{Traductions}
-\subsection{Trucs pas optimisés}
-\subsection{Optimisations durant la traduction}
-\section{Les sorties de \touist}
-\input{TouIST/touist-sorties.tex}
+\input{Chap2/0-intro.tex}
+\input{Chap2/1-vue-ensemble.tex}
+\input{Chap2/2-tutoriel.tex}
+\input{Chap2/3-nim.tex}
+\input{Chap2/4-touistplan.tex}
 
 %%%%%%%%
 % CHAPITRE PLANIFICATION
@@ -87,10 +49,6 @@
 %\chapter{Étude comparative des codages d'arbres compacts pour la planification}
 \section{Étude comparative des codages QBF avec \touist} %pour la planification}
 
-\subsection{Le module TouISTPlan}
-\input{TouIST/touistplan.tex}
-
-%\section{Introduction sur benchmarks}
 \subsection{Présentation des benchmarks utilisés}
 Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 
@@ -100,9 +58,6 @@ Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 \input{tests/tests-planification.tex}
 
 
-%\subsection{Jeux avec QBF}
-
-
 %%%%%%%%%%%%%%%%%%%%%
 % CONCLUSION
 %%%%%%%%%%%%%%%%%%%%%
@@ -110,9 +65,11 @@ Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
 \chapter{Conclusion et perspectives}\label{chap:conclusion}
 \input{conclusion.tex}
 
-\input{TouIST/reference.tex}
-
 \appendix
+
+\input{Appendix/touist-reference.tex}
+
+
 
 \printbibliography
 
