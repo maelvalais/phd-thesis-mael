@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Ce script me sert à corriger les choses fausses de madoko
-# et à corriger les accents type \'{e}
+# et à corriger les accents type \'{e}.
+#
+# Utilisation:
+#
+#     fd '.*\.tex' | xargs -L1 ./replace.sh
 
 perl -pi -e 's/\{\\scshape TouIST\}/\\touist/g' $1
 perl -pi -e 's/\\mdfootnote\{[\d]*\}/\\footnote/g' $1
@@ -17,5 +21,6 @@ perl -pi -e 's/\\\"\{?u\}?/ü/g' $1
 
 perl -pi -e 's/\\\"\{?e\}?/ë/g' $1
 perl -pi -e 's/\\\"\{?i\}?/ï/g' $1
+perl -pi -e 's/\\\^\{?i\}?/î/g' $1
 
 perl -pi -e 's/\\\^\{?o\}?/ô/g' $1
