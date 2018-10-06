@@ -5,19 +5,19 @@
 
 \fred{A ajouter: complexité en espace meilleure par rapport à MK99}
 
-Les codages SAT dans les espaces de plans existants introduits par \cite{DBLP:conf/aaai/MaliK99} se r\'{e}f\`{e}rent tous \`{a} trois \'{e}tapes index\'{e}es (pas n\'{e}cessairement cons\'{e}cutives) du plan.
-Dans notre nouveau codage, nous allons nous r\'{e}f\'{e}rer seulement \`{a} deux \'{e}tapes cons\'{e}cutives.
-Pour chaque action $\a\in\A$ et chaque \'{e}tape $i$, nous cr\'{e}ons une variable propositionnelle $\a_{i}$ pour d\'{e}terminer qu'une instance de $\a$ doit \^{e}tre planifi\'{e}e \`{a} l'\'{e}tape $i$.
-Pour chaque fluent $\f\in\F$ et chaque \'{e}tape $i$, nous cr\'{e}ons une variable propositionnelle $\open{\f}{i}$ pour exprimer que $\f$ se maintient \`{a} l'\'{e}tape pr\'{e}c\'{e}dente $i-1$ et doit \^{e}tre prot\'{e}g\'{e} au moins jusqu'\`{a} l'\'{e}tape $i$.
+Les codages SAT dans les espaces de plans existants introduits par \cite{DBLP:conf/aaai/MaliK99} se réfèrent tous à trois étapes indexées (pas nécessairement consécutives) du plan.
+Dans notre nouveau codage, nous allons nous référer seulement à deux étapes consécutives.
+Pour chaque action $\a\in\A$ et chaque étape $i$, nous créons une variable propositionnelle $\a_{i}$ pour déterminer qu'une instance de $\a$ doit être planifiée à l'étape $i$.
+Pour chaque fluent $\f\in\F$ et chaque étape $i$, nous créons une variable propositionnelle $\open{\f}{i}$ pour exprimer que $\f$ se maintient à l'étape précédente $i-1$ et doit être protégé au moins jusqu'à l'étape $i$.
 
 \begin{figure}[hb!]\centering
 	\includegraphics[width=.4\textwidth]{figures/transitions}
-    \caption{Lien causal: l'action $a'$ produit $\f$ \`{a} l'\'{e}tape $S_{i-k}$ pour l'action $\a$ qui n\'{e}cessite $\f$ \`{a} l'\'{e}tape $S_{i}$.}
+    \caption{Lien causal: l'action $a'$ produit $\f$ à l'étape $S_{i-k}$ pour l'action $\a$ qui nécessite $\f$ à l'étape $S_{i}$.}
     \label{fig:causal-link-sat}
 \end{figure}
 
-Dans la figure~\ref{fig:causal-link-sat}, la variable $f$ est une \textit {condition ouverte} \`{a} l'\'{e}tape $\S_i$, impliquant que $\f\in\I$ ou une action $a'$ qui ajoute $\f$ est ex\'{e}cut\'{e}e dans une \'{e}tape pr\'{e}c\'{e}dente $\S_{i-k}$.
-Les conditions ouvertes doivent \^{e}tre propag\'{e}es vers l'arri\`{e}re jusqu'\`{a} l'\'{e}tat initial ou une \'{e}tape dans laquelle elles sont ajout\'{e}es par une action.
+Dans la figure~\ref{fig:causal-link-sat}, la variable $f$ est une \textit {condition ouverte} à l'étape $\S_i$, impliquant que $\f\in\I$ ou une action $a'$ qui ajoute $\f$ est exécutée dans une étape précédente $\S_{i-k}$.
+Les conditions ouvertes doivent être propagées vers l'arrière jusqu'à l'état initial ou une étape dans laquelle elles sont ajoutées par une action.
 
 
 
@@ -64,11 +64,11 @@ Les conditions ouvertes doivent \^{e}tre propag\'{e}es vers l'arri\`{e}re jusqu'
 
 %\paragraph*{SAT Encoding: open conditions, then propagate or close}
 
-Dans la suite, nous donnons notre codage pour une longueur de plan fix\'{e}e $\length$. Une borne sup\'{e}rieure pour $\length$ est le nombre total d'\'{e}tats possibles, soit $2^{\mid\F\mid}$.
+Dans la suite, nous donnons notre codage pour une longueur de plan fixée $\length$. Une borne supérieure pour $\length$ est le nombre total d'états possibles, soit $2^{\mid\F\mid}$.
 
 \paragraph*{Conditions ouvertes}
 
-Si une action $\a$ est ex\'{e}cut\'{e}e dans une \'{e}tape du plan, alors chaque condition de $\a$ doit \^{e}tre une condition ouverte \`{a} cette \'{e}tape (c'est-\`{a}-dire qu'un lien causal est requis pour cette condition).
+Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition).
 
 
 \begin{small}
@@ -79,7 +79,7 @@ Si une action $\a$ est ex\'{e}cut\'{e}e dans une \'{e}tape du plan, alors chaque
 \end{multline*}
 \end{small}
 
-Dans la derni\`{e}re \'{e}tape du plan menant au but tous les fluents du but doivent \^{e}tre des conditions ouvertes ou ajout\'{e}es par des actions ex\'{e}cut\'{e}es dans cette \'{e}tape.
+Dans la dernière étape du plan menant au but tous les fluents du but doivent être des conditions ouvertes ou ajoutées par des actions exécutées dans cette étape.
 
 \begin{small}
 \begin{multline*}
@@ -91,7 +91,7 @@ Dans la derni\`{e}re \'{e}tape du plan menant au but tous les fluents du but doi
 
 \paragraph*{Propagation et fermeture}
 
-Aucune condition ne doit rester ouverte dans la premi\`{e}re \'{e}tape du plan si elle n'est pas fournie dans l'\'{e}tat initial.
+Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
 %$\bigwedge_{\mathbf{\f}\in \mathbf{\F}\setminus \mathbf{I}}\neg open_{\mathbf{\f},1}$
 
 \begin{small}
@@ -102,7 +102,7 @@ Aucune condition ne doit rester ouverte dans la premi\`{e}re \'{e}tape du plan s
 \end{multline*}
 \end{small}
 
-Toute condition ouverte dans une \'{e}tape doit soit rester ouverte soit \^{e}tre ajout\'{e}e (ferm\'{e}e) par une action \`{a} l'\'{e}tape pr\'{e}c\'{e}dente.
+Toute condition ouverte dans une étape doit soit rester ouverte soit être ajoutée (fermée) par une action à l'étape précédente.
 
 \begin{small}
 \begin{multline*}
@@ -117,7 +117,7 @@ Toute condition ouverte dans une \'{e}tape doit soit rester ouverte soit \^{e}tr
 
 \paragraph*{Protection des conditions ouvertes}
 
-Une condition ouverte dans une \'{e}tape donn\'{e}e ne peut pas \^{e}tre supprim\'{e}e \`{a} l'\'{e}tape pr\'{e}c\'{e}dente. Cela garantit de ne rompre aucun lien de causalit\'{e} dans le plan.
+Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'étape précédente. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 \begin{small}
 \begin{multline*}
 ~\\[-3em]
@@ -126,9 +126,9 @@ Une condition ouverte dans une \'{e}tape donn\'{e}e ne peut pas \^{e}tre supprim
 \end{multline*}
 \end{small}
 
-\paragraph*{Pr\'{e}vention des interactions n\'{e}gatives}
+\paragraph*{Prévention des interactions négatives}
 
-Si une action supprime un fluent qui est n\'{e}cessaire ou est ajout\'{e} par une autre action, alors ces deux actions ne peuvent pas \^{e}tre ex\'{e}cut\'{e}es toutes les deux dans une m\^{e}me \'{e}tape.
+Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape.
 
 \begin{small}
 \begin{multline*}
@@ -138,4 +138,4 @@ Si une action supprime un fluent qui est n\'{e}cessaire ou est ajout\'{e} par un
 \end{small}
 
 
-Dans la section suivante, nous présentons une version plus compacte de ce nouveau codage qui utilise le langage QBF. Nous \'{e}tendons ensuite ce codage SAT pour la planification classique en un codage SMT pour la planification temporelle en temps continu.
+Dans la section suivante, nous présentons une version plus compacte de ce nouveau codage qui utilise le langage QBF. Nous étendons ensuite ce codage SAT pour la planification classique en un codage SMT pour la planification temporelle en temps continu.

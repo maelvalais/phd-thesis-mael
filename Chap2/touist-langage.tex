@@ -25,7 +25,7 @@ Les formules de \touist\ sont basées sur des variables propositionnelles (qui p
 \paragraph{Conjonctions et disjonctions généralisées}
 Elles permettent d'exprimer des conjonctions et des disjonctions sur des formules contenant des paramètres qui varient, par exemple :
 \begin{itemize}
-\item $ \bigwedge_{i \in N} P_i$, o\`u $N$ est l'ensemble de domaine défini précédemment.\\
+\item $ \bigwedge_{i \in N} P_i$, où $N$ est l'ensemble de domaine défini précédemment.\\
   Elle représente la conjonction
   $P_1 \AND P_2 \AND \ldots \AND P_9$. 
 \item $\bigvee_{i \in E} P_i$.
@@ -69,7 +69,7 @@ qui est très long et terne.
 \subsubsection{Langage d'entrée vs. langage d'affichage}
 
 Les formules que nous avons vues précédemment sont écrites dans le \emph{langage d'affichage} (style \LaTeX), mais tous ces symboles ne sont pas disponibles sur les claviers, ainsi pour écrire les formules et ensembles de domaines, l'utilisateur utilisera le \emph{langage d'entrée}.
-Par exemple, la formule précédente avec l'ensemble associé $N$ sera tapée (les variables sont pr\'{e}fix\'{e}es par \$) :
+Par exemple, la formule précédente avec l'ensemble associé $N$ sera tapée (les variables sont préfixées par \$) :
 \begin{verbatim}
 bigand $i,$j in $N,$N:
   bigor $k in $N when $k != $i+$j:
@@ -77,8 +77,8 @@ bigand $i,$j in $N,$N:
   end
 end
 \end{verbatim}
-Mais \touist\ les affiche immédiatement en style \LaTeX\ comme on peut le voir dans le panneau droit montr\'{e} sur la figure \ref{fig:LatexDisplay}.
-La d\'{e}finition de l'ensemble $N$ est faite dans l'onglet ``Ensembles''.
+Mais \touist\ les affiche immédiatement en style \LaTeX\ comme on peut le voir dans le panneau droit montré sur la figure \ref{fig:LatexDisplay}.
+La définition de l'ensemble $N$ est faite dans l'onglet ``Ensembles''.
 
 \begin{figure*}[htbp]
 \centering

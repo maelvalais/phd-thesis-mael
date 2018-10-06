@@ -178,62 +178,62 @@ Dans la suite, nous proposons deux nouveaux codages de problèmes de planificati
 %\subsection{Planification temporelle}
 \subsection{Définitions préliminaires}
 
-%Nous \'{e}tudions la planification temporelle propositionnelle dans un langage bas\'{e} sur les aspects temporels de PDDL2.1 \cite{DBLP:journals/jair/FoxL03}. 
-Un fluent est une proposition atomique positive ou n\'{e}gative. Comme dans PDDL2.1, nous consid\'{e}rons que les changements des valeurs des fluents sont instantan\'{e}s mais que les conditions sur la valeur des fluents peuvent \^{e}tre impos\'{e}es sur un intervalle. Une action $\a$ est un quadruplet $\langle\cond{\a},\add{\a},\del{\a},\constr{a}\rangle$, o\`{u} l'ensemble des conditions $\cond{\a}$ est l'ensemble des fluents qui doivent \^{e}tre vrais pour que $\a$ soit ex\'{e}cut\'{e}e, l'ensemble des ajouts $\add{\a}$ est l'ensemble des fluents qui sont \'{e}tablis par $\a$, l'ensemble des retraits $\del{\a}$ est l'ensemble des fluents qui sont d\'{e}truits par $\a$, et l'ensemble de contraintes $\constr{a}$ est un ensemble de contraintes entre les temps relatifs des \'{e}v\'{e}nements qui se produisent pendant l'ex\'{e}cution de $\a$. Un \'{e}v\'{e}nement correspond \`{a} l'une des quatre possibilit\'{e}s: l'\'{e}tablissement ou la destruction d'un fluent par une action $\a$, ou le d\'{e}but ou la fin d'un intervalle sur lequel un fluent est requis par une action $\a$. Dans PDDL2.1, les \'{e}v\'{e}nements ne peuvent se produire qu'au d\'{e}but ou \`{a} la fin des actions, mais nous rel\^{a}chons cette hypoth\`{e}se de sorte que les \'{e}v\'{e}nements peuvent se produire \`{a} tout moment \`{a} condition que les contraintes $\constr{\a}$ soient satisfaites. Notons que $\add{\a} \cap \del{\a}$ peut \^{e}tre non vide. En effet, il n'est pas inhabituel pour une action durative d'\'{e}tablir un fluent au d\'{e}but de l'action et de le d\'{e}truire \`{a} sa fin. Nous pouvons \'{e}galement observer que la dur\'{e}e d'une action, le temps entre le premier et le dernier \'{e}v\'{e}nement de l'action, n'a pas besoin d'\^{e}tre explicitement stock\'{e}e.
+%Nous étudions la planification temporelle propositionnelle dans un langage basé sur les aspects temporels de PDDL2.1 \cite{DBLP:journals/jair/FoxL03}. 
+Un fluent est une proposition atomique positive ou négative. Comme dans PDDL2.1, nous considérons que les changements des valeurs des fluents sont instantanés mais que les conditions sur la valeur des fluents peuvent être imposées sur un intervalle. Une action $\a$ est un quadruplet $\langle\cond{\a},\add{\a},\del{\a},\constr{a}\rangle$, où l'ensemble des conditions $\cond{\a}$ est l'ensemble des fluents qui doivent être vrais pour que $\a$ soit exécutée, l'ensemble des ajouts $\add{\a}$ est l'ensemble des fluents qui sont établis par $\a$, l'ensemble des retraits $\del{\a}$ est l'ensemble des fluents qui sont détruits par $\a$, et l'ensemble de contraintes $\constr{a}$ est un ensemble de contraintes entre les temps relatifs des événements qui se produisent pendant l'exécution de $\a$. Un événement correspond à l'une des quatre possibilités: l'établissement ou la destruction d'un fluent par une action $\a$, ou le début ou la fin d'un intervalle sur lequel un fluent est requis par une action $\a$. Dans PDDL2.1, les événements ne peuvent se produire qu'au début ou à la fin des actions, mais nous rel\^{a}chons cette hypothèse de sorte que les événements peuvent se produire à tout moment à condition que les contraintes $\constr{\a}$ soient satisfaites. Notons que $\add{\a} \cap \del{\a}$ peut être non vide. En effet, il n'est pas inhabituel pour une action durative d'établir un fluent au début de l'action et de le détruire à sa fin. Nous pouvons également observer que la durée d'une action, le temps entre le premier et le dernier événement de l'action, n'a pas besoin d'être explicitement stockée.
 %Nous représentons des actions non-instantanées par un rectangle. La durée d'une action est donnée entre crochets après le nom de l'action. Les conditions sont écrites au-dessus d'une action, et les effets ci-dessous. L'action CHARGE (m, c) représentée sur la figure 1 représente le chargement d'un lot de béton c dans un mélangeur m. Nous avons Cond (LOAD (m, c)) = {Fluid (c), Empty (m), At-factory (m)}. On peut voir sur la figure que le mélangeur doit être vide au début du chargement, alors que le béton doit être fluide et le malaxeur à l'usine pendant toute la durée du chargement. Nous avons Del (LOAD (m, c)) = {Empty (m)} et Add (LOAD (m, c) = {On (m, c)} Nous pouvons voir sur la figure que dès que le chargement commence, le mélangeur n'est plus vide et à la fin du chargement le mélangeur contient le béton.
 
 
-Nous utilisons la notation $\a \rightarrow \f$ pour d\'{e}signer l'\'{e}v\'{e}nement que l'action $\a$ \'{e}tablit le fluent $\f$, $\a \rightarrow \neg\f$ pour d\'{e}signer l'\'{e}v\'{e}nement que $\a$ d\'{e}truit $\f$, et $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$, respectivement, pour indiquer le d\'{e}but et la fin de l'intervalle sur lequel $\a$ requiert la condition $\f.$ Si $\f$ est d\'{e}j\`{a} vrai (respectivement, faux) lorsque l'\'{e}v\'{e}nement
-$\a \rightarrow \f$ ($\a \rightarrow \neg\f$) se produit, nous consid\'{e}rons toujours que $\a$ \'{e}tablit (d\'{e}truit) $\f$. Un plan temporel peut contenir plusieurs instances de la m\^{e}me action, mais %puisque la plupart des plans temporels étudiés dans cet article contiennent au plus un exemple de chaque action, 
-par simplicit\'{e} de notation, nous ferons seulement la distinction entre actions et instances d'action si cela est absolument n\'{e}cessaire. Nous utilisons la notation $\tau(e)$ pour repr\'{e}senter l'instant dans un plan o\`{u} un \'{e}v\'{e}nement $e$ se produit.
-Pour une action donn\'{e}e (ou une instance d'action) $a$, $\events{\a}$ repr\'{e}sente les diff\'{e}rents \'{e}v\'{e}nements qui constituent sa d\'{e}finition, \`{a} savoir $\a \rightarrow \f$ pour tout $\f$ dans $\add{\a}$, $\a \rightarrow \neg\f$ pour tout $\f$ dans $\del{\a}$, $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$ pour tout $\f$ dans $\cond{a}$. La d\'{e}finition d'une action $\a$ inclut les contraintes $\constr{a}$ sur les instants relatifs aux \'{e}v\'{e}nements dans $\events{\a}$. %Par exemple, la structure interne de l'action de longueur fixe LOAD (m, c) représentée sur la figure 1 est définie par des contraintes telles que
+Nous utilisons la notation $\a \rightarrow \f$ pour désigner l'événement que l'action $\a$ établit le fluent $\f$, $\a \rightarrow \neg\f$ pour désigner l'événement que $\a$ détruit $\f$, et $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$, respectivement, pour indiquer le début et la fin de l'intervalle sur lequel $\a$ requiert la condition $\f.$ Si $\f$ est déjà vrai (respectivement, faux) lorsque l'événement
+$\a \rightarrow \f$ ($\a \rightarrow \neg\f$) se produit, nous considérons toujours que $\a$ établit (détruit) $\f$. Un plan temporel peut contenir plusieurs instances de la même action, mais %puisque la plupart des plans temporels étudiés dans cet article contiennent au plus un exemple de chaque action, 
+par simplicité de notation, nous ferons seulement la distinction entre actions et instances d'action si cela est absolument nécessaire. Nous utilisons la notation $\tau(e)$ pour représenter l'instant dans un plan où un événement $e$ se produit.
+Pour une action donnée (ou une instance d'action) $a$, $\events{\a}$ représente les différents événements qui constituent sa définition, à savoir $\a \rightarrow \f$ pour tout $\f$ dans $\add{\a}$, $\a \rightarrow \neg\f$ pour tout $\f$ dans $\del{\a}$, $\f \mid\rightarrow \a$ et $\f \rightarrow\mid \a$ pour tout $\f$ dans $\cond{a}$. La définition d'une action $\a$ inclut les contraintes $\constr{a}$ sur les instants relatifs aux événements dans $\events{\a}$. %Par exemple, la structure interne de l'action de longueur fixe LOAD (m, c) représentée sur la figure 1 est définie par des contraintes telles que
 %τ (Fluide (c) → | CHARGE (m, c)) - τ (Fluide (c) | → CHARGE (m, c)) = 5
 %τ (LOAD (m, c) → On (m, c)) - τ (Fluide (c) → | LOAD (m, c)) = 0
-Comme dans PDDL2.1, nous consid\'{e}rons que la dur\'{e}e entre \'{e}v\'{e}nements dans $\events{\a}$ n'est pas n\'{e}cessairement fixe et que $\constr{\a}$ est un ensemble de contraintes d'intervalle sur des paires d'\'{e}v\'{e}nements, tels que
-$\tau(\f \rightarrow\mid \a) - \tau(\f \mid\rightarrow \a) \in [\alpha,\beta]$ pour des constantes $\alpha,\beta$. Nous utilisons $[\alpha_{\a}(e_1, e_2), \beta_{\a}(e_1, e_2)]$ pour d\'{e}signer l'intervalle de valeurs possibles pour la distance relative entre les \'{e}v\'{e}nements $e_1$, $e_2$ de l'action $\a$. Une dur\'{e}e fixe entre les \'{e}v\'{e}nements $e_1,e_2 \in \events{\a}$ peut, bien s\^{u}r, \^{e}tre mod\'{e}lis\'{e}e en d\'{e}finissant $\alpha_{\a}(e_1, e_2)=\beta_{\a}(e_1, e_2)$. De m\^{e}me, l'absence de contrainte peut \^{e}tre mod\'{e}lis\'{e}e par l'intervalle $[-\infty,+\infty]$. Nous introduisons maintenant deux contraintes fondamentales que tous les plans temporels doivent satisfaire :
+Comme dans PDDL2.1, nous considérons que la durée entre événements dans $\events{\a}$ n'est pas nécessairement fixe et que $\constr{\a}$ est un ensemble de contraintes d'intervalle sur des paires d'événements, tels que
+$\tau(\f \rightarrow\mid \a) - \tau(\f \mid\rightarrow \a) \in [\alpha,\beta]$ pour des constantes $\alpha,\beta$. Nous utilisons $[\alpha_{\a}(e_1, e_2), \beta_{\a}(e_1, e_2)]$ pour désigner l'intervalle de valeurs possibles pour la distance relative entre les événements $e_1$, $e_2$ de l'action $\a$. Une durée fixe entre les événements $e_1,e_2 \in \events{\a}$ peut, bien s\^{u}r, être modélisée en définissant $\alpha_{\a}(e_1, e_2)=\beta_{\a}(e_1, e_2)$. De même, l'absence de contrainte peut être modélisée par l'intervalle $[-\infty,+\infty]$. Nous introduisons maintenant deux contraintes fondamentales que tous les plans temporels doivent satisfaire :
 \begin{itemize}
-\item les \emph{contraintes inh\'{e}rentes} \`{a} l'ensemble des instances d'action $\A$ : pour toute $\a\in\A$, $\a$ satisfait $\constr{a}$, c'est-\`{a}-dire pour toutes les paires d'\'{e}v\'{e}nements $e_1,e_2\in \events{\a}$ nous avons $\tau(e_1) - \tau(e_2) \in [\alpha_\a(e_1,e_2),\beta_\a(e_1,e_2)]$ ;
+\item les \emph{contraintes inhérentes} à l'ensemble des instances d'action $\A$ : pour toute $\a\in\A$, $\a$ satisfait $\constr{a}$, c'est-à-dire pour toutes les paires d'événements $e_1,e_2\in \events{\a}$ nous avons $\tau(e_1) - \tau(e_2) \in [\alpha_\a(e_1,e_2),\beta_\a(e_1,e_2)]$ ;
 \item les \emph{contraintes d'effets contradictoires} sur l'ensemble des instances d'action $\A$ : pour toutes $\a_i,\a_j \in\A$, pour tout fluent positif $\f \in \del{\a_i} \cap \add{\a_j}$ nous avons $\tau(\a_i \rightarrow \neg\f) \neq \tau(\a_j \rightarrow \f)$.
 \end{itemize}
 
-Les contraintes inh\'{e}rentes d\'{e}finissent la structure interne de chaque instance d'action, alors que les contraintes d'effets contradictoires assurent que la valeur de v\'{e}rit\'{e} de chaque fluent ne soit jamais ind\'{e}finie lors de l'ex\'{e}cution d'un plan temporel. %Par exemple, si un plan contient une instance $\a$ de l'action LOAD (m, c) montrée à la figure 1 et une instance b d'une autre action CLEAN (m) avec Empty (m) ∈ Add (CLEAN (m)), alors le plan temporel doit satisfaire la contrainte d'effets contradictoires
+Les contraintes inhérentes définissent la structure interne de chaque instance d'action, alors que les contraintes d'effets contradictoires assurent que la valeur de vérité de chaque fluent ne soit jamais indéfinie lors de l'exécution d'un plan temporel. %Par exemple, si un plan contient une instance $\a$ de l'action LOAD (m, c) montrée à la figure 1 et une instance b d'une autre action CLEAN (m) avec Empty (m) ∈ Add (CLEAN (m)), alors le plan temporel doit satisfaire la contrainte d'effets contradictoires
 %τ (a → ¬EMPTY (m)) ≠ τ (b → EMPTY (m)).
 
 \begin{definition}
-Un probl\`{e}me de planification temporelle $\langle \I, \A, \G \rangle$ consiste en un ensemble d'actions $\A,$ un \'{e}tat initial $\I$ et un but $\G$, o\`{u} $\I$ et $\G$ sont des ensembles de fluents.
+Un problème de planification temporelle $\langle \I, \A, \G \rangle$ consiste en un ensemble d'actions $\A,$ un état initial $\I$ et un but $\G$, où $\I$ et $\G$ sont des ensembles de fluents.
 \end{definition}
 \paragraph*{Notation} Si $\A$ est un ensemble d'instances d'actions, alors $\events{\A}$ est l'union des ensembles $\events{\a}$ (pour toutes les instances d'action $a\in \A$).
 
 \begin{definition}\label{def:plan-temporel}
-$P = \langle \A, \tau \rangle$, o\`{u} $\A$ est un ensemble fini d'instances d'actions $\{a_1,\ldots, a_n\}$ et $\tau$ est une fonction \`{a} valeurs r\'{e}elles sur $\events{\A}$, est un plan temporel pour le probl\`{e}me $\langle \I , \A^{\prime}, \G \rangle$ si
+$P = \langle \A, \tau \rangle$, où $\A$ est un ensemble fini d'instances d'actions $\{a_1,\ldots, a_n\}$ et $\tau$ est une fonction à valeurs réelles sur $\events{\A}$, est un plan temporel pour le problème $\langle \I , \A^{\prime}, \G \rangle$ si
 \begin{enumerate}
 \item[(1)] $\A \subseteq \A^{\prime}$, et
-\item[(2)] $P$ v\'{e}rifie les contraintes inh\'{e}rentes et contradictoires sur $\A$;
+\item[(2)] $P$ vérifie les contraintes inhérentes et contradictoires sur $\A$;
 \end{enumerate}
-et lorsque $P$ est ex\'{e}cut\'{e} (c'est-\`{a}-dire que les fluents sont \'{e}tablis ou d\'{e}truits aux instants donn\'{e}s par $\tau$) \`{a} partir de l'\'{e}tat initial $\I$:
+et lorsque $P$ est exécuté (c'est-à-dire que les fluents sont établis ou détruits aux instants donnés par $\tau$) à partir de l'état initial $\I$:
 \begin{enumerate}
 \item[(3)] pour toute $a_i \in \A$, chaque $\f \in \cond{a_i}$ est vrai lorsqu'il est requis, et
-\item[(4)] tous les fluents $g \in \G$ sont vrais \`{a} la fin de l'ex\'{e}cution de $P$.
-\item[(5)] $P$ est robuste sous des changements infinit\'{e}simaux dans les temps de d\'{e}marrage des actions.
+\item[(4)] tous les fluents $g \in \G$ sont vrais à la fin de l'exécution de $P$.
+\item[(5)] $P$ est robuste sous des changements infinitésimaux dans les temps de démarrage des actions.
 \end{enumerate}
 \end{definition}
 
-Les \'{e}v\'{e}nements sont instantan\'{e}s, alors que les actions ont non seulement une dur\'{e}e mais celle-ci peut aussi \^{e}tre de longueur variable. Ainsi, un plan temporel $P$ ne planifie pas directement ses instances d'action mais planifie tous les \'{e}v\'{e}nements dans ses instances d'actions.
-La condition (5) de la d\'{e}finition~\ref{def:plan-temporel} signifie que nous interdisons les plans qui exigent une synchronisation parfaite entre diff\'{e}rentes actions. % montrent comment 
-Cette condition peut \^{e}tre impos\'{e}e dans PDDL2.1 \cite{DBLP:conf/ecai/FoxLH04}. Nous exigeons que dans tous les plans, les fluents soient \'{e}tablis strictement avant le d\'{e}but de l'intervalle sur lequel ils sont requis. La seule exception \`{a} cette r\`{e}gle est lorsqu'un fluent $\f$ est \'{e}tabli et requis par la m\^{e}me action $\a$. Nous permettons la possibilit\'{e} d'une parfaite synchronisation au sein d'une action, ce qui signifie que nous pouvons avoir $\tau(\a\rightarrow\f)=\tau(\f\mid\rightarrow\a)$.
-De m\^{e}me, les fluents ne peuvent \^{e}tre d\'{e}truits qu'apr\`{e}s la fin de l'intervalle sur lequel ils sont requis. La seule exception \`{a} cette regle est quand un fluent $\f$ est requis et d\'{e}truit par une action $\a$, auquel cas on peut avoir $\tau(\f\rightarrow\mid\a)=\tau(\a\rightarrow\neg\f)$. %Par exemple, le fluide Empty (m) est simultanément requis et détruit par l'action LOAD (m, c) représentée sur la figure 1.
+Les événements sont instantanés, alors que les actions ont non seulement une durée mais celle-ci peut aussi être de longueur variable. Ainsi, un plan temporel $P$ ne planifie pas directement ses instances d'action mais planifie tous les événements dans ses instances d'actions.
+La condition (5) de la définition~\ref{def:plan-temporel} signifie que nous interdisons les plans qui exigent une synchronisation parfaite entre différentes actions. % montrent comment 
+Cette condition peut être imposée dans PDDL2.1 \cite{DBLP:conf/ecai/FoxLH04}. Nous exigeons que dans tous les plans, les fluents soient établis strictement avant le début de l'intervalle sur lequel ils sont requis. La seule exception à cette règle est lorsqu'un fluent $\f$ est établi et requis par la même action $\a$. Nous permettons la possibilité d'une parfaite synchronisation au sein d'une action, ce qui signifie que nous pouvons avoir $\tau(\a\rightarrow\f)=\tau(\f\mid\rightarrow\a)$.
+De même, les fluents ne peuvent être détruits qu'après la fin de l'intervalle sur lequel ils sont requis. La seule exception à cette regle est quand un fluent $\f$ est requis et détruit par une action $\a$, auquel cas on peut avoir $\tau(\f\rightarrow\mid\a)=\tau(\a\rightarrow\neg\f)$. %Par exemple, le fluide Empty (m) est simultanément requis et détruit par l'action LOAD (m, c) représentée sur la figure 1.
 
 \begin{definition}
-Un probl\`{e}me de planification temporelle $\langle \I, \A, \G \rangle$ est positif s'il n'y a pas de fluents n\'{e}gatifs dans les conditions d'actions ni dans le but $\G$.
+Un problème de planification temporelle $\langle \I, \A, \G \rangle$ est positif s'il n'y a pas de fluents négatifs dans les conditions d'actions ni dans le but $\G$.
 \end{definition}
 
-Dans cet article, nous ne consid\`{e}rerons que des probl\`{e}mes de planification temporelle positifs $\langle \I, \A, \G \rangle$. Il est bien connu que tout probl\`{e}me de planification peut \^{e}tre transform\'{e} en un probl\`{e}me positif \'{e}quivalent en temps lin\'{e}aire par l'introduction, pour chaque fluent positif $\f$, d'un nouveau fluent pour remplacer les occurrences de $\neg\f$ dans les conditions d'actions \cite{DBLP:books/daglib/0014222}. %Il est important de noter, cependant, que cette transformation peut ne pas conserver d'autres propri\'{e}t\'{e}s de l'instance. 
-En supposant que tous les probl\`{e}mes sont positifs, $\G$ et $\cond{\a}$ (pour toute action $\a$) sont compos\'{e}s de fluents positifs. Par convention, $\add{\a}$ et $\del{a}$ sont aussi compos\'{e}s exclusivement de fluents positifs. L'\'{e}tat initial $\I$, cependant, peut contenir des fluents n\'{e}gatifs.
-%Pour simplifier la pr\'{e}sentation, nous supposons dans cet article que l'ensemble des actions A a subi l'op\'{e}ration de filtrage consistant \`{a} \'{e}liminer les actions $\a$ de $\A$ qui ne peuvent \^{e}tre ex\'{e}cut\'{e}es puisque $\cond{\a}$ n'est pas un sous-ensemble de $\I\cup\add{\a}$.
+Dans cet article, nous ne considèrerons que des problèmes de planification temporelle positifs $\langle \I, \A, \G \rangle$. Il est bien connu que tout problème de planification peut être transformé en un problème positif équivalent en temps linéaire par l'introduction, pour chaque fluent positif $\f$, d'un nouveau fluent pour remplacer les occurrences de $\neg\f$ dans les conditions d'actions \cite{DBLP:books/daglib/0014222}. %Il est important de noter, cependant, que cette transformation peut ne pas conserver d'autres propriétés de l'instance. 
+En supposant que tous les problèmes sont positifs, $\G$ et $\cond{\a}$ (pour toute action $\a$) sont composés de fluents positifs. Par convention, $\add{\a}$ et $\del{a}$ sont aussi composés exclusivement de fluents positifs. L'état initial $\I$, cependant, peut contenir des fluents négatifs.
+%Pour simplifier la présentation, nous supposons dans cet article que l'ensemble des actions A a subi l'opération de filtrage consistant à éliminer les actions $\a$ de $\A$ qui ne peuvent être exécutées puisque $\cond{\a}$ n'est pas un sous-ensemble de $\I\cup\add{\a}$.
 
 
 %\subsubsection{Codage SAT pour la planification classique}
-%Dans cette section, nous consid\'{e}rons la planification classique comme restriction de la planification temporelle d\'{e}crite dans la section pr\'{e}c\'{e}dente. Un probl\`{e}me de planification positif est donc ici un triplet $\langle \I , \A, \G \rangle$ tel que toutes les actions de $\A$ sont instantan\'{e}es (c'est-\`{a}-dire $\forall \a\in\A, \forall e_1,e_2\in \events{\a}, \tau(e_1)=\tau(e_2)$). De plus, nous consid\'{e}rons pour tout plan $P = \langle \A, \tau \rangle$, que $\tau$ est une fonction \`{a} valeurs enti\`{e}res de $\events{\A}$ dans $N=\{1,\ldots,n\}$ l'ensemble ordonn\'{e} des index d'\'{e}tapes de $P$.
+%Dans cette section, nous considérons la planification classique comme restriction de la planification temporelle décrite dans la section précédente. Un problème de planification positif est donc ici un triplet $\langle \I , \A, \G \rangle$ tel que toutes les actions de $\A$ sont instantanées (c'est-à-dire $\forall \a\in\A, \forall e_1,e_2\in \events{\a}, \tau(e_1)=\tau(e_2)$). De plus, nous considérons pour tout plan $P = \langle \A, \tau \rangle$, que $\tau$ est une fonction à valeurs entières de $\events{\A}$ dans $N=\{1,\ldots,n\}$ l'ensemble ordonné des index d'étapes de $P$.
 
 
 %
@@ -268,11 +268,11 @@ En supposant que tous les probl\`{e}mes sont positifs, $\G$ et $\cond{\a}$ (pour
 
 \subsection{Nouveau codage SMT pour la planification temporelle}
 
-Nous introduisons une adaptation SMT du codage SAT bas\'{e} sur les conditions ouvertes que nous avons introduit dans la section \fred{ajout référence} pour la planification classique. Ici, les actions ne sont plus instantan\'{e}es et des contraintes sur les instants $\tau(e)$ auxquels se produisent des \'{e}v\'{e}nements $e\in\events{\A}$ doivent explicitement \^{e}tre ajout\'{e}es.
+Nous introduisons une adaptation SMT du codage SAT basé sur les conditions ouvertes que nous avons introduit dans la section \fred{ajout référence} pour la planification classique. Ici, les actions ne sont plus instantanées et des contraintes sur les instants $\tau(e)$ auxquels se produisent des événements $e\in\events{\A}$ doivent explicitement être ajoutées.
 
 
-Consid\'{e}rons donc maintenant un probl\`{e}me de planification temporelle positif $\langle \I, \A, \G \rangle$.
-Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous introduisons deux variables $\tau_{s}(\textit{open}_{f})$ et $\tau_{e}(\textit{open}_{f})$ qui nous permettent de d\'{e}finir un intervalle temporel de protection de lien causal depuis l'\'{e}tat initial ou une \'{e}tape contenant une action qui produit $\f$ vers une \'{e}tape qui contient l'instance d'action $\a$. Durant cet intervalle temporel, aucune action ne pourra d\'{e}truire $\f$.
+Considérons donc maintenant un problème de planification temporelle positif $\langle \I, \A, \G \rangle$.
+Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous introduisons deux variables $\tau_{s}(\textit{open}_{f})$ et $\tau_{e}(\textit{open}_{f})$ qui nous permettent de définir un intervalle temporel de protection de lien causal depuis l'état initial ou une étape contenant une action qui produit $\f$ vers une étape qui contient l'instance d'action $\a$. Durant cet intervalle temporel, aucune action ne pourra détruire $\f$.
 
 
 %%\paragraph*{Planning with Continuous Time}
@@ -301,7 +301,7 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 %\end{frame}
 
 
-\paragraph*{Conditions ouvertes} Si une action $\a$ est ex\'{e}cut\'{e}e dans une \'{e}tape du plan, alors chaque condition de $\a$ doit \^{e}tre une condition ouverte \`{a} cette \'{e}tape (c'est-\`{a}-dire qu'un lien causal est requis pour cette condition). De plus, le d\'{e}but de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
+\paragraph*{Conditions ouvertes} Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
 
 \begin{small}
 \begin{multline*}
@@ -313,7 +313,7 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 \end{multline*}
 \end{small}
 
-Dans la derni\`{e}re \'{e}tape du plan menant au but tous les fluents du but doivent \^{e}tre des conditions ouvertes ou ajout\'{e}es par des actions ex\'{e}cut\'{e}es dans cette \'{e}tape. Dans le cas o\`{u} une action $\a$ ajoute une condition ouverte $\f$, le d\'{e}but de l'intervalle de protection du lien causal correspondant est fix\'{e} \`{a} l'instant o\`{u} $\a$ produit $\f$.
+Dans la dernière étape du plan menant au but tous les fluents du but doivent être des conditions ouvertes ou ajoutées par des actions exécutées dans cette étape. Dans le cas où une action $\a$ ajoute une condition ouverte $\f$, le début de l'intervalle de protection du lien causal correspondant est fixé à l'instant où $\a$ produit $\f$.
 
 \begin{small}
 \begin{multline*}
@@ -330,7 +330,7 @@ Dans la derni\`{e}re \'{e}tape du plan menant au but tous les fluents du but doi
 
 \paragraph*{Propagation et fermeture}
 
-Aucune condition ne doit rester ouverte dans la premi\`{e}re \'{e}tape du plan si elle n'est pas fournie dans l'\'{e}tat initial.
+Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
 
 \begin{small}
 \begin{multline*}
@@ -340,7 +340,7 @@ Aucune condition ne doit rester ouverte dans la premi\`{e}re \'{e}tape du plan s
 \end{multline*}
 \end{small}
 
-Si une condition ouverte est fournie par l'\'{e}tat initial, alors le d\'{e}but de l'intervalle de protection du lien causal correspondant est fix\'{e} \`{a} l'instant initial $\tau_{\textit{Init}}$.
+Si une condition ouverte est fournie par l'état initial, alors le début de l'intervalle de protection du lien causal correspondant est fixé à l'instant initial $\tau_{\textit{Init}}$.
 
 \begin{small}
 \begin{multline*}
@@ -350,7 +350,7 @@ Si une condition ouverte est fournie par l'\'{e}tat initial, alors le d\'{e}but 
 \end{multline*}
 \end{small}
 
-Toute condition ouverte $\f$ dans une \'{e}tape doit \`{a} l'\'{e}tape pr\'{e}c\'{e}dente : (1) soit rester ouverte et dans ce cas l'intervalle de protection du lien causal correspondant reste le m\^{e}me pour ces deux \'{e}tapes, (2) soit \^{e}tre ajout\'{e}e (ferm\'{e}e) par une instance d'action $\a$ et dans ce cas le d\'{e}but de l'intervalle de protection du lien causal est fix\'{e} \`{a} l'instant de production de $\f$ par $\a$.
+Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1) soit rester ouverte et dans ce cas l'intervalle de protection du lien causal correspondant reste le même pour ces deux étapes, (2) soit être ajoutée (fermée) par une instance d'action $\a$ et dans ce cas le début de l'intervalle de protection du lien causal est fixé à l'instant de production de $\f$ par $\a$.
 
 \begin{small}
 \begin{multline*}
@@ -369,7 +369,7 @@ Toute condition ouverte $\f$ dans une \'{e}tape doit \`{a} l'\'{e}tape pr\'{e}c\
 
 \paragraph*{Protection des conditions ouvertes}
 
-Une condition ouverte dans une \'{e}tape donn\'{e}e ne peut pas \^{e}tre supprim\'{e}e \`{a} l'int\'{e}rieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalit\'{e} dans le plan.
+Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'intérieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 
 \begin{small}
 \begin{multline*}
@@ -383,9 +383,9 @@ Une condition ouverte dans une \'{e}tape donn\'{e}e ne peut pas \^{e}tre supprim
 \end{small}
 
 
-\paragraph*{Pr\'{e}vention des interactions n\'{e}gatives}
+\paragraph*{Prévention des interactions négatives}
 
-Si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajout\'{e} par une autre action $\a$ \`{a} un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont diff\'{e}rents.
+Si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajouté par une autre action $\a$ à un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont différents.
 
 \begin{small}
 \begin{multline*}
@@ -401,7 +401,7 @@ Si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\neg\f)$, un fl
 \end{multline*}
 \end{small}
 
-De m\^{e}me, si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est n\'{e}cessaire \`{a} une autre action $\a$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a), \tau(\f\rightarrow\mid\a)]$, alors cet instant ne peut \^{e}tre contenu dans cet intervalle.
+De même, si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est nécessaire à une autre action $\a$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a), \tau(\f\rightarrow\mid\a)]$, alors cet instant ne peut être contenu dans cet intervalle.
 
 \begin{small}
 \begin{multline*}
@@ -417,7 +417,7 @@ De m\^{e}me, si une action $\b$ supprime, \`{a} un instant $\tau(\b\rightarrow\n
 
 %\paragraph*{SMT Encoding: bound the plan with Init and Goal states}
 \paragraph*{Bornes du plan temporel}
-Enfin, nous devons ajouter une contrainte pour maintenir le plan dans un intervalle de temps born\'{e} par l'\'{e}tape initiale qui produit l'\'{e}tat initial $\I$ et l'\'{e}tape finale qui n\'{e}cessite tous les fluents du but $\G$.
+Enfin, nous devons ajouter une contrainte pour maintenir le plan dans un intervalle de temps borné par l'étape initiale qui produit l'état initial $\I$ et l'étape finale qui nécessite tous les fluents du but $\G$.
 \begin{small}
 \begin{multline*}
 ~\\[-2em]
