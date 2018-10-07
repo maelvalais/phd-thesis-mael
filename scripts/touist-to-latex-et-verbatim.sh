@@ -6,7 +6,7 @@
 # Distributed under terms of the MIT license.
 #
 
-if ! madoko >/dev/null 2>&1 || ! touist >/dev/null 2>&1; then
+if ! which madoko >/dev/null 2>&1 || ! which touist >/dev/null 2>&1; then
     echo 'error: missing madoko or touist'
     exit 1
 fi
