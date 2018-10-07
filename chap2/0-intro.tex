@@ -2,7 +2,7 @@
 
 \subsection{Genèse de \satoulouse}
 
-Lors de la conférence ICTTL'2011, l'équipe (\citeauthor{GaScSt2011}) avait présenté l'outil \satoulouse\ \cite{GaScSt2011}, dédié à la logique propositionnelle, dont les principales fonctions étaient (1) d'offrir un langage logique de haut niveau pour exprimer succinctement des formules complexes et (2) de trouver des modèles à ces formules en utilisant un solveur SAT performant.
+Lors de la conférence ICTTL'2011, l'équipe (\citeauthor{GaScSt2011}) avait présenté l'outil \satoulouse \cite{GaScSt2011}, dédié à la logique propositionnelle, dont les principales fonctions étaient (1) d'offrir un langage logique de haut niveau pour exprimer succinctement des formules complexes et (2) de trouver des modèles à ces formules en utilisant un solveur SAT performant.
 
 Bien sûr, il existe de nombreux outils logiques comme des prouveurs, assistants de preuves, éditeurs de tables de vérité\ldots disponibles sur Internet ; PROLOG aurait même pu être utilisé, mais aucun de ces outils ne correspond aux exigences de l'équipe, à savoir :
 \begin{itemize}
@@ -14,7 +14,7 @@ Bien sûr, il existe de nombreux outils logiques comme des prouveurs, assistants
 
 L'équipe ne trouvant aucun outil existant satisfaisant ces exigences, il a été décidé de développer un nouvel logiciel en 2010. L'objectif était de développer une interface qui permettrait d'utiliser confortablement un prouveur SAT (à savoir SAT4J \cite{DBLP:journals/jsat/BerreP10}). L'outil, appelé \satoulouse\, est décrit dans \cite{GaScSt2011}. À travers cet outil, l'utilisateur pouvait expérimenter par lui-même l'idée qu'un langage logique n'est pas seulement descriptif mais peut aussi conduire à des calculs qui résolvent des problèmes de la vie réelle. En particulier, dans le domaine éducatif, \satoulouse donnait l'occasion lors de cours avec des étudiants de L1 et L2 de résoudre des Sudokus en quelques lignes, ainsi que beaucoup d'autres problèmes combinatoires (emplois du temps, coloration de carte, circuits électroniques\ldots).\
 
-Voici les principales facilités qu'offraient \satoulouse\ :
+Voici les principales facilités qu'offraient \satoulouse :
 \begin{itemize}
 \item les formules entrées n'ont pas besoin d'être sous forme clausale et des connecteurs arbitraires peuvent être utilisés, la mise sous forme normale est faite dynamiquement pendant la saisie au clavier de l'utilisateur ;
 \item des facilités d'utilisation de grandes conjonctions ou disjonctions sont offertes comme dans :
@@ -30,12 +30,12 @@ Ainsi, il est possible de mettre à disposition à l'utilisateur la puissance de
 
 L'avantage de ce type d'outil tient au fait qu'un même solveur SAT peut être utilisé pour résoudre de nombreux autres problèmes combinatoires aussi facilement que pour le Sudoku : ils suffit de formaliser les contraintes. Ces problèmes vont de la gestion des emplois du temps, la coloration de cartes ou même le stockage de produits chimiques qui doivent être stockés dans des salles identiques/contiguës/non-contiguës en fonction de leur degré de compatibilité.
 
-\subsection{Limites de \satoulouse\ et genèse de \touist}
-Mais pendant ces années, nous avons remarqué quelques limitations dommageables de \satoulouse\ : de nombreux bugs, des défauts dans l'interface, le manque de modularité (si l'on souhaite changer le prouveur SAT utilisé), l'ambiguïté et les limites de son langage, etc.
+\subsection{Limites de \satoulouse et genèse de \touist}
+Mais pendant ces années, nous avons remarqué quelques limitations dommageables de \satoulouse : de nombreux bugs, des défauts dans l'interface, le manque de modularité (si l'on souhaite changer le prouveur SAT utilisé), l'ambiguïté et les limites de son langage, etc.
 
 Par exemple, des problèmes impliquant des contraintes de cardinalité, comme les règles du jeu de Takuzu\footnote{Connu aussi sous le nom de Binero.\\ \url{http://fr.wikipedia.org/wiki/Takuzu}} qui nécessitent de compter des 0 et des 1, ne peuvent être facilement formalisés : il manque des fonctionnalités permettant d'exprimer des choses comme ``exactement 5 parmi 10 propositions sont vraies''. 
 
-De plus, \satoulouse\ n'offre pas la possibilité de parcourir l'ensemble des modèles fournis par le solveur, il en retourne seulement un.
+De plus, \satoulouse n'offre pas la possibilité de parcourir l'ensemble des modèles fournis par le solveur, il en retourne seulement un.
 
 
 
@@ -43,19 +43,19 @@ De plus, \satoulouse\ n'offre pas la possibilité de parcourir l'ensemble des mo
 
 
 \color{red}
-Les leçons tirées de trois années d'utilisation de \satoulouse\ sont que beaucoup des étudiants en informatique ont clairement pris conscience que la logique avait des applications réelles en ce qui concerne la résolution de problèmes, et beaucoup d'entre-eux ont acquis une capacité dans la formalisation de problèmes. Mais les défauts de \satoulouse\ rendent le déboggage vraiment difficile, d'une part parce qu'un seul modèle est affiché et en raison de la façon dont ce modèle est affiché, et d'autre part à cause des faibles capacités d'édition dont il dispose. En outre, seuls des problèmes combinatoires purs peuvent être traités, ce qui limite lourdement la prétention de résolution d'une large gamme de problèmes par \satoulouse\ concernant les problèmes du monde réel.
+Les leçons tirées de trois années d'utilisation de \satoulouse sont que beaucoup des étudiants en informatique ont clairement pris conscience que la logique avait des applications réelles en ce qui concerne la résolution de problèmes, et beaucoup d'entre-eux ont acquis une capacité dans la formalisation de problèmes. Mais les défauts de \satoulouse rendent le déboggage vraiment difficile, d'une part parce qu'un seul modèle est affiché et en raison de la façon dont ce modèle est affiché, et d'autre part à cause des faibles capacités d'édition dont il dispose. En outre, seuls des problèmes combinatoires purs peuvent être traités, ce qui limite lourdement la prétention de résolution d'une large gamme de problèmes par \satoulouse concernant les problèmes du monde réel.
 
 Un autre inconvénient de \satoulouse, pas nécessairement lié à l'enseignement de la logique, est son incapacité à être utilisé à partir de la ligne de commande : les travaux de recherche nécessitent d'automatiser l'utilisation des outils pour les utiliser dans le cadre de benchmarks.
 
-Enfin, l'extension à des théories plus riches est également quelque chose qui peut intéresser les chercheurs, les ingénieurs ou les étudiants de cycles supérieurs. \satoulouse\ n'est certainement pas adapté pour la satisfiabilité modulo théories ou pour résoudre des problèmes de planification alors que la même architecture logicielle pourrait être utilisée en changeant juste le solveur.
+Enfin, l'extension à des théories plus riches est également quelque chose qui peut intéresser les chercheurs, les ingénieurs ou les étudiants de cycles supérieurs. \satoulouse n'est certainement pas adapté pour la satisfiabilité modulo théories ou pour résoudre des problèmes de planification alors que la même architecture logicielle pourrait être utilisée en changeant juste le solveur.
 
 
-Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \touist\ qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé ``twist''.
- \touist\ est bien sûr à la disposition du public pour téléchargement à partir du site suivant :
+Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \touist qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé ``twist''.
+ \touist est bien sûr à la disposition du public pour téléchargement à partir du site suivant :
 \begin{center}\url{ https://github.com/touist/touist }\end{center}
 \color{black}
 
-Pour résumer, voici quelques fonctionnalités offertes par \touist\ et que \satoulouse\ ne propose pas :
+Pour résumer, voici quelques fonctionnalités offertes par \touist et que \satoulouse ne propose pas :
 \begin{itemize}
 \item définition d'ensembles de domaines : $\bigwedge_{i\in A}$ vs. $\bigwedge_{i\in\{Paris,London,Roma,Madrid\}}$
 \item liaisons multiples sur les indices: $\bigwedge_{i\in A,j\in B}$ vs. $\bigwedge_{i\in \cdots} \bigwedge_{j\in \cdots}$
