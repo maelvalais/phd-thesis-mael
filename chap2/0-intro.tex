@@ -33,7 +33,7 @@ L'avantage de ce type d'outil tient au fait qu'un même solveur SAT peut être u
 \subsection{Limites de \satoulouse et genèse de \touist}
 Mais pendant ces années, nous avons remarqué quelques limitations dommageables de \satoulouse : de nombreux bugs, des défauts dans l'interface, le manque de modularité (si l'on souhaite changer le prouveur SAT utilisé), l'ambiguïté et les limites de son langage, etc.
 
-Par exemple, des problèmes impliquant des contraintes de cardinalité, comme les règles du jeu de Takuzu\footnote{Connu aussi sous le nom de Binero.\\ \url{http://fr.wikipedia.org/wiki/Takuzu}} qui nécessitent de compter des 0 et des 1, ne peuvent être facilement formalisés : il manque des fonctionnalités permettant d'exprimer des choses comme ``exactement 5 parmi 10 propositions sont vraies''. 
+Par exemple, des problèmes impliquant des contraintes de cardinalité, comme les règles du jeu de Takuzu\footnote{Connu aussi sous le nom de Binero.\\ \url{http://fr.wikipedia.org/wiki/Takuzu}} qui nécessitent de compter des 0 et des 1, ne peuvent être facilement formalisés : il manque des fonctionnalités permettant d'exprimer des choses comme \enquote{exactement 5 parmi 10 propositions sont vraies}. 
 
 De plus, \satoulouse n'offre pas la possibilité de parcourir l'ensemble des modèles fournis par le solveur, il en retourne seulement un.
 
@@ -50,7 +50,7 @@ Un autre inconvénient de \satoulouse, pas nécessairement lié à l'enseignemen
 Enfin, l'extension à des théories plus riches est également quelque chose qui peut intéresser les chercheurs, les ingénieurs ou les étudiants de cycles supérieurs. \satoulouse n'est certainement pas adapté pour la satisfiabilité modulo théories ou pour résoudre des problèmes de planification alors que la même architecture logicielle pourrait être utilisée en changeant juste le solveur.
 
 
-Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \touist qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé ``twist''.
+Il y a quelques mois, nous avons commencé à développer un nouveau logiciel qui comblerait ces lacunes et remplirait nos attentes. Nous l'avons appelé \touist qui signifie TOUlouse Integrated Satisfiability Tool et doit être prononcé \enquote{twist}.
  \touist est bien sûr à la disposition du public pour téléchargement à partir du site suivant :
 \begin{center}\url{ https://github.com/touist/touist }\end{center}
 \color{black}
@@ -60,7 +60,7 @@ Pour résumer, voici quelques fonctionnalités offertes par \touist et que \sato
 \item définition d'ensembles de domaines : $\bigwedge_{i\in A}$ vs. $\bigwedge_{i\in\{Paris,London,Roma,Madrid\}}$
 \item liaisons multiples sur les indices: $\bigwedge_{i\in A,j\in B}$ vs. $\bigwedge_{i\in \cdots} \bigwedge_{j\in \cdots}$
 \item calculs riches sur les indices ainsi que sur les ensembles de domaines: $\bigwedge_{i\in (A\cup (B \cap C))}$
-\item primitives de contraintes de cardinalité intégrées: ``auMoins'' (resp. ``auPlus'', ``exactement'') \emph{tant} de valeurs sont vraies parmi \emph{ces valeurs}
+\item primitives de contraintes de cardinalité intégrées: \enquote{auMoins} (resp. \enquote{auPlus}, \enquote{exactement}) \emph{tant} de valeurs sont vraies parmi \emph{ces valeurs}
 \item les prédicats peuvent également être des variables définies sur des ensembles de domaines: $\bigwedge_{X\in \{A,B\},i\in \{1,2\}} X(i)$ vs. $\bigwedge_{i\in \{1,2\}} (A(i)\AND B(i))$
 \item littéraux spéciaux définissant des contraintes entre nombres entiers ou réels : ($x+y\leq z$)
 \item parcours facile des modèles successivement calculés par les solveurs

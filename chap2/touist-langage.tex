@@ -4,7 +4,7 @@
 \paragraph{Ensembles de domaines}
 Avec le temps, nous avons remarqué que nous avions souvent besoin d'écrire des choses comme :
 $$\begin{aligned}\bigwedge_{i \in \{1..9\}} \bigwedge_{j \in \{1..9\}}\bigwedge_{ m\in \{A,B,C,D,E,F,G,H,I\}} \hspace{2cm}\\ \left( P_{i,j,m}\IMPL \bigwedge_{n \in \{A,B,C,D,E,F,G,H,I\}|m\neq n}\NOT P_{i,j,n}\right)\end{aligned}$$
-Si on lit $P_{i,j,m}$ comme  ``il y a la lettre $m$ dans la case $(i,j)$'' d'une grille $9\times 9$, la formule ci-dessus exprime qu'il y a \emph{au plus} une lettre parmi `A' ... `I' dans chaque case.
+Si on lit $P_{i,j,m}$ comme  \enquote{il y a la lettre $m$ dans la case $(i,j)$} d'une grille $9\times 9$, la formule ci-dessus exprime qu'il y a \emph{au plus} une lettre parmi `A' ... `I' dans chaque case.
 
 Ces ensembles $\{1..9\}$ et $\{A,B,C,D,E,F,G,H,I\}$ sont des \emph{ensembles de domaines}, et avec \touist l'utilisateur peut définir autant d'ensembles de domaines qu'il le souhaite, par exemple :
 
@@ -38,12 +38,12 @@ qui indique que dans chaque cellule se trouve au moins une lettre.
 
 
 \paragraph{Contraintes de cardinalité}
-Il s'agissait de l'un des sujets "laissé pour le futur" de \cite{GaScSt2011}.
+Il s'agissait de l'un des sujets \enquote{laissé pour le futur} de \cite{GaScSt2011}.
 Ces opérateurs logiques moins classiques sont disponibles dans \touist : il permettent de réduire drastiquement la taille de certaines formules, ce sont : $\atM{}{}$, $\atL{}{}$ et $\exact{}{}$.\\ L'exemple suivant décrit leur signification :
 \begin{itemize}
-\item $\atM{i \in N}{2} P_i$ représente ``pour au plus deux valeurs de $i \in N$ $P(i)$ est vraie'';
-\item $\atL{i \in N}{2} P_i$ représente ``pour au moins deux valeurs de $i \in N$ $P(i)$ est vraie'';
-\item $\exact{i \in N}{2} P_i$ représente ``pour exactement deux valeurs de $i \in N$ $P(i)$ est vraie''.
+\item $\atM{i \in N}{2} P_i$ représente \enquote{pour au plus deux valeurs de $i \in N$ $P(i)$ est vraie};
+\item $\atL{i \in N}{2} P_i$ représente \enquote{pour au moins deux valeurs de $i \in N$ $P(i)$ est vraie};
+\item $\exact{i \in N}{2} P_i$ représente \enquote{pour exactement deux valeurs de $i \in N$ $P(i)$ est vraie}.
 \end{itemize}
 La disjonction généralisée est en fait un cas particulier de ceci (au moins une est vraie), la conjonction aussi (au plus 0 est fausse), et le ou exclusif peut être vu comme exactement une parmi deux est vraie. \\
 Rappelons qu'avec des opérateurs logiques classiques et avec $N$ contenant 9 éléments, $\atM{i \in N}{3} P_i$ devrait nécessiter une formule contenant 84 propositions $P_i$ puisque cela revient à choisir 3 parmi 9 ce qui donne $\binom{9}{3}$ possibilités, et ni $\bigwedge$ ni $\bigvee$ n'aideraient beaucoup. 
@@ -56,7 +56,7 @@ qui signifie que $P_{i,j}$ est vraie lorsque $i\neq j$.
 
 Il s'agissait de la seule contrainte disponible dans \satoulouse, maintenant dans \touist la gamme de possibilités à été largement enrichie. Les contraintes peuvent inclure des opérateurs usuels de comparaison comme $<$, $>$, $\leq$, $\geq$, $\neq$, $=$ et ces comparaisons peuvent s'appliquer non seulement aux indices, mais aussi à toute expression arithmétique impliquant des indices et $+$, $-$, $*$, $/$, $\mod$, $\sqrt{\phantom{x}}$. 
 
-Exprimer une phrase comme ``chaque case $(i,j)$ contient un nombre qui n'est pas égal à $i+j$'' donnera :
+Exprimer une phrase comme \enquote{chaque case $(i,j)$ contient un nombre qui n'est pas égal à $i+j$} donnera :
 $$\bigwedge_{i \in N } \bigwedge_{j \in N} \bigvee_{k \in N|k\neq i+j} P_{i,j,k}$$
 Bien s\^ur, \emph{toutes ces phrases} pourraient être exprimées avec les opérateurs logiques usuels bruts, mais ceci serait un travail fastidieux. Néanmoins, les étudiants doivent savoir ce qui est derrière la scène, et qu'une telle formule est l'abréviation de quelque chose comme :
 $$P_{1,1,1}\vee P_{1,1,3}\vee P_{1,1,4}\ldots P_{1,2,1}\vee P_{1,2,2}\vee P_{1,2,4}\vee \ldots $$
@@ -78,7 +78,7 @@ bigand $i,$j in $N,$N:
 end
 \end{verbatim}
 Mais \touist les affiche immédiatement en style \LaTeX\ comme on peut le voir dans le panneau droit montré sur la figure \ref{fig:LatexDisplay}.
-La définition de l'ensemble $N$ est faite dans l'onglet ``Ensembles''.
+La définition de l'ensemble $N$ est faite dans l'onglet \enquote{Ensembles}.
 
 \begin{figure*}[htbp]
 \centering

@@ -12,7 +12,7 @@
 
 %{\color{blue} expliquer pourquoi on adapte le codage de MK99: pour ne pas avoir à dupliquer l'arbre QBF (on découpe les liens causaux en utilisant open)}
 
-%\fred{Fred: La définition des $X_{i}$ et $b_{i}$ n'était donnée qu'après ce premier paragraphe (dans la partie "Quantifiers"). J'ai donc déplacé la définition du CTE dans la sous-section précédente en explicitant le cas des No-ops, et modifié les parties "Quantifiers" pour CTE-OPEN et CTE-EFA.}
+%\fred{Fred: La définition des $X_{i}$ et $b_{i}$ n'était donnée qu'après ce premier paragraphe (dans la partie \enquote{Quantifiers}). J'ai donc déplacé la définition du CTE dans la sous-section précédente en explicitant le cas des No-ops, et modifié les parties \enquote{Quantifiers} pour CTE-OPEN et CTE-EFA.}
 
 Les codages SAT dans les espaces de plans de \cite{MK99} ne peuvent pas être directement adaptés au CTE. Tous ces codages se réfèrent à trois étapes indexées (pas nécessairement consécutives) du plan, ce qui n'est pas possible dans un CTE car chaque règle ne peut se référer qu'à des noeuds présents sur une même branche de l'arbre. Pour contourner ce problème, il serait possible de dupliquer l'arbre en ajoutant, pour chaque variable de branchement $b_{i}$, deux autres variables de branchement $b^{\prime}_{i}$ et $b^{\prime\prime}_{i}$, et pour chaque noeud $X_{i}$, deux copies de noeud $X^{\prime}_{i}$ et $X^{\prime\prime}_{i}$ , et les règles d'équivalence $\bigwedge_{x_{i}\in X_{i}} \big((x_{i}\leftrightarrow x^{\prime}_{i})\wedge (x_{i}\leftrightarrow x^{\prime\prime}_{i})\big)$. Malheureusement, cela augmenterait inutilement le facteur de branchement. Nous proposons donc un nouveau codage dans les espaces de plans qui nous permet de ne faire référence qu'à des étapes consécutives du plan.
 
@@ -28,7 +28,7 @@ Les conditions ouvertes sont propagées vers l'arrière jusqu'à l'état initial
     \label{fig:causal-link-cte}
 \end{figure}
 
-Nous définissons l'ensemble des variables ``open'', noté $\openSet$, comme $\openSet = \{\openSingle{\f} ~|~ \f \in \F \}$. Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \openSet$.
+Nous définissons l'ensemble des variables \enquote{open}, noté $\openSet$, comme $\openSet = \{\openSingle{\f} ~|~ \f \in \F \}$. Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \openSet$.
 
 
 \paragraph*{Quantificateurs}
