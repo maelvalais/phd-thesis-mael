@@ -8,26 +8,62 @@
 
 Dans cette section, nous nous employons à décrire pas à pas les aspects importants de \touist.
 
-\subsection{Utilisation du prouveur}
-\subsubsection{Vérifier si une formule admet un modèle (= est satisfiable)}
-\begin{enumerate}
-\item Saisissez la formule $p\vee q\rightarrow p$
-\item Vérifiez, en bas à droite, que le sélecteur est sur "SAT" puis cliquez sur Solve.
-\item Le solveur vous indique un modèle de la formule : la valuation $v(p)=0$ et $v(q)=0$. En cliquant sur "Next" vous accédez aux autres modèles (s'il y en a). Les coches "True" et "False" permettent de n'afficher que les propositions à True ou à False. 
-\item Retour à l'édition.
-\item Saisissez la formule $p\wedge\neg p$. Solve. Vous avez une pop-up qui vous informe qu'il n'y a pas de modèle : la formule est insatisfiable. 
-\item Saisissez "p$\vee \neg$ p". Solve : il y a deux modèles sur deux possibles, normal la formule est valide !
-\end{enumerate}
-Exercice : trouvez les modèles de $(p \vee q \vee r) \wedge (p \rightarrow \neg q) \wedge (q \rightarrow \neg r) \wedge (r\rightarrow \neg p)$. Vérifiez que dans chacun une seule proposition est vraie. 
+\subsection{Introduction des fonctionnalités du langage \touist}
 
-\subsection{Vérifier si une formule est valide}
-Rappel : une formule valide est vraie dans tous les modèles. 
+\touist raisonne sur des formules. Ces formules sont un assemblage de \emph{variables propositionnelles} (que nous notons $p$, $q$, $r$\dots) qui représentent des faits du monde réel ainsi que d'opérateurs (que nous appellerons %\enquote{connecteurs}) notés $\neg a \wedge a \vee a \Rightarrow$\Leftrightarrow$.
 
-Si l'on saisit une formule et qu'on veut savoir si elle est valide, on doit vérifier qu'elle a autant de modèle qu'il y en a de possibles ! (pas pratique).
+L'idée est de décrire les contraintes et faits du monde réel à l'aide d'une formule, puis de vérifier les propriétés logiques de cette formule à l'aide du bouton \enquote{Résoudre}. Celui-ci ne permet qu'une chose : vérifier si la formule admet un modèle, c'est à dire que l'affectation de chaque variable propositionnelle (qu'on appellera \enquote{valuation} ou \enquote{interprétation}) permet de rendre l'ensemble de la formule vraie. Si c'est le cas, \touist montrera une telle affectation des variables propositionnelles (que nous appellerons \enquote{modèle}).
 
-On procède indirectement, par réfutation. Si elle est valide, sa négation sera insatisfiable. On teste donc sa négation, ici $\neg(p\vee \neg p)$. Faites-le. Vous constatez qu'il n'y a pas de solution, donc la formule $p\vee \neg p$ est valide ! \\
+\paragraph{Vérifier la satisfiabilité d'une formule propositionnelle} Une formule est satisfiable si et seulement si il existe au moins un modèle. Elle est insatisfiable dans le cas où il n'existe aucun modèle et elle est valide si toutes les affectations (d'une formule \enquote{valuations} ou \enquote{interprétations}) sont des modèles.
 
-Exercice : Vérifiez que $pluie \wedge (pluie \rightarrow routeMouillee) \wedge (routeMouillee\rightarrow danger) \rightarrow danger$ est valide. 
+Par exemple, nous pouvons vérifier que chacun des modèles de la formule suivante ne possède qu'une interprétation à vrai :
+
+% (p or q or r) and (p => not q) and (q => not r) and (r => not p)
+\[(p \vee q \vee r) \wedge (p \rightarrow \neg q) \wedge (q \rightarrow \neg r) \wedge (r\rightarrow \neg p)\]
+
+\noindent
+Nous la traduisons d'abord en langage \touist :
+
+\begin{mdpre}%mdk
+\noindent(p~or~q~or~r)~and~(p~=\textgreater{}~not~q)~and~(q~=\textgreater{}~not~r)~and~(r~=\textgreater{}~not~p)%mdk
+\end{mdpre}%mdk
+
+\begin{center}
+    \includegraphics[width=\textwidth]{figures/screenshot-formule.png}
+\end{center}
+
+\noindent
+Puis, en appuyant sur \enquote{Résoudre}, on obtient le premier modèle :
+
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{figures/screenshot-modele.png} \label{fig:screenshot-modele}    
+\end{center}
+
+\noindent
+En parcourant les modèles suivants avec le bouton \enquote{Suivant}, on constate bien une unique variable propositionnelle vraie par modèle.
+
+\paragraph{Vérifier la validité d'une formule propositionnelle}
+
+Si nous devions vérifier la validité de la précédente formule, il nous faudrait parcourir les modèles un à un et vérifier que l'ensemble de modèles est égal à l'ensemble des valuations possibles pour cette formule. Pour la formule précédente, il n'y a que trois variables propositionnelles, soit $2^3 = 8$ valuations, la tâche est donc toujours possible. Mais dès que la formule contient davantage de variables, nous procédons  indirectement par réfutation.
+
+\noindent
+Ainsi, si la formule est valide, sa négation sera insatisfiable. On teste donc sa négation (i.e., on rajoute $\neg$ devant la formule).
+
+Concrètement, le test de validité permet par exemple de vérifier qu'un raisonnement est formellement valide (mais cela n'exclut pas la possibilité de prémisses ou conclusions fausses). Par exemple :
+\[pluie \wedge (pluie \rightarrow routeMouillee) \wedge (routeMouillee\rightarrow danger) \rightarrow danger\]
+
+En \touist, cela donne :
+\begin{mdpre}%mdk
+\noindent pluie~and~(pluie~=\textgreater{}~routeMouillee)~and~(routeMouillee~=\textgreater{}~danger)~=\textgreater{}~danger%mdk
+\end{mdpre}%mdk
+
+
+
+\mael{ --------------- CONTINUER A PARTIR D'ICI ----------}
+
+
+
+
 \subsection{Vérifier si un ensemble de formules admet un modèle (= est satisfiable)}
 On saisit simplement les formules de l'ensemble, les unes au-dessus des autres, puis Solve. \\
 Exercice : Vérifiez que l'ensemble $\mathit{cafe\vee the, \neg the}$ est satisfiable. Quel unique modèle admet-il ? 

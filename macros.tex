@@ -179,7 +179,7 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\leftselect}[1] {\textit{left}(#1)}
 \newcommand{\rightselect}[1] {\textit{right}(#1)}
 
-\newcommand {\mael}[1] {{\color{cyan}[\undeline{Maël}: #1]}}
+\newcommand {\mael}[1] {{\color{olive}[\underline{Maël}: #1]}}
 \newcommand {\fred}[1] {{\color{purple}[\underline{Fred}: #1]}}
 \newtheorem{definition}{Définition}
 
@@ -224,6 +224,12 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\rest}[2]{\mathit{reste}(#1, #2)}
 \newcommand{\takes}[2][2]{\mathit{prend\_2}(#1)}
 \newcommand{\lost}[1][0]{#1\_\mathit{perd}}
+
+% MACROS exemple du Gripper
+
+\newcommand{\gripperpick}[3]{\mathit{PICK}(\mathit{ball}_{#1},\mathit{room}_{#2},#3)}
+\newcommand{\gripperdrop}[3]{\mathit{DROP}(\mathit{ball}_{#1},\mathit{room}_{#2},#3)}
+\newcommand{\grippermove}[2]{\mathit{MOVE}(\mathit{room}_{#1},\mathit{room}_{#2})}
 
 % MACROS TLP-GP
 

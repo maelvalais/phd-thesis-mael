@@ -304,27 +304,32 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 \paragraph*{Conditions ouvertes} Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\BigforallTwo{i=1}{\length}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
-\left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \bigwedge\limits_{\substack{\mathbf{f}\in \cond{\mathbf{\a}}}}\begin{pmatrix}open_{\mathbf{\f},\mathbf{i}}\hfill\\ \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \geq \tau_{s}(open_{\mathbf{f},\mathbf{i}})\right)\hfill\\
- \wedge \left(\tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \leq \tau_{e}(open_{\mathbf{\f},\mathbf{i}})\right)\end{pmatrix}\right)\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\BigforallTwo{i=1}{\length}\bigwedge\limits_{\substack{\a\in \A}}%\hfill\\
+\left(\a_{i} \Rightarrow \Bigforall{\substack{\f\in \cond{\a}}}\begin{pmatrix}\open{\f}{i}\hfill\\ \wedge \left(\tau(\f\mid\rightarrow\a_{i}) \geq \tau_{s}(\open{\f}{i})\right)\hfill\\
+ \wedge \left(\tau(\f\mid\rightarrow\a_{i}) \leq \tau_{e}(\open{\f}{i})\right)\end{pmatrix}\right)%\hfill\\[-2em]
 %%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 Dans la dernière étape du plan menant au but tous les fluents du but doivent être des conditions ouvertes ou ajoutées par des actions exécutées dans cette étape. Dans le cas où une action $\a$ ajoute une condition ouverte $\f$, le début de l'intervalle de protection du lien causal correspondant est fixé à l'instant où $\a$ produit $\f$.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\G}}}\begin{pmatrix}open_{\mathbf{\f},\mathbf{\length}} \hfill\\\vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\begin{pmatrix}\mathbf{\a}_{\mathbf{\length}}\hfill\\
- \wedge \left(\tau(\mathbf{\a}_\mathbf{\length}\rightarrow \mathbf{\f}) = \tau_{s}(open_{\mathbf{\f},\mathbf{\length}})\right)\hfill\\
-  \wedge \left(\tau_{\textit{Goal}} = \tau_{e}(open_{\mathbf{f},\mathbf{\length}})\right)\hfill\end{pmatrix}\end{pmatrix}\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\Bigforall{\substack{\f\in \G}}\begin{pmatrix}\open{\f}{\length} %\hfill\\
+\vee \Bigexists{\substack{\a\in \A\\\f \in \add{\a}}}\begin{pmatrix}\a_{\length}\hfill\\
+ \wedge \left(\tau(\a_{\length}\rightarrow \f) = \tau_{s}(\open{\f}{\length})\right)\hfill\\
+  \wedge \left(\tau_{\mathit{Goal}} = \tau_{e}(\open{\f}{\length})\right)\hfill\end{pmatrix}\end{pmatrix}\hfill\\[-2em]
 %
 %\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{G}}}\left(\tau_{\textit{Goal}} = \tau_{e}(open_{\mathbf{f},\mathbf{length}})\right)\hfill\
 %%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 
@@ -333,21 +338,25 @@ Dans la dernière étape du plan menant au but tous les fluents du but doivent �
 Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}\setminus \mathbf{\I}}}\neg open_{\mathbf{\f},1}\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\Bigforall{\substack{\f\in \F\setminus \I}}\neg \open{\f}{1}%\hfill\\[-2em]
 %%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 Si une condition ouverte est fournie par l'état initial, alors le début de l'intervalle de protection du lien causal correspondant est fixé à l'instant initial $\tau_{\textit{Init}}$.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\I}}}\left(open_{\mathbf{\f},1} \Rightarrow \left(\tau_{\textit{Init}} = \tau_{s}(open_{\mathbf{\f},1})\right)\right)\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\Bigforall{\substack{\f\in \I}}\left(\open{\f}{1} \Rightarrow \left(\tau_{\mathit{Init}} = \tau_{s}(\open{\f}{1})\right)\right)%\hfill\\[-2em]
 %%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1) soit rester ouverte et dans ce cas l'intervalle de protection du lien causal correspondant reste le même pour ces deux étapes, (2) soit être ajoutée (fermée) par une instance d'action $\a$ et dans ce cas le début de l'intervalle de protection du lien causal est fixé à l'instant de production de $\f$ par $\a$.

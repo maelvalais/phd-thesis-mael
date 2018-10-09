@@ -1,13 +1,10 @@
 \subsection{Vue d'ensemble de \touist}\label{sec:sat_interface}
 
-\touist est composé de trois modules, mais l'utilisateur standard ne verra que l'un d'entre eux : l'interface. Dans la suite nous insistons principalement sur cette dernière plutôt que sur le traducteur et le solveur. L'architecture globale est illustrée par la figure~\ref{fig:architectureTouisT}:
+\touist est composé de trois modules, mais l'utilisateur standard ne verra que l'un d'entre eux : l'interface. Dans la suite nous insistons principalement sur cette dernière plutôt que sur le traducteur et le solveur. L'architecture globale est illustrée par la figure~\ref{fig:archi-simple-touist}.
 
-\begin{figure}[htbp]
-\centering
-% \includegraphics[scale=0.37]{figures/DiagTouist.png}
-  \includegraphics[scale=0.80]{figures/architecture.pdf}
-  \caption{Architecture de TouIST}
-  \label{fig:architectureTouisT}
+\begin{figure}[!ht] \centering
+  \includegraphics[width=1\textwidth]{figures/archi-simple}
+  \caption{Architecture simplifiée de \touist. L'interface graphique écrite en Java fait appel à un programme en ligne de commande écrit en OCaml pour traduire et résoudre les problèmes.} \label{fig:archi-simple-touist} 
 \end{figure}
 
 Avec \touist , on accède à un éditeur puissant et convivial pour éditer des formules logiques complexes et des contraintes variées comme :
@@ -36,28 +33,21 @@ Une fois qu'une formule a été donnée à l'interface, sa satisfiabilité peut 
 Les modèles renvoyés par le solveur sont totaux : une valeur est affectée à chacune des variables apparaissant dans les formules envoyées au solveur. L'utilisateur peut sélectionner uniquement les propositions vraies ou les propositions fausses. Il peut également sélectionner des sous-ensembles de variables en tapant une expression régulière pour les filtrer.
 
 
-%%%%%%%%%%%%%%%%
-- l'éditeur de langage \touist
-- le prouveur (solveur)
-
-mais aussi
-
-- la traduction vers des langages compatibles avec les solveur
-- la traduction vers \LaTeX
-
-mais encore
-
-- un éditeur web en cours de développement
-- touist (command line) est dispo sur OPAM et sur Homebrew (dans un tap)
-
-Parler aussi du langage touist qui recoupe
-- la logique prop
-- SMT
-- QBF
-- et meme DLPA
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.80]{figures/touist-web}
-  \caption{Architecture de \touist}
-  \label{fig:architectureTouisT}
+\begin{figure}[!ht] \centering
+  \includegraphics[width=1\textwidth]{figures/touist-web}
+  \caption{Application Web pour \touist. Nous projetons de l'utiliser en remplacement de l'application Java.} \label{fig:touist-web}
 \end{figure}
+
+\begin{figure}[!ht] \centering
+  \includegraphics[width=0.7\textwidth]{figures/vscode-touist}
+  \caption{\touist peut être utilisé plus confortablement dans un IDE (ici, Visual Studio Code, un éditeur open-source). Une extension permet de voir les erreurs de syntaxe et propose aussi la coloration syntaxique.} \label{fig:touist-vscode}
+\end{figure}
+
+\paragraph{Disponibilité des outils}
+
+Le programme \enquote{caché} utilisable en ligne de commande est disponible à la fois sur \href{https://opam.ocaml.org/packages/touist}{OPAM}, le package manager propre à OCaml (similaire à Npm pour Javascript ou Pip pour Python), ainsi que sur \href{https://github.com/touist/homebrew-touist}{Homebrew}, un package manager pour macOS. Ils permettent d'installer l'outil très rapidement et sans connaissances en développement ou compilation :
+
+\begin{mdpre}
+    opam install touist\\
+    brew install touist/touist/touist
+\end{mdpre}
