@@ -1,6 +1,16 @@
 %\subsubsection{SMT : SAT Modulo Theories}
 
-Certains problèmes combinatoires nécessitent néanmoins de traiter des calculs sur les nombre naturels ou réels. Ceci peut être fait en utilisant seulement la logique propositionnelle (par exemple, $2+3=5$ pourrait être codé par $add_{2,3,5}$), mais c'est très inconfortable à moins qu'il n'y ait que quelques additions à faire. Ne parlons même pas des opérations de multiplication ou plus complexes. L'idée derrière la genèse de SMT a été de combiner des solveurs SAT avec un solveur arithmétique dans le but d'améliorer le traitement de la partie arithmétique du raisonnement. Dans de nombreux cas, ceci n'améliorera pas seulement l'efficacité du solveur, mais permettra aussi d'exprimer les contraintes arithmétiques des problèmes d'une manière radicalement plus compacte.
+
+
+
+Certains problèmes combinatoires nécessitent néanmoins de traiter des calculs sur les nombre naturels ou réels. Ceci peut être fait en utilisant seulement la logique propositionnelle (par exemple, $2+3=5$ pourrait être codé par $add_{2,3,5}$), mais c'est très inconfortable à moins qu'il n'y ait que quelques additions à faire. Ne parlons même pas des opérations de multiplication ou plus complexes. 
+
+Le langage propositionnel de SAT a ainsi été étendu via SAT Modulo Theories (SMT) \cite{DBLP:journals/jacm/NieuwenhuisOT06}
+Une instance SMT est composée d'une formule du premier ordre $\mathrm{F}$ qui peut inclure des symboles de constantes, de prédicats et de fonctions, ainsi que d'une théorie $\mathrm{T}$ qui définit la sémantique des symboles. La question est : est-ce que $\mathrm{F}$ est satisfiable, sous réserve des interprétations des symboles imposées par $\mathrm{T}$ ?
+Le langage SMT-LIB \cite{BarFT-SMTLIB} a été développé pour décrire des problèmes SMT. De nombreux solveurs existent aujourd'hui pour résoudre des problèmes pour différentes théories $\mathrm{T}$ comme la différence logique, l'arithmétique linéaire, les tableaux et les fonctions réelles non linéaires. \fred{REFERENCES ?: Alt-Ergo, AProVE, Boolector, CVC4, MathSAT 5, OpenSMT 2, raSAT, SMTInterpol, SMT-RAT, STP, veriT, Yices 2, Z3}
+
+\fred{Transition à voir avec la suite de l'article TTL}
+L'idée derrière la genèse de SMT a été de combiner des solveurs SAT avec un solveur arithmétique dans le but d'améliorer le traitement de la partie arithmétique du raisonnement. Dans de nombreux cas, ceci n'améliorera pas seulement l'efficacité du solveur, mais permettra aussi d'exprimer les contraintes arithmétiques des problèmes d'une manière radicalement plus compacte.
 
 Pensez au jeu de Kamaji\footnote{\texttt{http://fr.wikipedia.org/wiki/Kamaji}}  où le joueur doit grouper des nombres adjacents dans une grille de sorte que leur somme soit égale à un nombre fixe. Résoudre le jeu nécessite essentiellement un raisonnement logique mais a aussi besoin d'un peu d'arithmétique (addition).
 

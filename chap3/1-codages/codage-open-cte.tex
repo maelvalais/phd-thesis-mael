@@ -33,21 +33,36 @@ Nous définissons l'ensemble des variables \enquote{open}, noté $\openSet$, com
 
 \paragraph*{Quantificateurs}
 
-%In a CTE formula, we want to select two consecutive steps in order to define transitions (Figure~\ref{fig:plantree}).
-Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$. Il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\open{\f}{i}\in X_{i}$ pour chaque fluent utilisée pour déterminer si $\f$ est une condition ouverte. A la même profondeur~$i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
+Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$ \fred{à reformuler}. Il existe une seule variable $\instep{\a}{i}\in X_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\openstep{\f}{i}\in X_{i}$ pour chaque fluent utilisée pour déterminer si $\f$ est une condition ouverte. A la même profondeur~$i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
+
+%\begin{small}
+%\[
+%\begin{matrix}
+%\displaystyle \bigexists_{\a \in \A} \a_{\depth}. \bigexists_{\f\in \F} %\open{\f}{\depth}.%\\
+%\displaystyle {\bigforall b_{\depth}.}\\
+%\displaystyle \bigexists_{\a \in \A} \a_{\depth-1}. \bigexists_{\f\in \F} %\open{\f}{\depth-1}.%\\
+%\displaystyle {\bigforall b_{\depth-1}.}\\
+%\displaystyle \dots\\ 
+%%\dots
+%\displaystyle \bigexists_{\a \in \A} \a_{1}. \bigexists_{\f\in \F} %\open{\f}{1}.%\\
+%\displaystyle {\bigforall b_{1}.}%\\
+%\displaystyle \bigexists_{\a \in \A} \a_{0}. \bigexists_{\f\in \F} %\open{\f}{0}.
+%\end{matrix}
+%\]
+%\end{small}\\
 
 \begin{small}
 \[
 \begin{matrix}
-\displaystyle \bigexists_{\a \in \A} \a_{\depth}. \bigexists_{\f\in \F} \open{\f}{\depth}.%\\
+\displaystyle \bigexists_{\a \in \A} \instep{\a}{\depth}. \bigexists_{\f\in \F} \openstep{\f}{\depth}.%\\
 \displaystyle {\bigforall b_{\depth}.}\\
-\displaystyle \bigexists_{\a \in \A} \a_{\depth-1}. \bigexists_{\f\in \F} \open{\f}{\depth-1}.%\\
+\displaystyle \bigexists_{\a \in \A} \instep{\a}{\depth-1}. \bigexists_{\f\in \F} \open{\f}{\depth-1}.%\\
 \displaystyle {\bigforall b_{\depth-1}.}\\
 \displaystyle \dots\\ 
 %\dots
-\displaystyle \bigexists_{\a \in \A} \a_{1}. \bigexists_{\f\in \F} \open{\f}{1}.%\\
+\displaystyle \bigexists_{\a \in \A} \instep{\a}{1}. \bigexists_{\f\in \F} \open{\f}{1}.%\\
 \displaystyle {\bigforall b_{1}.}%\\
-\displaystyle \bigexists_{\a \in \A} \a_{0}. \bigexists_{\f\in \F} \open{\f}{0}.
+\displaystyle \bigexists_{\a \in \A} \instep{\a}{0}. \bigexists_{\f\in \F} \open{\f}{0}.
 \end{matrix}
 \]
 \end{small}\\
