@@ -80,47 +80,35 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
 
 L'action \texttt{pick} permet au robot de prendre dans une salle un balle avec l'une de ses pinces.
 
-\begin{center}
-\fbox{\texttt{
-\begin{minipage}[c]{\linewidth}
-\begin{tabbing} 
-(\bb{:action} drop \hspace{-2cm} \= \hspace{3.5cm} \= \\
-\>       \bb{:parameters} (?b - ball ?r - room ?g - gripper)\\
-\>       \bb{:precondition}  (and (carry ?b ?g)\\
-\> \> (at-robby ?r)\\
-\>       \bb{:effect} (and (at ?b ?r)\\
-\> \>		    (not (carry ?b ?g)) \\
-\> \>		    (free ?g)))\\
-\end{tabbing}
-\end{minipage}
-}}
-\end{center}
+\begin{lstlisting}[language=pddl,frame=single]
+(:action drop
+    :parameters (?b - ball ?r - room ?g - gripper)
+    :precondition  (and (carry ?b ?g)
+        (at-robby ?r)
+    :effect (and (at ?b ?r)
+        (not (carry ?b ?g)) 
+        (free ?g)))
+\end{lstlisting}
 
 L'action \texttt{drop} permet au robot de déposer dans une salle un balle qu'il tient dans l'une de ses pinces.
 
 
 \paragraph{Définition d'un problème en PDDL :}~\\
 
-\begin{center}
-\fbox{\texttt{
-\begin{minipage}[c]{\linewidth}
-\begin{tabbing}
-(\bb{define} (\bb{problem} gripper-2) \hspace{-5cm} \= \hspace{0.5cm} \= \hspace{4cm} \\
-\> (\bb{:domain} gripper-strips)\\
-\> (\bb{:objects}\\
-\> \> rooma roomb - room\\
-\> \> left right - gripper\\
-\> \> ball1 ball2 - ball)\\
-\> (\bb{:init}\\
-\> \> (free left) (free right)\\
-\> \> (at ball1 rooma) (at ball2 rooma)\\
-\> \> (at-robby rooma))\\
-\> (\bb{:goal}\\
-\> \> (and (at ball1 roomb) (at ball2 roomb))))
-\end{tabbing}
-\end{minipage}
-}}
-\end{center}
+\begin{lstlisting}[language=pddl,frame=single]
+(define (problem gripper-2)
+    (:domain gripper-strips)
+    (:objects
+        rooma roomb - room
+        left right - gripper
+        ball1 ball2 - ball)
+    (:init
+        (free left) (free right)
+        (at ball1 rooma) (at ball2 rooma)
+        (at-robby rooma))
+    (:goal
+        (and (at ball1 roomb) (at ball2 roomb))))
+\end{lstlisting}
 
 
 \subsection{Extraction d'un plan avec le module \touistplan}
