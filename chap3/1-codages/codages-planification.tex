@@ -362,17 +362,20 @@ Si une condition ouverte est fournie par l'état initial, alors le début de l'i
 Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1) soit rester ouverte et dans ce cas l'intervalle de protection du lien causal correspondant reste le même pour ces deux étapes, (2) soit être ajoutée (fermée) par une instance d'action $\a$ et dans ce cas le début de l'intervalle de protection du lien causal est fixé à l'instant de production de $\f$ par $\a$.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [2..\mathbf{\length}]}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}}}\hfill\\
-\begin{pmatrix}open_{\mathbf{\f},\mathbf{i}} \Rightarrow\hfill\\ \begin{pmatrix}\begin{pmatrix}open_{\mathbf{\f},\mathbf{i} - 1}\hfill\\ \wedge %\begin{pmatrix}
-\left(\tau_{s}(open_{\mathbf{\f},\mathbf{i} - 1}) = \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\hfill\\
- \wedge \left(\tau_{e}(open_{\mathbf{f},\mathbf{i} - 1}) = \tau_{e}(open_{\mathbf{\f},\mathbf{i}})
+\[
+%\begin{multline*}
+%~\\[-3em]
+\BigforallTwo{i=2}{\length}~\Bigforall{\substack{\f\in \F}}%\hfill\\
+\begin{pmatrix}\open{\f}{i} \Rightarrow%\hfill\\
+\begin{pmatrix}\begin{pmatrix}\open{\f}{i-1}\hfill\\ \wedge %\begin{pmatrix}
+\left(\tau_{s}(\open{\f}{i-1}) = \tau_{s}(\open{\f}{i})\right)\hfill\\
+ \wedge \left(\tau_{e}(\open{\f}{i-1}) = \tau_{e}(\open{\f}{i})
  \right)\end{pmatrix}\hfill\\
- \vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\left(\mathbf{\a}_{\mathbf{i} - 1} \wedge \left(\tau(\mathbf{\a}_{\mathbf{i} - 1}\rightarrow \mathbf{\f}) = \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\right)\hfill\\
- \end{pmatrix}\end{pmatrix}\\[-2em]
+ \vee \bigvee\limits_{\substack{\a\in \A\\\f \in \add{\a}}}\left(\a_{i - 1} \wedge \left(\tau(\a_{i - 1}\rightarrow \f) = \tau_{s}(\open{\f}{i})\right)\right)\hfill\\
+ \end{pmatrix}\end{pmatrix}%\\[-2em]
 %%%
-\end{multline*}
+\]
+%\end{multline*}
 \end{small}
 
 
@@ -381,14 +384,16 @@ Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1)
 Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'intérieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
-~\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}}}~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \del{\mathbf{\a}}}}\hfill\\
-\left(\left(open_{\mathbf{\f},\mathbf{i}} \wedge \mathbf{\a}_{\mathbf{j}}\right) \Rightarrow \begin{pmatrix}\left(\tau(\mathbf{\a}_\mathbf{j}\rightarrow \neg \mathbf{\f}) < \tau_{s}(open_{\mathbf{\f},\mathbf{i}})\right)\hfill\\
- \vee \left(\tau_{e}(open_{\mathbf{\f},\mathbf{i}}) < \tau(\mathbf{\a}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\end{pmatrix}\right)\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\BigforallTwo{i=1}{\length}\BigforallTwo{j=1}{\length}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\Bigforall{\substack{\f\in \F}}~\Bigforall{\substack{\a\in \A\\\f \in \del{\a}}}\hfill\\
+\left(\left(\open{\f}{i} \wedge \a_{j}\right) \Rightarrow \begin{pmatrix}\left(\tau(\a_{j}\rightarrow \neg \f) < \tau_{s}(\open{\f}{i})\right)\hfill\\
+ \vee \left(\tau_{e}(\open{\f}{i}) < \tau(\a_j\rightarrow \neg \f)\right)\end{pmatrix}\right)%\hfill\\[-2em]
 %%%
-\end{multline*}
+\]
+%\end{multline*}
 \end{small}
 
 
@@ -397,30 +402,36 @@ Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'
 Si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajouté par une autre action $\a$ à un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont différents.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
-~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \add{\mathbf{\a}}}}~\bigwedge\limits_{\substack{\mathbf{\b}\in \mathbf{\A}\\((\mathbf{i} \neq \mathbf{j}) \vee (\mathbf{\a} \neq \mathbf{\b})) \wedge \mathbf{\f} \in \del{\mathbf{\b}}}}\hfill\\
-\left(\left(\mathbf{\a}_{\mathbf{i}} \wedge \mathbf{\b}_{\mathbf{j}}\right) \Rightarrow %\begin{pmatrix}
-\left(\tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{\f}) \neq \tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\hfill%\\
+\[
+%\begin{multline*}
+%~\\[-3em]
+\BigforallTwo{i=1}{\length}\BigforallTwo{j=1}{\length}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\Bigforall{\substack{\a\in \A}}~\Bigforall{\substack{\f\in \add{\a}}}~\Bigforall{\substack{\b\in \A\\((i \neq j) \vee (\a \neq \b)) \wedge \f \in \del{\b}}}\hfill\\
+\left(\left(\a_{i} \wedge \b_{j}\right) \Rightarrow %\begin{pmatrix}
+\left(\tau(\a_{i}\rightarrow \f) \neq \tau(\b_{j}\rightarrow \neg \f)\right)%\hfill%\\
 % \vee \left(\tau(\mathbf{\b}_\mathbf{j}\rightarrow\mid \neg \mathbf{\f}) < \tau(\mathbf{\a}_\mathbf{i}\mid\rightarrow \mathbf{\f})\right)
 %\end{pmatrix}
-\right)\hfill\\[-2em]
+\right)%\hfill\\[-2em]
 %%%%%%%%%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 De même, si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est nécessaire à une autre action $\a$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a), \tau(\f\rightarrow\mid\a)]$, alors cet instant ne peut être contenu dans cet intervalle.
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]\\ \mathbf{j}\in [1..\mathbf{\length}]}}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
-~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}~\bigwedge\limits_{\substack{\mathbf{\f}\in \cond{\mathbf{\a}}}}~\bigwedge\limits_{\substack{\mathbf{\b}\in \mathbf{\A}\\((\mathbf{i} \neq \mathbf{j}) \vee (\mathbf{\a} \neq \mathbf{\b})) \wedge \mathbf{\f} \in \del{\mathbf{\b}}}}\hfill\\
-\left(\left(\mathbf{\a}_{\mathbf{i}} \wedge \mathbf{\b}_{\mathbf{j}}\right) \Rightarrow \begin{pmatrix}\left(\tau(\mathbf{f}\rightarrow\mid\mathbf{\a}_\mathbf{i}) < \tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f})\right)\hfill\\
- \vee \left(\tau(\mathbf{\b}_\mathbf{j}\rightarrow \neg \mathbf{\f}) < \tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i})\right)\end{pmatrix}\right)\hfill\\[-2em]
+\[
+%\begin{multline*}
+%~\\[-3em]
+\begin{matrix}
+\BigforallTwo{i=1}{\length}\BigforallTwo{j=1}{\length}%~\bigwedge\limits_{\substack{\mathbf{j}\in [1..\mathbf{\length}]}}
+~\Bigforall{\substack{\a\in \A}}~\Bigforall{\substack{\f\in \cond{\a}}}~\Bigforall{\substack{\b\in \A\\((i \neq j) \vee (\a \neq \b)) \wedge \f \in \del{\b}}}\hfill\\
+\left(\left(\a_{i} \wedge \b_{j}\right) \Rightarrow \begin{pmatrix}\left(\tau(\f\rightarrow\mid\a_{i}) < \tau(\b_{j}\rightarrow \neg \f)\right)\hfill\\
+ \vee \left(\tau(\b_{j}\rightarrow \neg \f) < \tau(\f\mid\rightarrow\a_{i})\right)\end{pmatrix}\right)%\hfill\\[-2em]
+\end{matrix}
 %%%
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 
@@ -428,18 +439,20 @@ De même, si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$
 \paragraph*{Bornes du plan temporel}
 Enfin, nous devons ajouter une contrainte pour maintenir le plan dans un intervalle de temps borné par l'étape initiale qui produit l'état initial $\I$ et l'étape finale qui nécessite tous les fluents du but $\G$.
 \begin{small}
-\begin{multline*}
-~\\[-2em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]}}~\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\hfill\\
-\left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \begin{pmatrix}\bigwedge\limits_{\substack{\mathbf{\f}\in \cond{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\f}\mid\rightarrow\mathbf{\a}_\mathbf{i}) \right)\hfill\\%
- \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{f}\rightarrow\mid\mathbf{\a}_\mathbf{i})\right) \end{pmatrix}\hfill\\
- \wedge \bigwedge\limits_{\substack{\mathbf{\f}\in \add{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{\f}) \right)\hfill\\%
- \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \mathbf{f})\right) \end{pmatrix}\hfill\\
- \wedge \bigwedge\limits_{\substack{\mathbf{\f}\in \del{\mathbf{\a}}}} \begin{pmatrix}\left(\tau_{\textit{Init}} \leq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \neg \mathbf{\f}) \right)\hfill\\%
- \wedge \left(\tau_{\textit{Goal}} \geq \tau(\mathbf{\a}_\mathbf{i}\rightarrow \neg \mathbf{\f})\right) \end{pmatrix} \end{pmatrix}\right)\\[1em]
+\[
+%\begin{multline*}
+%~\\[-2em]
+\BigforallTwo{i=1}{\length}~\Bigforall{\substack{\a\in \A}}%\hfill\\
+\left(\a_{i} \Rightarrow \begin{pmatrix}\Bigforall{\substack{\f\in \cond{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\f\mid\rightarrow\a_{i}) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\f\rightarrow\mid\a_{i})\right) \end{pmatrix}\hfill\\
+ \wedge \Bigforall{\substack{\f\in \add{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\a_{i}\rightarrow \f) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\a_{i}\rightarrow \f)\right) \end{pmatrix}\hfill\\
+ \wedge \Bigforall{\substack{\f\in \del{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\a_{i}\rightarrow \neg \f) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\a_{i}\rightarrow \neg \f)\right) \end{pmatrix} \end{pmatrix}\right)%\\[1em]
  %%%
 % \bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{length}]}}\bigwedge\limits_{\substack{\mathbf{A}\in \mathbf{O}}} \left(\neg \mathbf{A}_{\mathbf{i}} \Rightarrow \left(t_{\mathbf{A},\mathbf{i}} = -1\right)\right)\hfill\\
-\end{multline*}
+%\end{multline*}
+\]
 \end{small}
 
 

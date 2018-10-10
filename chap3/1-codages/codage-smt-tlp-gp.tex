@@ -49,4 +49,15 @@ Si deux actions produisant respectivement une proposition $p$ et sa négation so
 \paragraph{Bornes inférieure et supérieure}
 
 L’instant initial où les propositions de l’état initial sont vraies est antérieur à tous les instants de début des préconditions des actions du plan. L’instant final où les propositions du but sont vraies est postérieur à tous les instants de fin des effets des actions du plan.
-\fred{à ajouter}
+
+\begin{small}
+\[
+\BigforallTwo{i=1}{\length}~\Bigforall{\substack{\a\in \A}}%\hfill\\
+\left(\a_{i} \Rightarrow \begin{pmatrix}\Bigforall{\substack{\f\in \cond{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\f\mid\rightarrow\a_{i}) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\f\rightarrow\mid\a_{i})\right) \end{pmatrix}\hfill\\
+ \wedge \Bigforall{\substack{\f\in \add{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\a_{i}\rightarrow \f) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\a_{i}\rightarrow \f)\right) \end{pmatrix}\hfill\\
+ \wedge \Bigforall{\substack{\f\in \del{\a}}} \begin{pmatrix}\left(\tau_{\mathit{Init}} \leq \tau(\a_{i}\rightarrow \neg \f) \right)%\hfill\\%
+ \wedge \left(\tau_{\mathit{Goal}} \geq \tau(\a_{i}\rightarrow \neg \f)\right) \end{pmatrix} \end{pmatrix}\right)
+\]
+\end{small}

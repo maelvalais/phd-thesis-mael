@@ -45,11 +45,8 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
 
 
 \paragraph{Définition du domaine en PDDL :}~\\
-\fbox{
-\begin{minipage}[c]{\linewidth}
-\lstset{escapeinside={<@}{@>}}
-\lstset{language=pddl}
-\begin{lstlisting}
+
+\begin{lstlisting}[language=pddl,frame=single]
 (define (domain gripper-strips)
     (:requirements :strips :typing)
     (:types room gripper ball)
@@ -59,75 +56,27 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
         (carry ?b - ball ?g - gripper))
 ...<@\fbox{Définition des actions}@>...)
 \end{lstlisting}
-\end{minipage}
-}
-
-%\begin{scriptsize}
-\begin{center}
-\fbox{
-\texttt{
-\begin{minipage}[c]{\linewidth}
-\begin{tabbing}
-(\bb{define} (\bb{domain} gripper-strips) \hspace{-6cm} \= \hspace{2.3cm} \= \hspace{3.2cm} \\
-\>  (\bb{:requirements :strips :typing})\\
-\>  (\bb{:types} room gripper ball)\\
-\>   (\bb{:predicates} (at-robby ?r - room)\\
-\> \>		(at ?b - ball ?r - room)\\
-\> \>		(free ?g - gripper)\\
-\> \>		(carry ?b - ball ?g - gripper))\\
-\\
-$\cdots$ \fbox{Définition des actions} $\cdots$)
-\end{tabbing}
-\end{minipage}
-}}
-\end{center}
-%\end{scriptsize}
-
 
 \paragraph{Définition des actions en PDDL :}~\\
 
-%\fbox{\texttt{
-%\begin{minipage}[c]{\linewidth}
-%\begin{tabbing}
-%(:action move \hspace{-2cm} \= \hspace{1.5cm} \= \\
-%\>     :parameters  (?from ?to) \\
-%\>     :precondition (and  (room ?from) (room ?to) (at-robby ?from))\\
-%\>     :effect (and  (at-robby ?to)\\
-%\>	\>	     (not (at-robby ?from))))
-%\end{tabbing}
-%\end{minipage}
-%}}
+\begin{lstlisting}[language=pddl,frame=single]
+(:action move
+    :parameters  (?from - room ?to - room)
+    :precondition (at-robby ?from)
+    :effect (and  (at-robby ?to)
+        (not (at-robby ?from))))
+\end{lstlisting}
 
-\begin{center}
-\fbox{\texttt{
-\begin{minipage}[c]{\linewidth}
-\begin{tabbing}
-(\bb{:action} move \hspace{-2cm} \= \hspace{1.5cm} \= \\
-\>     \bb{:parameters}  (?from - room ?to - room) \\
-\>     \bb{:precondition} (at-robby ?from)\\
-\>     \bb{:effect} (and  (at-robby ?to)\\
-\>	\>	     (not (at-robby ?from))))
-\end{tabbing}
-\end{minipage}
-}}
-\end{center}
-
-\begin{center}
-\fbox{\texttt{
-\begin{minipage}[c]{\linewidth}
-\begin{tabbing} 
-(\bb{:action} pick \hspace{-2cm} \= \hspace{3.5cm} \= \\
-\>       \bb{:parameters} (?b - ball ?r - room ?g - gripper)\\
-\>       \bb{:precondition}  (and (at ?b ?r)\\
-\> \> (at-robby ?r)\\
-\> \> (free ?g))\\
-\>       \bb{:effect} (and (carry ?b ?g)\\
-\> \>		    (not (at ?b ?r)) \\
-\> \>		    (not (free ?g))))\\
-\end{tabbing}
-\end{minipage}
-}}
-\end{center}
+\begin{lstlisting}[language=pddl,frame=single]
+(:action pick
+    :parameters (?b - ball ?r - room ?g - gripper)
+    :precondition (and (at ?b ?r)
+        (at-robby ?r)
+        (free ?g))
+    :effect (and (carry ?b ?g)
+        (not (at ?b ?r))
+        (not (free ?g))))
+\end{lstlisting}
 
 L'action \texttt{pick} permet au robot de prendre dans une salle un balle avec l'une de ses pinces.
 

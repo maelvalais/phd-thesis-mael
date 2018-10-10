@@ -136,6 +136,14 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 %\newcommand{\txt}[1]{\mathrm{#1}}
 \newcommand{\prop}[1]{\small\texttt{#1}}
 
+\newcommand{\step}[1]{S_{#1}}
+\newcommand{\instep}[2]{(#1 \in \step{#2})}
+\newcommand{\Needs}[2]{\mathit{Needs}(\step{#1},#2)}
+\newcommand{\Adds}[2]{\mathit{Adds}(\step{#1},#2)}
+\newcommand{\Dels}[2]{\mathit{Dels}(\step{#1},#2)}
+\newcommand{\Linksteps}[3]{\mathit{Link}(\step{#1},#2,\step{#3})}
+\newcommand {\openstep}[2] {\textit{open}_{#1,\step{#2}}} % open (in step)
+
 %\newcommand{\bigexists}[1]{\stackrel{\exists}{_{#1}}~}
 \newcommand\ScaleExists[1]{\vcenter{\hbox{\scalefont{#1}$\exists$}}}
 \newcommand\ScaleForall[1]{\vcenter{\hbox{\scalefont{#1}$\forall$}}}
@@ -259,7 +267,9 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \usepackage{listings}
 \renewcommand{\ttdefault}{txtt} % to resolve a problem with bold fonts in alltt
 
-\lstset{language=ada,basicstyle=\ttfamily}
+\lstset{escapeinside={<@}{@>}}
+\lstset{basicstyle=\ttfamily}
+\input{scripts/syntax-highlighting.tex}
 
 \usepackage{proof}
 \inferLineSkip=4pt  % increase spacing between lines; default is 2pt

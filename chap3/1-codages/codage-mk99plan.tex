@@ -24,8 +24,8 @@ meilleur codage dans les espaces d'états (celui avec frame-axiomes explicatifs)
 Dans tous ces codages, les ensembles d'actions indépendants qui peuvent faire
 partie d'un plan sont associés à des symboles d'étapes. Un ordre sur ces étapes
 détermine un ordre total pour l'exécution des ensembles d'actions indépendants.
-Deux étapes particulières sont créées~: l'étape $p_0$ qui représente l'état
-initial du problème, et l'étape $p_{k+1}$ qui représente le but du problème. Ces
+Deux étapes particulières sont créées~: l'étape $\step{0}$ qui représente l'état
+initial du problème, et l'étape $\step{k+1}$ qui représente le but du problème. Ces
 deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions
 fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement
 utilisées en planification dans les espaces de plans partiels. Pour prendre en
@@ -38,20 +38,20 @@ considérant les actions $Start$ et $End$ comme des cas particuliers
 nous les présentons ici de manière intégrée aux autres actions.
 
 Les règles des codages dans les espaces de plans produisent les propositions
-suivantes, pour une action $a$, un fluent $f$, et deux étapes $p$ et $q$~:
+suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
 
 \begin{itemize}
-\item $(a \in p)$ est vraie ssi l'action $a$ appartient à l'étape $p$.
-\item $\mathrm{Adds}(p, f)$, est vraie ssi l'étape $p$ contient une action qui ajoute le
-  fluent $f$.
-\item $\mathrm{Needs}(p, f)$ est vraie ssi l'étape $p$ contient une action qui a $f$ en
+\item $(\a \in \step{i})$ est vraie ssi l'action $\a$ appartient à l'étape $\step{i}$.
+\item $\Adds{i}{\f}$, est vraie ssi l'étape $\step{i}$ contient une action qui ajoute le
+  fluent $\f$.
+\item $\Needs{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui a $f$ en
   précondition.
-\item $\mathrm{Dels}(p, f)$ est vraie ssi l'étape $p$ contient une action qui retire le
-  fluent $f$.
-\item $p \causal{f} q$ représente un lien causal et est vraie ssi l'étape
-  $p$ produit le fluent $f$ qui est une précondition de l'étape $q$.
-\item $p \prec q$ est vraie ssi l'étape $p$ précède l'étape $q$~; toutes les actions
-  associées à $p$ doivent donc être exécutées avant celles associées à $q$.
+\item $\Dels{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui retire le
+  fluent $\f$.
+\item $\Linksteps{i}{\f}{j}$ représente un lien causal et est vraie ssi l'étape
+  $\step{i}$ produit le fluent $\f$ qui est une précondition de l'étape $\step{j}$.
+\item $\step{i} \prec \step{j}$ est vraie ssi l'étape $\step{i}$ précède l'étape $\step{j}$~; toutes les actions
+  associées à $\step{i}$ doivent donc être exécutées avant celles associées à $\step{j}$.
   Ces propositions traduisent un ordre partiel sur les étapes.
 \end{itemize}
 
@@ -65,50 +65,65 @@ de cinq règles~:
 \begin{enumerate}
 \item \codrule{état initial et but~: } l'étape $p_0$ produit l'état
   initial du problème, et l'étape $p_{k+1}$ requiert les buts.
-  \codage{\left[ \biget{f \in I}\mathrm{Adds}(p_0,f)\right] \land \left[ \biget{f \in (F\setminus I)}\lnot\mathrm{Adds}(p_0,f)\right] \land \left[ \biget{f \in B} \mathrm{Needs}(p_{k+1},f)\right]\label{codage:epcom1}}
+  \codage{\left( \Bigforall{\f \in \I}\Adds{0}{\f}\right) \land \left( \Bigforall{\f \in (\F\setminus \I)}\lnot\Adds{0}{\f}\right) \land \left( \Bigforall{\f \in \G} \Needs{k+1}{\f}\right)\label{codage:epcom1}}
 \item \codrule{Correspondance action/étape~:} si une étape ajoute, retire, ou a
   pour précondition un fluent, alors cette étape peut correspondre à n'importe
   quelle action qui a le même comportement vis-à-vis de ce fluent. Inversement,
   si une action appartient à une étape, ses préconditions, ajouts et retraits
   sont vrais.
 
-  \codage{\biget{i \in [1,k]} \biget{f \in F_a} \left[ \mathrm{Adds}(p_i,f) \Leftrightarrow \bigou{a \in A | f \in \mathrm{Add}(a)} (a \in p_i) \right]\label{codage:epcom2}}
-  \codage{\biget{i \in [1,k]} \biget{f \in F_d} \left[ \mathrm{Dels}(p_i,f) \Leftrightarrow \bigou{a \in A | f \in \mathrm{Del}(a)} (a \in p_i) \right]\label{codage:epcom3}}
-  \codage{\biget{i \in [1,k]} \biget{f \in F_p} \left[ \mathrm{Needs}(p_i,f) \Leftrightarrow \bigou{a \in A | f \in \mathrm{Prec}(a)} (a \in p_i) \right]\label{codage:epcom4}}
+  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Adds{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Add{\a}}} \instep{\a}{i} \right)\label{codage:epcom2}}
+  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Dels{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Del{\a}}} \instep{\a}{i} \right)\label{codage:epcom3}}
+  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Needs{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Cond{\a}}} \instep{\a}{i} \right)\label{codage:epcom4}}
 \item \codrule{Exclusions mutuelles~: } deux actions qui ne sont pas indépendantes ne peuvent appartenir à une même étape.
   \codage{\biget{i \in [1,k]} \biget{ \{a_m, a_n\} \subseteq A \suchthat m < n \land \lnot(a_m\|a_n)} \left[\neg (a_m \in p_i) \lor \neg(a_n \in p_i) \right]\label{codage:epcom5}}
 \end{enumerate}
 
+\paragraph*{Prévention des interactions négatives}
+
+Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape.
+
+\begin{small}
+\[
+\BigforallTwo{i=1}{k}\Bigforall{\substack{\a\in \A}}\Bigforall{\substack{\f\in \left(\Add{\a}\cup\Cond{\a}\right)}}\Bigforall{\substack{\b\in \A\\\a \neq \b \wedge \f \in \Del{\b}}}\left(\neg \instep{\a}{i} \vee \neg \instep{\b}{i}\right)
+\]
+\end{small}
+
 \subsubsection{Codage par liens causaux, protection d'intervalles et ordre partiel}
 
 La production des préconditions se fait par le codage direct des liens causaux.
-La proposition $p \causal{f} q$ traduit le fait que l'étape $p$ produit le fluent
-$f$, précondition de l'étape $q$. La protection de $f$ dans l'intervalle compris
-entre les deux étapes se fait par promotion (l'étape menaçant $f$ est placée
-avant $p$), ou par rétrogradation (l'étape menaçant $f$ est placée après $q$).
+La proposition $\Linksteps{i}{\f}{j}$ traduit le fait que l'étape $\step{i}$ produit le fluent
+$\f$, précondition de l'étape $\step{j}$. La protection de $\f$ dans l'intervalle compris
+entre les deux étapes se fait par promotion (l'étape menaçant $\f$ est placée
+avant $\step{i}$), ou par rétrogradation (l'étape menaçant $\f$ est placée après $\step{j}$).
 L'ordre d'exécution des étapes  est donné par une relation de précédence de
-la forme $p \prec q$. Les quatre règles suivantes sont ajoutées à la partie commune~:
+la forme $\step{i} \prec \step{j}$. Les quatre règles suivantes sont ajoutées à la partie commune~:
 
 \begin{enumerate}
 \item \codrule{Production des préconditions~:} chaque fluent est supporté par un lien
   causal entre l'étape qui le produit et l'étape
   qui l'utilise en tant que précondition.
-  \codage{\biget{i \in [1,k+1]} \biget{f\in F_p} \left[ \mathrm{Needs}(p_i, f) \Rightarrow \ifthen{f \in F_a}{\bigou{j \in [0, k] \suchthat j \neq i} p_j \causal{f} p_i}{\bot} \right]}
-\item \codrule{Liens causaux~:} un lien causal supportant un fluent $f$ entre
-  deux étapes $p_i$ et $p_j$ implique que $p_i$ ajoute $f$, que $p_j$ a pour
-  précondition $f$, et que $p_i$ précède $p_j$.
-  \codage{\biget{i \in [0,k]} \biget{j \in [1,k+1]\suchthat i\neq j} \biget{f\in (F_p \cap F_a)} \left[ p_i \causal{f} p_j \Rightarrow\left( \mathrm{Adds}(p_i, f) \land \mathrm{Needs}(p_j,f)\land p_i \prec p_j  \right) \right]}
+  \codage{\BigforallTwo{i=1}{k+1} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{\f \in \F_a}{
+  \BigexistsTwo{\substack{j=0\\j\neq i}}{k} \Linksteps{j}{\f}{i}%}{\bot}
+  \right)}
+\item \codrule{Liens causaux~:} un lien causal supportant un fluent $\f$ entre
+  deux étapes $\step{i}$ et $\step{j}$ implique que $\step{i}$ ajoute $\f$, que $\step{j}$ a pour
+  précondition $\f$, et que $\step{i}$ précède $\step{j}$.
+  \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=1\\j\neq i}}{k+1} \Bigforall{\f\in \F} \left( \Linksteps{i}{\f}{j} \Rightarrow\left( \Adds{i}{\f} \land \Adds{j}{\f}\land \step{i} \prec \step{j}  \right) \right)}
 \item \codrule{Protection d'intervalles~:} si un lien causal supporte le
-  fluent $f$ entre une étape $p_i$ et une étape $p_j$, et si une étape $p_q$
-  retire $f$, alors $p_q$ doit précéder $p_i$ (promotion) ou $p_j$ doit précéder
-  $p_q$ (rétrogradation).
-  \codage{\biget{i \in [0,k]} \biget{j \in [1,k+1]\suchthat i\neq j} \biget{q \in [1,k]\suchthat q\neq i \land q\neq j} \biget{f\in (F_p \cap F_a \cap F_d)} 
-  \left[ \begin{array}{l}p_i \causal{f} p_j \land \mathrm{Dels}(p_q, f) \Rightarrow\\ \left( p_q \prec p_i \lor p_j \prec p_q \right) \end{array} \right]}
+  fluent $\f$ entre une étape $\step{i}$ et une étape $\step{j}$, et si une étape $\step{q}$
+  retire $\f$, alors $\step{q}$ doit précéder $\step{i}$ (promotion) ou $\step{j}$ doit précéder
+  $\step{q}$ (rétrogradation).
+  \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=1\\j\neq i}}{k+1} \BigforallTwo{\substack{q=1\\q\neq i \land q\neq j}}{k} \Bigforall{\f\in \F} 
+  \left( %\begin{array}{l}
+  \Linksteps{i}{\f}{j} \land \Dels{q}{\f} \Rightarrow%\\
+  \left( \step{q} \prec \step{i} \lor \step{j} \prec \step{q} \right) %\end{array}
+  \right)}
 \item \codrule{Propriétés de la relation de précédence~:} transitive et
   antisymétrique. L'irréflexivité est codée dans les autres règles par le biais
   des indices des étapes.
-  \codage{\biget{i \in [0,k+1]} \biget{j \in [0,k+1]\suchthat i\neq j} \biget{q \in [0,k+1]\suchthat q\neq i \land q\neq j} \left( \left( p_i \prec p_j \land p_j \prec p_q \right) \Rightarrow p_i \prec p_q \right)}
-  \codage{\biget{i \in [0,k]} \biget{j \in [i+1,k+1]\suchthat i\neq j} \lnot \left( p_i \prec p_j \right) \lor \lnot \left( p_j \prec p_i \right)}
+  \codage{\BigforallTwo{i=0}{k+1} \BigforallTwo{\substack{j=0\\j\neq i}}{k+1} \BigforallTwo{\substack{q=0\\q\neq i \land q\neq j}}{k+1} \left( \left( \step{i} \prec \step{j} \land \step{j} \prec \step{q} \right) \Rightarrow \step{i} \prec \step{q} \right)}
+  \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=i+1\\j\neq i}}{ k+1} \lnot \left( \step{i} \prec \step{j} \right) \lor \lnot \left( \step{j} \prec \step{i} \right)}
 \end{enumerate}
 
 \subsubsection{Codage par liens causaux, protection d'intervalles et étapes contiguës}
@@ -126,13 +141,23 @@ commune~:
 \item \codrule{Production des préconditions~:} chaque fluent est supporté par un
   lien causal entre l'étape qui le produit et l'étape qui l'utilise en tant que
   précondition.
-  \codage{\biget{i \in [1,k]} \biget{f\in F_p} \left[ \mathrm{Needs}(p_i, f) \Rightarrow \ifthen{f \in F_a}{\bigou{j \in [1, i-1]} p_j \causal{f} p_i}{\bot}\right]}
+  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{\f \in \F_a}{
+  \BigexistsTwo{j=1}{i-1} \Linksteps{j}{\f}{i}%}{\bot}
+  \right)}
 \item \codrule{Liens causaux et protection d'intervalles~:} la présence d'un lien
   causal supportant un fluent $f$ entre deux étapes $p_i$ et $p_j$
   implique que $p_i$ ajoute $f$ et que $p_j$ a pour précondition
   $f$. De plus, une étape qui retire $f$ ne peut s'insérer entre $p_i$ et
   $p_j$.
-  \codage{\biget{i \in [1,k-1]} \biget{j \in [i+1,k]} \biget{f\in (F_p \cap F_a)} \left[ \begin{array}{l} p_i \causal{f} p_j \Rightarrow \mathrm{Adds}(p_i, f) \land \mathrm{Needs}(p_j,f) \land \\ \ifthen{f \in F_d}{\biget{q\in [i+1,j-1]} \lnot \mathrm{Dels}(p_q, f)}{\top} \end{array}\right]}
+%  \codage{
+\[
+\BigforallTwo{i=1}{k-1} \BigforallTwo{j=i+1}{k} \Bigforall{\f\in \F} \left( %\begin{array}{l} 
+  \Linksteps{i}{\f}{j} \Rightarrow \Adds{i}{\f} \land \Needs{j}{\f} \land %\\ %\ifthen{f \in F_d}{
+  \BigforallTwo{q=i+1}{j-1} \lnot \Dels{q}{\f}%}{\top}
+  %\end{array}
+  \right)
+\]
+  %}
 \end{enumerate}
 
 \subsubsection{Codage du \enquote{chevalier blanc}}
@@ -147,18 +172,26 @@ commune. La protection d'intervalles se réalise en codant la technique du
 \cite{Cha87}. Les deux règles suivantes sont ajoutées à la partie commune~:
 
 
-\begin{enumerate}
-\item \codrule{Production des préconditions~:} la précondition d'une étape d'un niveau
+%\begin{enumerate}
+%\item \codrule
+\paragraph*{Production des préconditions} La précondition d'une étape d'un niveau
   $i$ doit être ajoutée par une étape précédente.
-  \codage{\biget{i \in [1,k+1]} \biget{f\in F_p} \left[ \mathrm{Needs}(p_i, f) \Rightarrow \ifthen{f \in F_a}{\bigou{j \in [0, i-1]} \mathrm{Adds}(p_j, f)}{\bot} \right]}
+  \codage{\BigforallTwo{i=1}{k+1} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{f \in F_a}{
+  \BigexistsTwo{j=0}{i-1} \Adds{j}{\f}%}{\bot}
+  \right)}
 
-\item \codrule{Chevalier blanc~:} si une étape a pour précondition le fluent $f$
+%\item \codrule
+\paragraph*{Chevalier blanc} Si une étape a pour précondition le fluent $f$
   au niveau $i$, et qu'une autre le retire au niveau $j$ avant que la première
   puisse l'utiliser, alors il doit y avoir une troisième étape qui rétablit $f$
   à un niveau $q$ tel que $j < q < i$.
-  \codage{\biget{i \in [3,k+1]} \biget{j \in [1,i-2]} \biget{f \in (F_p \cap F_d)} \left[ \begin{array}{l}\mathrm{Needs}(p_i, f) \land \mathrm{Dels}(p_j, f) \Rightarrow\\ 
-        \ifthen{f \in F_a}{\bigou{q \in [j+1,i-1]} \mathrm{Adds}(p_q,f)}{\bot}\end{array} \right]}
-\end{enumerate}
+  \codage{\BigforallTwo{i=3}{k+1} \BigforallTwo{j=1}{i-2} \Bigforall{\f \in \F} \left( %\begin{array}{l}
+  \Needs{i}{\f} \land \Dels{j}{\f} \Rightarrow%\\ 
+        %\ifthen{f \in F_a}{
+        \BigexistsTwo{q=j+1}{i-1} \Adds{q}{\f}%}{\bot}
+        %\end{array}
+        \right)}
+%\end{enumerate}
 
 
 }

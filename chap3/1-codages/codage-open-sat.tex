@@ -70,46 +70,60 @@ Dans la suite, nous donnons notre codage pour une longueur de plan fixée $\leng
 
 Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition).
 
+%\begin{small}
+%\[
+%\BigforallTwo{i=1}{\length}\Bigforall{\substack{\a\in \A}}\left(\a_{i} %\Rightarrow \Bigforall{\substack{\f\in \Cond{\a}}}\open{\f}{i}\right)
+%\]
+%\end{small}
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{\length}]}}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\left(\mathbf{\a}_{\mathbf{i}} \Rightarrow \bigwedge\limits_{\substack{\mathbf{\f}\in \pre{\mathbf{\a}}}}open_{\mathbf{\f},\mathbf{i}}\right)\hfill\\[-2em]
-%%%
-\end{multline*}
+\[
+\BigforallTwo{i=1}{\length}\Bigforall{\substack{\a\in \A}}\left(\instep{\a}{i} \Rightarrow \Bigforall{\substack{\f\in \Cond{\a}}}\openstep{\f}{i}\right)
+\]
 \end{small}
 
 Dans la dernière étape du plan menant au but tous les fluents du but doivent être des conditions ouvertes ou ajoutées par des actions exécutées dans cette étape.
 
+%\begin{small}
+%\[
+%\Bigforall{\substack{\f\in \G}}\left(\open{\f}{\length} \vee %\Bigexists{\substack{\a\in \A\\\f \in \Add{\a}}}\a_{\length}\right)
+%\]
+%\end{small}
+
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\G}}}\left(open_{\mathbf{\f},\mathbf{\length}} \vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\mathbf{\a}_{\mathbf{\length}}\right)\hfill\\[-2em]
-%%%
-\end{multline*}
+\[
+\Bigforall{\substack{\f\in \G}}\left(\openstep{\f}{\length} \vee \Bigexists{\substack{\a\in \A\\\f \in \Add{\a}}}\instep{\a}{\length}\right)
+\]
 \end{small}
 
 \paragraph*{Propagation et fermeture}
 
 Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
-%$\bigwedge_{\mathbf{\f}\in \mathbf{\F}\setminus \mathbf{I}}\neg open_{\mathbf{\f},1}$
+
+%\begin{small}
+%\[
+%\Bigforall{\substack{\f\in \F\setminus \I}}\neg \open{\f}{1}
+%\]
+%\end{small}
 
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}\setminus \mathbf{I}}}\neg open_{\mathbf{\f},1}\hfill\\[-2em]
-%%%
-\end{multline*}
+\[
+\Bigforall{\substack{\f\in \F\setminus \I}}\neg \openstep{\f}{1}
+\]
 \end{small}
 
 Toute condition ouverte dans une étape doit soit rester ouverte soit être ajoutée (fermée) par une action à l'étape précédente.
 
+%\begin{small}
+%\[
+%\BigforallTwo{i=2}{\length}\Bigforall{\substack{\f\in %\F}}\left(\open{\f}{i} \Rightarrow \left(\open{\f}{i-1} \vee %\Bigexists{\substack{\a\in \A\\\f \in \Add{\a}}}\a_{i - 1}\right)\right)
+%\]
+%\end{small}
+
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [2..\mathbf{\length}]}}\bigwedge\limits_{\substack{\mathbf{f}\in \mathbf{\F}}}\left(open_{\mathbf{\f},\mathbf{i}} \Rightarrow \left(open_{\mathbf{\f},\mathbf{i} - 1} \vee \bigvee\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \add{\mathbf{\a}}}}\mathbf{\a}_{\mathbf{i} - 1}\right)\right)\hfill\\[-2em]
-%%%
-\end{multline*}
+\[
+\BigforallTwo{i=2}{\length}\Bigforall{\substack{\f\in \F}}\left(\openstep{\f}{i} \Rightarrow \left(\openstep{\f}{i-1} \vee \Bigexists{\substack{\a\in \A\\\f \in \Add{\a}}}\instep{\a}{i - 1}\right)\right)
+\]
 \end{small}
 
 
@@ -118,23 +132,33 @@ Toute condition ouverte dans une étape doit soit rester ouverte soit être ajou
 \paragraph*{Protection des conditions ouvertes}
 
 Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'étape précédente. Cela garantit de ne rompre aucun lien de causalité dans le plan.
+
+%\begin{small}
+%\[
+%\BigforallTwo{i=2}{\length}\Bigforall{\substack{\f\in %\F}}\left(\open{\f}{i} \Rightarrow \Bigforall{\substack{\a\in \A\\\f \in %\Del{\a}}}\neg \a_{i - 1}\right)
+%\]
+%\end{small}
+
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [2..\mathbf{\length}]}}\bigwedge\limits_{\substack{\mathbf{\f}\in \mathbf{\F}}}\left(open_{\mathbf{\f},\mathbf{i}} \Rightarrow \bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}\\\mathbf{\f} \in \del{\mathbf{\a}}}}\neg \mathbf{\a}_{\mathbf{i} - 1}\right)\hfill\\[-3em]
-%%%
-\end{multline*}
+\[
+\BigforallTwo{i=2}{\length}\Bigforall{\substack{\f\in \F}}\left(\openstep{\f}{i} \Rightarrow \Bigforall{\substack{\a\in \A\\\f \in \Del{\a}}}\neg \instep{\a}{i - 1}\right)
+\]
 \end{small}
 
 \paragraph*{Prévention des interactions négatives}
 
 Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape.
 
+%\begin{small}
+%\[
+%\BigforallTwo{i=1}{\length}\Bigforall{\substack{\a\in %\A}}\Bigforall{\substack{\f\in %\left(\Add{\a}\cup\Cond{\a}\right)}}\Bigforall{\substack{\b\in \A\\\a %\neq \b \wedge \f \in \Del{\b}}}\left(\neg \a_{i} \vee \neg \b_{i}\right)
+%\]
+%\end{small}
+
 \begin{small}
-\begin{multline*}
-~\\[-3em]
-\bigwedge\limits_{\substack{\mathbf{i}\in [1..\mathbf{length}]}}\bigwedge\limits_{\substack{\mathbf{\a}\in \mathbf{\A}}}\bigwedge\limits_{\substack{\mathbf{f}\in \left(\add{\mathbf{\a}}\cup\pre{\mathbf{\a}}\right)}}\bigwedge\limits_{\substack{\mathbf{\b}\in \mathbf{\A}\\\mathbf{\a} \neq \mathbf{\b} \wedge \mathbf{f} \in \del{\mathbf{\b}}}}\left(\neg \mathbf{\a}_{\mathbf{i}} \vee \neg \mathbf{\b}_{\mathbf{i}}\right)\hfill\\[-3em]
-\end{multline*}
+\[
+\BigforallTwo{i=1}{\length}\Bigforall{\substack{\a\in \A}}\Bigforall{\substack{\f\in \left(\Add{\a}\cup\Cond{\a}\right)}}\Bigforall{\substack{\b\in \A\\\a \neq \b \wedge \f \in \Del{\b}}}\left(\neg \instep{\a}{i} \vee \neg \instep{\b}{i}\right)
+\]
 \end{small}
 
 
