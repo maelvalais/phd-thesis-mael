@@ -47,3 +47,71 @@
       KIF,
     },
 }
+
+\lstdefinelanguage{touist}
+{
+    keywords={
+        end,
+        in,
+        subset,
+        empty,
+        union,
+        inter,
+        diff,
+        exact,
+        atmost,
+        atleast,
+        bigand,
+        bigor,
+        when,
+        card,
+        mod,
+        sqrt,
+        int,
+        float,
+        abs,
+        if,
+        then,
+        else,
+        mod,
+        let,
+        data,
+        powerset,
+        :,
+        exists,
+        forall,
+        for,
+        Top,
+        Bot,
+        true,
+        false
+    },
+    morekeywords={[2]
+        and,
+        or,
+        xor,
+        =>,
+        <=>,
+        not,
+        =,
+        >,
+        <,
+        ==,
+        <=,
+        >=,
+        !=,
+        &&,
+        ||,
+        +,
+        -,
+        *,
+        /
+    },
+    morekeywords={[3]
+    },
+    morekeywords={[4]
+    },
+    comment=[l]{\;\;},
+    morecomment=[l]{<==}, % l is for line comment
+    sensitive=true
+}[keywords, comments]

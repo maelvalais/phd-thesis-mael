@@ -1,0 +1,29 @@
+\documentclass[a4paper,12pt,oneside]{article}
+
+\usepackage{alltt}
+\usepackage{listings}
+% \renewcommand{\ttdefault}{txtt} % to resolve a problem with bold fonts in alltt
+\lstset{escapeinside={<@}{@>}}
+% \lstset{basicstyle=\ttfamily}
+\input{syntax-highlighting.tex}
+
+\begin{document}
+
+\begin{lstlisting}[language=pddl,frame=single]
+    (define (domain gripper-strips)
+        (:requirements :strips :typing)
+        (:types room gripper ball)
+        (:predicates (at-robby ?r - room)
+            (at ?b - ball ?r - room)
+            (free ?g - gripper)
+            (carry ?b - ball ?g - gripper))
+    ...<@\fbox{Définition des actions}@>...)
+\end{lstlisting}
+
+\begin{lstlisting}[language=touist,frame=single]
+bigand $i in [a,b]:
+    p(b,$i)
+end
+\end{lstlisting}
+
+\end{document}

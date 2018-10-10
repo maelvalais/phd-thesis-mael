@@ -254,8 +254,6 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{soul}
 \usepackage{amsfonts}
-\usepackage{alltt}
-\usepackage{listings}
 \usepackage{proof}
 \usepackage{wrapfig}
 \usepackage{multicol,multirow,booktabs,array}
@@ -264,9 +262,10 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{comment}
+
+\usepackage{alltt}
 \usepackage{listings}
 \renewcommand{\ttdefault}{txtt} % to resolve a problem with bold fonts in alltt
-
 \lstset{escapeinside={<@}{@>}}
 \lstset{basicstyle=\ttfamily}
 \input{scripts/syntax-highlighting.tex}
