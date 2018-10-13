@@ -115,16 +115,16 @@ Ces deux codages de planification utilisent la structure de branchement de QBF p
 \begin{figure}[h]\label{steps2}
 \begin{footnotesize}
 (a)\\[1em]
-  \xymatrix@C=0.1pc@R=1pc{
-  \text{S}_{0} (\textit{Init}) \ar@{>}[r] & \fbox{$x_{1}\equiv$ S$_{1}$} \ar@{>}[r]  & \fbox{$x_{2}\equiv$ S$_{2}$} \ar@{>}[r] & \fbox{$x_{3}\equiv$ S$_{3}$} \ar@{>}[r] & \fbox{$x_{4}\equiv$ S$_{4}$}
-  \ar@{>}[r] & \fbox{$x_{5}\equiv$ S$_{5}$} \ar@{>}[r] & \fbox{$x_{6}\equiv$ S$_{6}$} \ar@{>}[r] & \fbox{$x_{7}\equiv$ S$_{7}$} \ar@{>}[r] & \text{S}_{8} (\textit{Goal}) \\
+  \xymatrix@C=0.2pc@R=1pc{
+  \step{0} (\mathit{Init}) \ar@{>}[r] & *+[F]+{x_{1}\equiv\steplevel{1}{1}} \ar@{>}[r]  & *+[F]+{x_{2}\equiv\steplevel{2}{2}} \ar@{>}[r] & *+[F]+{x_{3}\equiv\steplevel{3}{3}} \ar@{>}[r] & *+[F]+{x_{4}\equiv\steplevel{4}{4}}
+  \ar@{>}[r] & *+[F]+{x_{5}\equiv\steplevel{5}{5}} \ar@{>}[r] & *+[F]+{x_{6}\equiv\steplevel{6}{6}} \ar@{>}[r] & *+[F]+{x_{7}\equiv\steplevel{7}{7}} \ar@{>}[r] & \step{8} (\mathit{Goal}) \\
   }
   ~\\[3em]
 (b)\\[-1em]
    \hspace{0.8em}\xymatrix@C=0pc@R=1pc{
-   & & & & & \fbox{$x_{2}\equiv$ S$_{4}$} \ar@{.}[lld] \ar@{.}[rrd] \ar@/^1pc/[rdd] & & & & \\
-   & & & \fbox{$x_{1}\equiv$ S$_{2}$} \ar[rd] & & & & \fbox{$x_{1}^{\prime}\equiv$ S$_{6}$} \ar[rd] & & \\
-   \text{S}_{0} (\textit{Init}) \ar@{>}[rr] & & \fbox{$x_{0}\equiv$ S$_{1}$} \ar[ru]  & & \fbox{$x_{0}^{\prime}\equiv$ S$_{3}$} \ar@/^1pc/[ruu] & &  \fbox{$x_{0}^{\prime\prime}\equiv$ S$_{5}$} \ar[ru] & & \fbox{$x_{0}^{\prime\prime\prime}\equiv$ S$_{7}$} \ar@{>}[rr] & & \text{S}_{8} (\textit{Goal}) \\
+   & & & & & *+[F]+{x_{2}\equiv\steplevel{4}{2}} \ar@{.}[lld] \ar@{.}[rrd] \ar@/^1pc/[rdd] & & & & \\
+   & & & *+[F]+{x_{1}\equiv\steplevel{2}{1}} \ar[rd] & & & & *+[F]+{x_{1}^{\prime}\equiv\steplevel{6}{1}} \ar[rd] & & \\
+   \step{0} (\mathit{Init}) \ar@{>}[rr] & & *+[F]+{x_{0}\equiv\steplevel{1}{0}} \ar[ru]  & & *+[F]+{x_{0}^{\prime}\equiv\steplevel{3}{0}} \ar@/^1pc/[ruu] & &  *+[F]+{x_{0}^{\prime\prime}\equiv\steplevel{5}{0}} \ar[ru] & & *+[F]+{x_{0}^{\prime\prime\prime}\equiv\steplevel{7}{0}} \ar@{>}[rr] & & \step{8} (\mathit{Goal}) \\
   }
 \vspace{2em}
  \end{footnotesize}
@@ -301,7 +301,7 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 %\end{frame}
 
 
-\paragraph*{Conditions ouvertes} Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
+\paragraph*{[SMT-OPEN.1 -- Conditions ouvertes]} Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
 
 \begin{small}
 \[
@@ -333,7 +333,7 @@ Dans la dernière étape du plan menant au but tous les fluents du but doivent �
 \end{small}
 
 
-\paragraph*{Propagation et fermeture}
+\paragraph*{[SMT-OPEN.2 -- Propagation et fermeture]}
 
 Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
 
@@ -379,7 +379,7 @@ Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1)
 \end{small}
 
 
-\paragraph*{Protection des conditions ouvertes}
+\paragraph*{[SMT-OPEN.3 -- Protection des conditions ouvertes]}
 
 Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'intérieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 
@@ -397,7 +397,7 @@ Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'
 \end{small}
 
 
-\paragraph*{Prévention des interactions négatives}
+\paragraph*{[SMT-OPEN.4 -- Prévention des interactions négatives]}
 
 Si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajouté par une autre action $\a$ à un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont différents.
 
@@ -436,7 +436,7 @@ De même, si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$
 
 
 %\paragraph*{SMT Encoding: bound the plan with Init and Goal states}
-\paragraph*{Bornes du plan temporel}
+\paragraph*{[SMT-OPEN.5 -- Bornes du plan temporel]}
 Enfin, nous devons ajouter une contrainte pour maintenir le plan dans un intervalle de temps borné par l'étape initiale qui produit l'état initial $\I$ et l'étape finale qui nécessite tous les fluents du but $\G$.
 \begin{small}
 \[

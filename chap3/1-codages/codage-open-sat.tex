@@ -11,12 +11,12 @@ Pour chaque action $\a\in\A$ et chaque étape $i$, nous créons une variable pro
 Pour chaque fluent $\f\in\F$ et chaque étape $i$, nous créons une variable propositionnelle $\open{\f}{i}$ pour exprimer que $\f$ se maintient à l'étape précédente $i-1$ et doit être protégé au moins jusqu'à l'étape $i$.
 
 \begin{figure}[hb!]\centering
-	\includegraphics[width=.4\textwidth]{figures/transitions}
-    \caption{Lien causal: l'action $a'$ produit $\f$ à l'étape $S_{i-k}$ pour l'action $\a$ qui nécessite $\f$ à l'étape $S_{i}$.}
+	\includegraphics[width=.5\textwidth]{figures/transitions}
+    \caption{Lien causal: l'action $a'$ produit $\f$ à l'étape $S_{i-j}$ pour l'action $\a$ qui nécessite $\f$ à l'étape $S_{i}$.}
     \label{fig:causal-link-sat}
 \end{figure}
 
-Dans la figure~\ref{fig:causal-link-sat}, la variable $f$ est une \textit {condition ouverte} à l'étape $\S_i$, impliquant que $\f\in\I$ ou une action $a'$ qui ajoute $\f$ est exécutée dans une étape précédente $\S_{i-k}$.
+Dans la figure~\ref{fig:causal-link-sat}, la variable $f$ est une \textit {condition ouverte} à l'étape $\S_i$, impliquant que $\f\in\I$ ou une action $a'$ qui ajoute $\f$ est exécutée dans une étape précédente $\S_{i-j}$.
 Les conditions ouvertes doivent être propagées vers l'arrière jusqu'à l'état initial ou une étape dans laquelle elles sont ajoutées par une action.
 
 
@@ -66,8 +66,7 @@ Les conditions ouvertes doivent être propagées vers l'arrière jusqu'à l'éta
 
 Dans la suite, nous donnons notre codage pour une longueur de plan fixée $\length$. Une borne supérieure pour $\length$ est le nombre total d'états possibles, soit $2^{\mid\F\mid}$.
 
-\paragraph*{Conditions ouvertes}
-
+\paragraph*{[SAT-OPEN.1 -- Conditions ouvertes]}
 Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition).
 
 %\begin{small}
@@ -96,7 +95,7 @@ Dans la dernière étape du plan menant au but tous les fluents du but doivent �
 \]
 \end{small}
 
-\paragraph*{Propagation et fermeture}
+\paragraph*{[SAT-OPEN.2 -- Propagation et fermeture]}
 
 Aucune condition ne doit rester ouverte dans la première étape du plan si elle n'est pas fournie dans l'état initial.
 
@@ -129,7 +128,7 @@ Toute condition ouverte dans une étape doit soit rester ouverte soit être ajou
 
 %\paragraph*{SAT Encoding: protect open conditions and prevent negative interactions (mutex)}
 
-\paragraph*{Protection des conditions ouvertes}
+\paragraph*{[SAT-OPEN.3 -- Protection des conditions ouvertes]}
 
 Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'étape précédente. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 
@@ -145,7 +144,7 @@ Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'
 \]
 \end{small}
 
-\paragraph*{Prévention des interactions négatives}
+\paragraph*{[SAT-OPEN.4 -- Prévention des interactions négatives]}
 
 Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape.
 

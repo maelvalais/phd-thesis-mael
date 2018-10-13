@@ -7,38 +7,16 @@
 
 \fred{Attention, ici copier/coller ouvrage SAT 2008 Maris, Régnier, Vidal}
 {\color{red}
-Ces codages ne traduisent plus seulement les transitions qui s'opèrent entre
-niveaux successifs du plan, mais expriment maintenant les relations de causalité
-entre les actions qui le constituent. Dans les espaces d'états, l'application
-des actions est envisagée séquentiellement~: une action ne peut apparaître à un
-niveau du plan que lorsque ses préconditions sont satisfaites au niveau
-précédent.  Dans les espaces de plans, une action apparaît à un niveau du plan
-parce qu'une action d'un niveau antérieur (pas forcément le niveau précédent)
-établit ses préconditions et qu'une action qui suit requiert un de ses effets.
+Ces codages ne traduisent plus seulement les transitions qui s'opèrent entre niveaux successifs du plan, mais expriment maintenant les relations de causalité entre les actions qui le constituent. Dans les espaces d'états, l'application des actions est envisagée séquentiellement~: une action ne peut apparaître à un niveau du plan que lorsque ses préconditions sont satisfaites au niveau précédent.  Dans les espaces de plans, une action apparaît à un niveau du plan parce qu'une action d'un niveau antérieur (pas forcément le niveau précédent) établit ses préconditions et qu'une action qui suit requiert un de ses effets.
 L'existence de différents codages découle de la traduction des différentes
-stratégies de recherche utilisées dans les espaces de plans. Ces codages restent
-moins performants, en termes de compacité et de temps de résolution, que le
-meilleur codage dans les espaces d'états (celui avec frame-axiomes explicatifs)
+stratégies de recherche utilisées dans les espaces de plans. Ces codages restent moins performants, en termes de compacité et de temps de résolution, que le meilleur codage dans les espaces d'états (celui avec frame-axiomes explicatifs)
 \cite{MK99}.
 
-Dans tous ces codages, les ensembles d'actions indépendants qui peuvent faire
-partie d'un plan sont associés à des symboles d'étapes. Un ordre sur ces étapes
-détermine un ordre total pour l'exécution des ensembles d'actions indépendants.
-Deux étapes particulières sont créées~: l'étape $\step{0}$ qui représente l'état
-initial du problème, et l'étape $\step{k+1}$ qui représente le but du problème. Ces
-deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions
-fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement
-utilisées en planification dans les espaces de plans partiels. Pour prendre en
-compte ces deux étapes, l'ensemble $F_a$ des fluents présents dans les ajouts
-des actions est augmenté des fluents de l'état initial $I$. De même, l'ensemble
-$F_p$ des fluents présents dans les préconditions des actions est augmenté des
-fluents du but $B$. On peut produire des codages produisant moins de clauses en
-considérant les actions $Start$ et $End$ comme des cas particuliers
-\cite{Vid01}, mais pour des raisons de compacité dans l'écriture des codages
-nous les présentons ici de manière intégrée aux autres actions.
+Dans tous ces codages, les ensembles d'actions indépendants qui peuvent faire partie d'un plan sont associés à des symboles d'étapes. Un ordre sur ces étapes détermine un ordre total pour l'exécution des ensembles d'actions indépendants.
+Deux étapes particulières sont créées~: l'étape $\step{0}$ qui représente l'état initial du problème, et l'étape $\step{k+1}$ qui représente le but du problème. Ces deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement utilisées en planification dans les espaces de plans partiels. Pour prendre en
+compte ces deux étapes, l'ensemble $F_a$ des fluents présents dans les ajouts des actions est augmenté des fluents de l'état initial $I$. De même, l'ensemble $F_p$ des fluents présents dans les préconditions des actions est augmenté des fluents du but $B$. On peut produire des codages produisant moins de clauses en considérant les actions $Start$ et $End$ comme des cas particuliers \cite{Vid01}, mais pour des raisons de compacité dans l'écriture des codages nous les présentons ici de manière intégrée aux autres actions.
 
-Les règles des codages dans les espaces de plans produisent les propositions
-suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
+Les règles des codages dans les espaces de plans produisent les propositions suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
 
 \begin{itemize}
 \item $(\a \in \step{i})$ est vraie ssi l'action $\a$ appartient à l'étape $\step{i}$.
@@ -62,25 +40,37 @@ Elle permet d'établir une correspondance entre toutes les actions disponibles e
 celles qui font partie des étapes des plans solutions. Elle est constituée
 de cinq règles~:
 
-\begin{enumerate}
-\item \codrule{état initial et but~: } l'étape $p_0$ produit l'état
-  initial du problème, et l'étape $p_{k+1}$ requiert les buts.
+
+%\begin{enumerate}
+%\item 
+%\tagrule{SAT/PS-MK99.1}\codrule
+\paragraph*{[SAT-CL.1 -- état initial et but]} l'étape $\step{0}$ produit l'état
+  initial du problème, et l'étape $\step{k+1}$ requiert les buts.
   \codage{\left( \Bigforall{\f \in \I}\Adds{0}{\f}\right) \land \left( \Bigforall{\f \in (\F\setminus \I)}\lnot\Adds{0}{\f}\right) \land \left( \Bigforall{\f \in \G} \Needs{k+1}{\f}\right)\label{codage:epcom1}}
-\item \codrule{Correspondance action/étape~:} si une étape ajoute, retire, ou a
+%\item 
+%\tagrule{SAT/PS-MK99.2}\codrule
+\paragraph*{[SAT-CL.2 -- Correspondance action/étape]} si une étape ajoute, retire, ou a
   pour précondition un fluent, alors cette étape peut correspondre à n'importe
   quelle action qui a le même comportement vis-à-vis de ce fluent. Inversement,
   si une action appartient à une étape, ses préconditions, ajouts et retraits
   sont vrais.
 
-  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Adds{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Add{\a}}} \instep{\a}{i} \right)\label{codage:epcom2}}
-  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Dels{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Del{\a}}} \instep{\a}{i} \right)\label{codage:epcom3}}
-  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Needs{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Cond{\a}}} \instep{\a}{i} \right)\label{codage:epcom4}}
-\item \codrule{Exclusions mutuelles~: } deux actions qui ne sont pas indépendantes ne peuvent appartenir à une même étape.
-  \codage{\biget{i \in [1,k]} \biget{ \{a_m, a_n\} \subseteq A \suchthat m < n \land \lnot(a_m\|a_n)} \left[\neg (a_m \in p_i) \lor \neg(a_n \in p_i) \right]\label{codage:epcom5}}
-\end{enumerate}
+  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \begin{pmatrix}
+  \left( \Adds{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Add{\a}}} \instep{\a}{i} \right)
+  \wedge \left( \Dels{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Del{\a}}} \instep{\a}{i} \right)\\
+  \wedge \left( \Needs{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Cond{\a}}} \instep{\a}{i} \right)
+  \end{pmatrix}}
 
-\paragraph*{Prévention des interactions négatives}
+%  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Adds{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Add{\a}}} \instep{\a}{i} \right)\label{codage:epcom2}}
+%  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Dels{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Del{\a}}} \instep{\a}{i} \right)\label{codage:epcom3}}
+%  \codage{\BigforallTwo{i=1}{k} \Bigforall{\f \in \F} \left( \Needs{i}{\f} \Leftrightarrow \Bigexists{\substack{\a \in \A \\\f \in \Cond{\a}}} \instep{\a}{i} \right)\label{codage:epcom4}}
+%\item 
+%\tagrule{SAT/PS-MK99.3}\codrule
+%\paragraph*{[SAT-MK99.3 -- Exclusions mutuelles]} deux actions qui ne sont pas indépendantes ne peuvent appartenir à une même étape.
+%  \codage{\biget{i \in [1,k]} \biget{ \{a_m, a_n\} \subseteq A \suchthat m < n \land \lnot(a_m\|a_n)} \left[\neg (a_m \in p_i) \lor \neg(a_n \in p_i) \right]\label{codage:epcom5}}
+%\end{enumerate}
 
+\paragraph*{[SAT-CL.3 -- Prévention des interactions négatives]}
 Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux dans une même étape.
 
 \begin{small}
@@ -99,18 +89,21 @@ avant $\step{i}$), ou par rétrogradation (l'étape menaçant $\f$ est placée a
 L'ordre d'exécution des étapes  est donné par une relation de précédence de
 la forme $\step{i} \prec \step{j}$. Les quatre règles suivantes sont ajoutées à la partie commune~:
 
-\begin{enumerate}
-\item \codrule{Production des préconditions~:} chaque fluent est supporté par un lien
+%\begin{enumerate}
+%\item \codrule
+\paragraph*{[SAT-CLPO.4 -- Production des préconditions]} chaque fluent est supporté par un lien
   causal entre l'étape qui le produit et l'étape
   qui l'utilise en tant que précondition.
   \codage{\BigforallTwo{i=1}{k+1} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{\f \in \F_a}{
   \BigexistsTwo{\substack{j=0\\j\neq i}}{k} \Linksteps{j}{\f}{i}%}{\bot}
   \right)}
-\item \codrule{Liens causaux~:} un lien causal supportant un fluent $\f$ entre
+%\item \codrule
+\paragraph*{[SAT-CLPO.5 -- Liens causaux]} un lien causal supportant un fluent $\f$ entre
   deux étapes $\step{i}$ et $\step{j}$ implique que $\step{i}$ ajoute $\f$, que $\step{j}$ a pour
   précondition $\f$, et que $\step{i}$ précède $\step{j}$.
   \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=1\\j\neq i}}{k+1} \Bigforall{\f\in \F} \left( \Linksteps{i}{\f}{j} \Rightarrow\left( \Adds{i}{\f} \land \Adds{j}{\f}\land \step{i} \prec \step{j}  \right) \right)}
-\item \codrule{Protection d'intervalles~:} si un lien causal supporte le
+%\item \codrule
+\paragraph*{[SAT-CLPO.6 -- Protection d'intervalles]} si un lien causal supporte le
   fluent $\f$ entre une étape $\step{i}$ et une étape $\step{j}$, et si une étape $\step{q}$
   retire $\f$, alors $\step{q}$ doit précéder $\step{i}$ (promotion) ou $\step{j}$ doit précéder
   $\step{q}$ (rétrogradation).
@@ -119,12 +112,13 @@ la forme $\step{i} \prec \step{j}$. Les quatre règles suivantes sont ajoutées 
   \Linksteps{i}{\f}{j} \land \Dels{q}{\f} \Rightarrow%\\
   \left( \step{q} \prec \step{i} \lor \step{j} \prec \step{q} \right) %\end{array}
   \right)}
-\item \codrule{Propriétés de la relation de précédence~:} transitive et
+%\item \codrule
+\paragraph*{[SAT-CLPO.7 -- Propriétés de la relation de précédence]} transitive et
   antisymétrique. L'irréflexivité est codée dans les autres règles par le biais
   des indices des étapes.
   \codage{\BigforallTwo{i=0}{k+1} \BigforallTwo{\substack{j=0\\j\neq i}}{k+1} \BigforallTwo{\substack{q=0\\q\neq i \land q\neq j}}{k+1} \left( \left( \step{i} \prec \step{j} \land \step{j} \prec \step{q} \right) \Rightarrow \step{i} \prec \step{q} \right)}
   \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=i+1\\j\neq i}}{ k+1} \lnot \left( \step{i} \prec \step{j} \right) \lor \lnot \left( \step{j} \prec \step{i} \right)}
-\end{enumerate}
+%\end{enumerate}
 
 \subsubsection{Codage par liens causaux, protection d'intervalles et étapes contiguës}
 
@@ -137,18 +131,19 @@ réalise en interdisant qu'une étape comprise dans un intervalle défini par un
 lien causal ne le menace. Les deux règles suivantes sont ajoutées à la partie
 commune~:
 
-\begin{enumerate}
-\item \codrule{Production des préconditions~:} chaque fluent est supporté par un
+%\begin{enumerate}
+%\item \codrule
+\paragraph*{[SAT-CLCS.4 -- Production des préconditions]} chaque fluent est supporté par un
   lien causal entre l'étape qui le produit et l'étape qui l'utilise en tant que
   précondition.
   \codage{\BigforallTwo{i=1}{k} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{\f \in \F_a}{
   \BigexistsTwo{j=1}{i-1} \Linksteps{j}{\f}{i}%}{\bot}
   \right)}
-\item \codrule{Liens causaux et protection d'intervalles~:} la présence d'un lien
-  causal supportant un fluent $f$ entre deux étapes $p_i$ et $p_j$
-  implique que $p_i$ ajoute $f$ et que $p_j$ a pour précondition
-  $f$. De plus, une étape qui retire $f$ ne peut s'insérer entre $p_i$ et
-  $p_j$.
+%\item \codrule
+\paragraph*{[SAT-CLCS.5 -- Liens causaux et protection d'intervalles]} la présence d'un lien
+  causal supportant un fluent $\f$ entre deux étapes $\step{i}$ et $\step{j}$
+  implique que $\step{i}$ ajoute $\f$ et que $\step{j}$ a pour précondition
+  $\f$. De plus, une étape qui retire $\f$ ne peut s'insérer entre $\step{i}$ et $\step{j}$.
 %  \codage{
 \[
 \BigforallTwo{i=1}{k-1} \BigforallTwo{j=i+1}{k} \Bigforall{\f\in \F} \left( %\begin{array}{l} 
@@ -158,7 +153,7 @@ commune~:
   \right)
 \]
   %}
-\end{enumerate}
+%\end{enumerate}
 
 \subsubsection{Codage du \enquote{chevalier blanc}}
 
@@ -174,14 +169,16 @@ commune. La protection d'intervalles se réalise en codant la technique du
 
 %\begin{enumerate}
 %\item \codrule
-\paragraph*{Production des préconditions} La précondition d'une étape d'un niveau
+%\tagrule{SAT/WK.1}\codrule
+\paragraph*{[SAT-CLWK.4 -- Production des préconditions]} La précondition d'une étape d'un niveau
   $i$ doit être ajoutée par une étape précédente.
   \codage{\BigforallTwo{i=1}{k+1} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{f \in F_a}{
   \BigexistsTwo{j=0}{i-1} \Adds{j}{\f}%}{\bot}
   \right)}
 
 %\item \codrule
-\paragraph*{Chevalier blanc} Si une étape a pour précondition le fluent $f$
+%\tagrule{SAT/WK.2}\codrule
+\paragraph*{[SAT-CLWK.5 -- Chevalier blanc]} Si une étape a pour précondition le fluent $f$
   au niveau $i$, et qu'une autre le retire au niveau $j$ avant que la première
   puisse l'utiliser, alors il doit y avoir une troisième étape qui rétablit $f$
   à un niveau $q$ tel que $j < q < i$.
@@ -193,5 +190,4 @@ commune. La protection d'intervalles se réalise en codant la technique du
         \right)}
 %\end{enumerate}
 
-
-}
+} % FIN COLOR RED

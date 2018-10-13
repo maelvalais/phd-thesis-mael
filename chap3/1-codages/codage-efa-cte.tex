@@ -5,7 +5,7 @@
 
 Dans ce codage, nous définissons l'ensemble des variables propositionnelles comme $\X = \A \cup \F$. Chaque étape est maintenant définie par une transition (comme dans CTE-OPEN) ainsi que par l'état résultant (valuation des fluents de $\F$). La formule est une adaptation au CTE des règles bien connues de codage SAT de \cite{KS92} basées sur des frame-axiomes explicatifs dans les espaces d'états.
 
-\paragraph*{Quantificateurs}
+\paragraph*{[CTE-EFA.0 -- Quantificateurs]}
 
 A chaque profondeur $i$ de l'arbre, il existe une seule variable $\a_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\f_{i}$ pour chaque fluent utilisée pour déterminer l'état.
 A la même profondeur $i$, les valeurs de ces variables dépendent du n\oe ud (correspondant à une transition dans le plan et à l'état résultant) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
@@ -26,7 +26,7 @@ A la même profondeur $i$, les valeurs de ces variables dépendent du n\oe ud (c
 \]
 \end{small}%\\
 
-\paragraph*{But}
+\paragraph*{[CTE-EFA.1 -- But]}
 
 Dans l'état après la dernière transition du plan (c'est-à-dire la feuille la plus à droite de l'arbre), tous les fluents du but doivent être atteints.
 
@@ -34,7 +34,7 @@ Dans l'état après la dernière transition du plan (c'est-à-dire la feuille la
 \[ \BigforallTwo{i=1}{\depth} b_{i} \Rightarrow \Bigforall{\f\in G} {\f}_{0} \]	
 %\end{scriptsize}
 
-\paragraph*{Conditions et effets des actions}
+\paragraph*{[CTE-EFA.2 -- Conditions et effets des actions]}
 
 Si une action $\a$ est exécutée dans une transition du plan, alors chaque effet de $\a$ se produit dans l'état résultant et chaque précondition de $\a$ est requise dans l'état précédent.
 %\begin{scriptsize}
@@ -54,7 +54,7 @@ De plus, une action qui n'a pas toutes ses préconditions dans l'état initial n
 \[ \BigforallTwo{i=1}{\depth}\neg b_{i} \Rightarrow \Bigforall{\a\in \A\\ \Cond{\a} \not\subset I} \neg {\a}_{0} \]
 %\end{scriptsize}
 
-\paragraph*{Frame-axiomes explicatifs}
+\paragraph*{[CTE-EFA.3 -- Frame-axiomes explicatifs]}
 
 %{\color{blue}We only give here one of the four rules for explanatory frame axioms, the others being very similar. \color{red} Fred: j'ai ajouté les 4 règles + celles pour l'étape initiale}
 Si la valeur d'un fluent change entre deux états consécutifs, alors une action qui produit cette modification est exécutée dans la transition du plan entre ces états.
@@ -81,9 +81,9 @@ Une règle supplémentaire est également requise pour décrire les frame-axiome
 \[ \Bigforall{\f\in I} \left(\left(\neg\f_{0}\wedge \BigforallTwo{i=1}{\depth}\neg b_{i}\right) \Rightarrow \Bigexists{\a\in \A\\ \f\in\Del{\a}\\\Cond{\a} \subset I} {\a}_{0} \right) \]
 %\end{scriptsize}
 
-\paragraph*{Prévention des interactions négatives}
+\paragraph*{[CTE-EFA.4 -- Prévention des interactions négatives]}
 
-Contrairement à CTE-NOOP et CTE-OPEN, les effets contradictoires sont déjà interdits par les règles précédentes (effets des actions).
+Contrairement à CTE-NOOP et CTE-OPEN, les effets contradictoires sont déjà interdits par les règles précédentes (CTE-EFA.2, première formule).
 Cette règle doit donc seulement empêcher les interactions entre les préconditions et les retraits des actions. Si une action supprime un fluent nécessaire à une autre action, ces deux actions ne peuvent pas être exécutées dans une même transition du plan.
 
 %\begin{scriptsize}

@@ -24,9 +24,10 @@ Par exemple, nous pouvons vérifier que chacun des modèles de la formule suivan
 \noindent
 Nous la traduisons d'abord en langage \touist :
 
-\begin{mdpre}%mdk
-\noindent(p~or~q~or~r)~and~(p~=\textgreater{}~not~q)~and~(q~=\textgreater{}~not~r)~and~(r~=\textgreater{}~not~p)%mdk
-\end{mdpre}%mdk
+\begin{lstlisting}[language=touist,frame=single]
+(p or q or r) and (p => not q)
+    and (q => not r) and (r => not p)
+\end{lstlisting}
 
 \begin{center}
     \includegraphics[width=\textwidth]{figures/screenshot-formule.png}
@@ -50,13 +51,16 @@ Si nous devions vérifier la validité de la précédente formule, il nous faudr
 Ainsi, si la formule est valide, sa négation sera insatisfiable. On teste donc sa négation (i.e., on rajoute $\neg$ devant la formule).
 
 Concrètement, le test de validité permet par exemple de vérifier qu'un raisonnement est formellement valide (mais cela n'exclut pas la possibilité de prémisses ou conclusions fausses). Par exemple :
-\[pluie \wedge (pluie \rightarrow routeMouillee) \wedge (routeMouillee\rightarrow danger) \rightarrow danger\]
+\[pluie \wedge (pluie \rightarrow routeMouillee) \wedge (routeMouillee \rightarrow danger) \rightarrow danger\]
 
 En \touist, cela donne :
-\begin{mdpre}%mdk
-\noindent pluie~and~(pluie~=\textgreater{}~routeMouillee)~and~(routeMouillee~=\textgreater{}~danger)~=\textgreater{}~danger%mdk
-\end{mdpre}%mdk
 
+\begin{lstlisting}[language=touist, frame=single]
+pluie and (pluie => routeMouillee)
+    and (routeMouillee => danger) => danger
+\end{lstlisting}
+
+\lstinline[columns=fixed,language=touist]{bigand}
 
 
 \mael{ --------------- CONTINUER A PARTIR D'ICI ----------}

@@ -41,39 +41,37 @@ signifie qu'il est présent après l'application successive de toutes les
 actions associées à des propositions qui sont vraies, du niveau 1 jusqu'au
 niveau $i$. Ce codage comporte cinq règles~:
 
-\begin{enumerate}
-\item \codrule{état initial et but~:} les fluents de l'état initial sont vrais au
-  niveau $0$, ceux qui n'en font pas partie sont faux au niveau $0$, et les
-  fluents du but sont vrais au niveau $k$.
+} % FIN COLOR RED
+
+
+%\begin{enumerate}
+%\item \codrule
+\paragraph*{[SAT-EFA.1 -- état initial et but]}
+Les fluents de l'état initial sont vrais au niveau $0$ et ceux qui ne sont pas dans l'état initial sont faux au niveau $0$. Tous les fluents du but doivent être vrais au niveau $\length$.
+
   \codage{\noindent\left(\Bigforall{\f \in \I} \f_{0} \right) \land \left(\Bigforall{\f \in (\F \setminus \I)}\neg \f_{0} \right) \land \left(\Bigforall{\f \in \G}\f_{\length} \right)}
-\item \label{codage:ee2} \codrule{Préconditions et effets des actions~: } si une
-  action appartient au plan, alors ses préconditions sont vérifiées et
-  ses effets sont produits.\codage{\BigforallTwo{i=1}{\length} \Bigforall{\a \in \A} \left(
+%\item \label{codage:ee2} \codrule
+\paragraph*{[SAT-EFA.2 -- Préconditions et effets des actions]} %si une action appartient au plan, alors ses préconditions sont vérifiées et ses effets sont produits.
+Si une action $\a$ est exécutée dans une transition du plan (au niveau $i$), alors chaque effet de $\a$ se produit dans l'état résultant (au niveau $i$) et chaque précondition de $\a$ est requise dans l'état précédent (au niveau $i-1$).
+  \codage{\BigforallTwo{i=1}{\length} \Bigforall{\a \in \A} \left(
       \a_{i} \Rightarrow \left( \Bigforall{\f \in \Cond{\a}} \f_{i-1} \right) \land
       \left( \Bigforall{\f \in \Add{\a}} \f_{i} \right) \land \left( \Bigforall{\f
           \in \Del{\a}} \neg \f_{i} \right) \right)}
-\item \label{codage:ee3} \codrule{Frame-axiomes explicatifs de retrait~:} si un
-  fluent devient faux entre deux niveaux successifs du plan, alors une action au
-  moins qui le retire doit avoir été appliquée. Il faut que le fluent existe à
-  un instant donné, il doit donc appartenir à $I$ ou à $F_a$. Il lui faut aussi
-  pouvoir être retiré par une action, il doit donc aussi appartenir à $F_d$.
- \codage{\BigforallTwo{i=1}{\length} \Bigforall{\f \in \F} \left( \f_{i-1} \land \neg \f_{i} \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{i} \right)}
-\item \label{codage:ee4} \codrule{Frame-axiomes explicatifs d'ajout~:} si un
-  fluent devient vrai entre deux niveaux successifs du plan, alors une action au
-  moins qui l'établit doit avoir été appliquée.  Il faut que le fluent puisse ne
-  pas exister à un instant donné, donc ne pas appartenir à $I$ ou appartenir à
-  $F_d$. Il lui faut aussi pouvoir être ajouté par une action donc appartenir à
-  $F_a$.
+%\item \label{codage:ee4} \codrule
+\paragraph*{[SAT-EFA.3 -- Frame-axiomes explicatifs]} %d'ajout]} %si un fluent devient vrai entre deux niveaux successifs du plan, alors une action au moins qui l'établit doit avoir été appliquée.  Il faut que le fluent puisse ne pas exister à un instant donné, donc ne pas appartenir à $I$ ou appartenir à $F_d$. Il lui faut aussi pouvoir être ajouté par une action donc appartenir à $F_a$.
+Si la valeur d'un fluent change entre deux états consécutifs (du niveau $i-1$ au niveau $i$), alors une action qui produit cette modification est exécutée dans la transition du plan entre ces états (au niveau $i$).
   \codage{\BigforallTwo{i=1}{\length} \Bigforall{\f \in \F} \left( \neg \f_{i-1} \land \f_{i} \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{i} \right)}
-\item \label{codage:ee5} \codrule{Interférences~:} deux actions non
-  indépendantes ne peuvent pas être exécutées au même niveau. Les effets
-  contradictoires sont déjà pris en compte par la règle \ref{codage:ee2}.
+%\item \label{codage:ee3} \codrule
+%\paragraph*{[SAT-EFA.3.2 -- Frame-axiomes explicatifs de retrait]} si un fluent devient faux entre deux niveaux successifs du plan, alors une action au moins qui le retire doit avoir été appliquée. Il faut que le fluent existe à un instant donné, il doit donc appartenir à $I$ ou à $F_a$. Il lui faut aussi pouvoir être retiré par une action, il doit donc aussi appartenir à $F_d$.
+ \codage{\BigforallTwo{i=1}{\length} \Bigforall{\f \in \F} \left( \f_{i-1} \land \neg \f_{i} \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{i} \right)}
+%\item \label{codage:ee5} \codrule
+\paragraph*{[SAT-EFA.4 -- Prévention des interactions négatives]}%Interférences]} %deux actions non indépendantes ne peuvent pas être exécutées au même niveau. 
+Les effets contradictoires sont déjà pris en compte par la règle SAT-EFA.2.
 Cette règle doit donc seulement empêcher les interactions entre les préconditions et les retraits des actions. Si une action supprime un fluent nécessaire à une autre action, ces deux actions ne peuvent pas être exécutées dans une même transition du plan.
 
 %\begin{scriptsize}
 \[ \BigforallTwo{i=0}{\depth} \Bigforall{\a \in \A} \Bigforall{\f\in \Cond{\a}} \Bigforall{\b \in \A \\ \a \neq \b \\ \f \in \Del{\b}}\left(\neg \a_{i} \vee \neg \b_{i}\right) \]
 %\end{scriptsize}  
 %  \codage{\biget{i \in [1,k]} \biget{\{a_m, a_n\} \subseteq A \suchthat m < n \land (a_m\|_e a_n) \land \lnot (a_m\|_i a_n)} \left[ \neg a_m(i) \lor \neg a_n(i) \right]}
-\end{enumerate}
+%\end{enumerate}
 
-}

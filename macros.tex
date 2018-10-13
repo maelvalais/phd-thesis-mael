@@ -127,6 +127,7 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\constr}[1]{\mathit{Constr}(#1)}
 \newcommand{\events}[1]{\mathit{Events}(#1)}
 
+\newcommand{\tagrule}[1]{\vspace{0.5em}\noindent(#1)~}
 \newcommand{\codrule}[1]{\textit{#1}}
 \newcommand{\codage}[1]{$$#1$$}
 \newcommand{\ifthen}[3]{\left(\begin{array}{l|l}{#1}\hookrightarrow{#2} & {#3}\end{array}\right)}
@@ -137,12 +138,16 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 \newcommand{\prop}[1]{\small\texttt{#1}}
 
 \newcommand{\step}[1]{S_{#1}}
+\newcommand{\stepcte}[1]{S^{#1}}
+\newcommand{\steplevel}[2]{S_{#1}^{#2}}
 \newcommand{\instep}[2]{(#1 \in \step{#2})}
+\newcommand{\instepcte}[2]{(#1 \in \stepcte{#2})}
 \newcommand{\Needs}[2]{\mathit{Needs}(\step{#1},#2)}
 \newcommand{\Adds}[2]{\mathit{Adds}(\step{#1},#2)}
 \newcommand{\Dels}[2]{\mathit{Dels}(\step{#1},#2)}
 \newcommand{\Linksteps}[3]{\mathit{Link}(\step{#1},#2,\step{#3})}
 \newcommand {\openstep}[2] {\textit{open}_{#1,\step{#2}}} % open (in step)
+\newcommand {\openstepcte}[2] {\textit{open}_{#1,\stepcte{#2}}} % open (in step)
 
 %\newcommand{\bigexists}[1]{\stackrel{\exists}{_{#1}}~}
 \newcommand\ScaleExists[1]{\vcenter{\hbox{\scalefont{#1}$\exists$}}}

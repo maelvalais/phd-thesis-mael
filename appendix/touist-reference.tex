@@ -1248,7 +1248,7 @@ needs to read the errors. The placeholders you can use are:%mdk
 \midrule
 \end{tabular}\end{mdtabular}
 
-\noindent By default, the errors and warnings will display with the formatting
+\noindent By default, the errors and warnings will display with the formatting\\
 \mdcode{\%f:~line~\%l,~col~\%c-\%C:~\%t:~\%m}. An ending newline (\mdcode{\textbackslash{}n}) is
 automatically added.%mdk
 
@@ -1270,7 +1270,7 @@ table~\ref{timings}).%mdk
 
 \item on syntax error, print the state number of the LL(1) automaton; each
   state number that may trigger a syntax error should have a
-  corresponding message in \mdcode{src/lib/parser.messages}.%mdk
+  corresponding message in \\ \mdcode{src/lib/parser.messages}.%mdk
 %mdk
 \end{itemize}%mdk
 
@@ -1279,7 +1279,8 @@ table~\ref{timings}).%mdk
 
 \noindent\textbf{Note}.
 Availability of timings using \mdcode{-v}:%mdk
-\begin{mdtabular}{4}{\dimeval{(\linewidth)/4}}{1ex}%mdk
+\begin{mdtabular}{4}{\dimeval{(\linewidth)/4}}{1ex}%mdk 
+\centering
 \begin{tabular}{lccc}\multicolumn{1}{c}{{\bfseries}}&{\bfseries\mdcode{--sat}}&{\bfseries\mdcode{--smt}}&{\bfseries\mdcode{--qbf}}\\
 
 \midrule
