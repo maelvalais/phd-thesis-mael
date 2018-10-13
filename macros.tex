@@ -270,10 +270,13 @@ hmargin=25mm,bindingoffset=10mm]{geometry}
 
 \usepackage{alltt}
 \usepackage{listings}
+\input{scripts/syntax-highlighting.tex}
 \renewcommand{\ttdefault}{txtt} % to resolve a problem with bold fonts in alltt
 \lstset{escapeinside={<@}{@>}}
-\lstset{basicstyle=\ttfamily}
-\input{scripts/syntax-highlighting.tex}
+\lstset{basicstyle=\scriptsize\ttfamily}
+\lstset{language=touist}
+\lstset{frame=single}
+
 
 \usepackage{proof}
 \inferLineSkip=4pt  % increase spacing between lines; default is 2pt
