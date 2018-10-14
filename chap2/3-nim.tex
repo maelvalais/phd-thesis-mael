@@ -132,7 +132,7 @@ bigor $t in $T when $t>0:
 end) \\
 and
 
-;; Si le joueur 0 joue au tour t, alors ça sera à l'autre joueur au tour
+;; Si le joueur 0 joue au tour t, alors ca sera a l'autre joueur au tour
 ;; suivant.
 bigand $t in $T:
   not tour_de_0($t) <=> tour_de_0($t+1)
