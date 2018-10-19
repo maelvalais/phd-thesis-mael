@@ -3,45 +3,26 @@
 %
 %\subsection{Codage SAT de référence dans les espaces d'états}
 
-\fred{Présenter le codage KS92,95 SAT-EFA classique}
-
-\fred{Attention, ici copier/coller ouvrage SAT 2008 Maris, Régnier, Vidal}
-{\color{red}
-
 \subsubsection{Codage dans les espaces d'états avec frame-axiomes explicatifs}
-
-\begin{figure}\label{steps:sat}
-\begin{footnotesize}
-%(a)\\[1em]
-
-\fred{Rajouter la figure que j'ai enlevée ici !!!}
-%   \xymatrix@C=0.1pc@R=1pc{
-%   \text{S}_{0} (\textit{Init}) \ar@{->}[r] & \fbox{$x_{1}\equiv$ S$_{1}$} \ar@{>}[r]  & \fbox{$x_{2}\equiv$ S$_{2}$} \ar@{>}[r] & \fbox{$x_{3}\equiv$ S$_{3}$} \ar@{>}[r] & \fbox{$x_{4}\equiv$ S$_{4}$}
-%   \ar@{>}[r] & \fbox{$x_{5}\equiv$ S$_{5}$} \ar@{>}[r] & \fbox{$x_{6}\equiv$ S$_{6}$} \ar@{>}[r] & \fbox{$x_{7}\equiv$ S$_{7}$} \ar@{>}[r] & \text{S}_{8} (\textit{Goal})
-%   }
-\end{footnotesize}
-\vspace{1em}
-\caption{Transitions of an 8-step plan in SAT/SMT encoding}
-\end{figure}
 
 
 Les codages dans les espaces d'états sont basés sur les transitions entre les étapes successives du plan en partant de l'état initial pour arriver au but.
 %Le parallélisme y est codé grâce à la notion d'indépendance entre actions simultanées. 
-Pour conserver les fluents non affectés par les actions qui doivent être exécutées dans une étape du plan, on va coder la notion de frame-axiome.
-Nous décrivons d'abord la technique la plus efficace en termes de compacité et
-de temps de résolution \cite{MK99} qui utilise des frame-axiomes explicatifs.
-Nous présentons ensuite une variation de ce codage utilisant des actions
-particulières appelées no-ops \cite{KMS96}.
-Les règles du codage dans les espaces d'états produisent des propositions de la
-forme $a(i)$ qui représentent le fait que l'action $a$ est appliquée à un niveau
-$i$ du plan ssi $a(i)$ a la valeur de vérité vrai, et des propositions de la
-forme $f(i)$ qui représentent le fait que le fluent $f$ est présent au niveau
-$i$ ssi $f(i)$ a la valeur de vérité vrai. Le présence de $f$ au niveau $i$
-signifie qu'il est présent après l'application successive de toutes les
-actions associées à des propositions qui sont vraies, du niveau 1 jusqu'au
-niveau $i$. Ce codage comporte cinq règles~:
+Pour conserver les fluents non affectés par les actions qui doivent être exécutées dans une étape du plan, nous allons coder la notion de frame-axiome.
+Nous décrivons tout d'abord le codage de référence SAT-EFA dans les espaces d'états qui utilise des frame-axiomes explicatifs~\cite{MK99}.
 
-} % FIN COLOR RED
+
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est donné par $\X = \X_{\F} \cup \X_{\A}$, où :
+\begin{itemize}
+    \item l'ensemble des variables de fluents est défini par $\displaystyle\X_{\F}=\bigcup_{i=0}^{\length}\{\f_{i}\mid \f\in\F\}$ ;
+    \item l'ensemble des variables d'actions est défini par $\displaystyle\X_{\A}=\bigcup_{i=1}^{\length}\{\a_{i}\mid \a\in\A\}$.
+\end{itemize}
+
+Dans ce codage, la proposition $\a_{i}$ représente la propriété que l'action $\a$ est appliquée à un niveau $i$ du plan, et $\f_{i}$ représentent la propriété que le fluent $\f$ est présent au niveau
+$i$. La présence de $\f$ au niveau $i$ signifie qu'il est présent après l'application successive de toutes les actions associées à des propositions qui sont vraies, du niveau 1 jusqu'au niveau~$i$. Nous détaillons maintenant les quatre règles du codage SAT-EFA dans les espaces d'états avec frame-axiomes explicatifs :
+
+
+
 
 
 %\begin{enumerate}

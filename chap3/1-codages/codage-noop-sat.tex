@@ -1,0 +1,43 @@
+%
+% codage SAT-EFA
+%
+\subsubsection{Codage dans les espaces d'états avec no-ops}
+
+Nous présentons maintenant une variation de ce codage qui utilise des actions supplémentaires appelées No-ops.
+L'idée de ce codage vient du graphe de planification introduit par le planificateur \textsc{Graphplan} \cite{BF95,BF97} et a été proposée pour la première fois dans \cite{KMS96}. Pour chaque fluent $\f\in\F$, l'action No-op correspondante est définie par $\langle \{\f\},\{\f\},\{\}\rangle$ ($\f$ est son unique précondition et son unique ajout, et elle n'a aucun retrait). 
+
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\F} \cup \X_{\A} \cup \X_{\mathcal{N}}$, où $X_{\F}$ et $X_{\A}$ sont les ensembles de variables de fluents et d'actions identiques au codage SAT-EFA, et :
+\begin{itemize}
+    \item l'ensemble des variables de No-ops est défini par $\displaystyle\X_{\mathcal{N}}=\bigcup_{i=1}^{\length}\{\noop{f}{i}\mid \f\in\F\}$.
+\end{itemize}
+
+Les No-ops participent à la construction du plan solution mais les propositions correspondantes ne seront pas incluses lors du décodage du plan. La présence d'un No-op à un niveau $i$ signifie que le fluent qu'il représente était déjà présent au niveau $i-1$ et sera toujours présent au niveau $i$. Un No-op est en conflit avec les actions qui retirent le fluent qu'il représente.
+Nous détaillons maintenant les quatre règles du codage SAT-NOOP dans les espaces d'états avec actions No-ops :
+
+\paragraph*{[SAT-NOOP.1 -- état initial et but]}
+Les fluents de l'état initial sont vrais au niveau $0$ et ceux qui ne sont pas dans l'état initial sont faux au niveau $0$. Tous les fluents du but doivent être vrais au niveau $\length$.
+
+  \codage{\noindent\left(\Bigforall{\f \in \I} \f_{0} \right) \land \left(\Bigforall{\f \in (\F \setminus \I)}\neg \f_{0} \right) \land \left(\Bigforall{\f \in \G}\f_{\length} \right)}
+
+\paragraph*{[SAT-NOOP.2 -- Préconditions et effets des actions]} %si une action appartient au plan, alors ses préconditions sont vérifiées et ses effets sont produits.
+Si une action $\a$ est exécutée dans une transition du plan (au niveau $i$), alors chaque effet de $\a$ se produit dans l'état résultant (au niveau $i$) et chaque précondition de $\a$ est requise dans l'état précédent (au niveau $i-1$).
+  \codage{\BigforallTwo{i=1}{\length} \Bigforall{\a \in \A} \left(
+      \a_{i} \Rightarrow \left( \Bigforall{\f \in \Cond{\a}} \f_{i-1} \right) \land
+      \left( \Bigforall{\f \in \Add{\a}} \f_{i} \right) \land \left( \Bigforall{\f
+          \in \Del{\a}} \neg \f_{i} \right) \right)}
+  \codage{\BigforallTwo{i=1}{\length} \Bigforall{\f \in \F} \left(
+      \noop{f}{i} \Rightarrow \left( \f_{i-1} \land f_{i} \right) \right)}
+
+%La seule différence avec le codage précédent est le remplacement des règles~\ref{codage:ee3} et \ref{codage:ee4} portant sur les frame-axiomes explicatifs par la règle suivante~:
+
+\paragraph*{[SAT-NOOP.3 -- Frame-axiomes avec actions No-ops]}
+  un fluent vrai au niveau $i$ implique la disjonction des actions du niveau $i$ qui le produisent, y compris son no-op. 
+  \codage{\BigforallTwo{i=1}{\length} \Bigforall{\f \in \F} \left(\f_{i} \Rightarrow \noop{f}{i} \lor \Bigexists{\substack{\a \in \A\\ \f \in \Add{a}}} a_{i} \right)}
+
+\paragraph*{[SAT-NOOP.4 -- Prévention des interactions négatives]}
+Si une action supprime un fluent qui est nécessaire ou est ajouté par une autre action, alors ces deux actions ne peuvent pas être exécutées toutes les deux à un même niveau du plan. De même, une action qui détruit un fluent $\f$ ne peut être exécutée à un même niveau que l'action No-op de $\f$.
+%\begin{scriptsize}
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a \in \A} \Bigforall{\f\in \left(\Add{\a} \cup \Cond{\a}\right)} \Bigforall{\b \in \A \\ \a \neq \b \\ \f \in \Del{\b}}\left(\neg \a_{i} \vee \neg \b_{i}\right) \]
+%\end{scriptsize}
+
+\[ \BigforallTwo{i=0}{\depth} \Bigforall{\a\in \A} \Bigforall{\f \in \Del{\a}}\left(\neg \noop{\f}{i} \vee \neg \a_{i}\right) \]

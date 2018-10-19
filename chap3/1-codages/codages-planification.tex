@@ -2,7 +2,17 @@
 \section{Planification classique SAT et QBF}
 %
 
+Depuis une quarantaine d’années, une large part des travaux menés dans le domaine de la planification se situe dans un cadre restrictif appelé la planification classique. L’objectif essentiel consiste à chercher à développer des algorithmes indépendants du domaine qui soient performants pour des représentations simples de l'action.
 
+Le cadre classique est basé sur les hypothèses restrictives suivantes :
+\begin{itemize}
+\item L’univers est statique : aucun événement imprévu ne peut survenir. Les seuls changements du monde sont ceux effectués par les actions d'un seul agent.
+\item L’agent est omniscient : il possède une connaissance complète de l'univers dans lequel il évolue, et de la nature de ses propres actions.
+\item Les actions sont atomiques : elles ont un effet immédiat et leur exécution ne peut pas être interrompue. Elles sont modélisées comme des transitions atomiques d'un état du monde vers un autre.
+\item Les actions ont des effets déterministes : les effets d'une action sont seulement fonction de cette action et de l'état du monde.
+\end{itemize}
+
+Ce cadre doit ensuite pouvoir être étendu en enrichissant cette représentation, notamment avec des aspects temporels comme nous le présentons dans la section~\ref{section:smtplan}, tout en conservant une efficacité suffisante.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,8 +23,36 @@
 
 %In SAT planning, each copy of the variable set $X$ is indexed, making the writing of transitions easy; let $P$ and $Q$ two formulas and $x_i$ and $x_{i+1}$ two copies of one variable
 
+Pour les codages SAT, nous utilisons une logique du premier ordre $\mathcal{L}$, construite à partir des vocabulaires $\mathcal{V}_{x}$, $\mathcal{V}_{c}$ et $\mathcal{V}_{p}$ qui dénotent respectivement des ensembles finis disjoints deux à deux de symboles de variables, de constantes et de prédicats. Nous n'utilisons pas de fonctions. Pour les notations utilisées dans les codages, nous nous basons sur les définitions classiques de logique propositionnelle ainsi que les règles de réécriture définies dans le chapitre~\ref{chap:touist} pour les connecteurs généralisés.
+
+%Les codages d'un problème de planification sous forme de base de clauses seront formalisés par des règles de réécriture. Ces règles seront exprimées par rapport à un problème de planification $\Pi=\langle F, A, I, B\rangle$ et un entier $k\geq 0$ qui représentera le nombre de niveaux des plans produits. Nous utiliserons également les sous-ensembles de $F$ suivants~: $F_p = \bigcup_{a\in   A} \mathrm{Prec}(A)$, $F_a = \bigcup_{a\in A} \mathrm{Add}(A)$, $F_d = \bigcup_{a\in A} \mathrm{Del}(A)$ dénotant respectivement les ensembles de fluents se trouvant en précondition, en ajout et en retrait des actions. Les règles des codages seront parfois exprimées sous forme non clausale pour des raisons de compacité, mais la transformation sous forme de clauses est immédiate.
+
+Soient $A=\{a_1, \ldots, a_n\}$ un ensemble fini quelconque et $R$ une règle de
+réécriture.  Pour une action $a\in A$, soit $P[a]$ une propriété que peut (ou
+non) vérifier $a$. Soit $P_A=\{a\in A \suchthat P[a]\
+\mathrm{vraie}\}=\{b_1,\ldots,b_m\}$~:
+\begin{itemize}
+\item $\displaystyle\Bigforall{a\in A} R(a)$ dénote $F=R(a_1) \land\ldots\land R(a_n)$. Si $A=\emptyset$, alors $F=\top$.
+\item $\displaystyle\Bigexists{a\in A} R(a)$ dénote $F=R(a_1) \lor\ldots\lor R(a_n)$. Si $A=\emptyset$, alors $F=\bot$.
+\item $\displaystyle\Bigexists{\substack{a\in A \\ P[a]}} R(a)$ dénote $F=R(b_1) \land\ldots\land R(b_m)$. Si $P_A=\emptyset$, alors $F=\top$.
+\item $\displaystyle\Bigexists{\substack{a\in A \\ P[a]}} R(a)$ dénote $F=R(b_1) \lor\ldots\lor R(b_m)$. Si $P_A=\emptyset$, alors $F=\bot$.
+\end{itemize}~\\
+Dans le cas des codages QBF, nous étendons $\mathcal{L}$ à une logique du second ordre $\mathcal{L}^{\prime}$ dans laquelle nous pouvons quantifier les propositions atomiques instanciées. Soient $A=\{a_1, \ldots, a_n\}$ un ensemble fini quelconque :
+\begin{itemize}
+\item $\displaystyle\bigexists_{\a \in \A}$ dénote $\exists a_1. \ldots \exists a_n$
+\item $\displaystyle\bigforall_{\a \in \A}$ dénote $\forall a_1. \ldots \forall a_n$
+\end{itemize}
+
+%Pour deux formules $F_1$ et $F_2$ et une propriété $P$, la règle de réécriture
+%« si $P$ est satisfaite, alors $F_1$ sinon $F_2$ » sera notée
+%$\ifthen{P}{F_1}{F_2}$.
+
 \begin{definition}
-Un \emph{problème de planification classique} STRIPS est un triplet $\langle \F, \I, \A , \G \rangle$ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
+Un \emph{fluent} est une proposition atomique contruite à partir du langage $\mathcal{L}$. Etant donné un ensemble de fluents $\F$ et une valuation $v: \F \rightarrow \{0,1\}$, un \emph{état} $s_{v}$ est défini par l'ensemble des fluents $s_{v}=\{\f\in\F \mid v(f)=1\}$.
+\end{definition}
+
+\begin{definition}
+Un \emph{problème de planification classique} STRIPS est un triplet $\langle \F, \I, \A , \G \rangle$ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques du langage $\mathcal{L}$), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
 Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \rangle$ où
 
 \begin{itemize}
@@ -26,30 +64,21 @@ Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \ra
 \end{itemize}
 \end{definition}
 
-{\color{red}
-%Les codages d'un problème de planification sous forme de base de clauses seront formalisés par des règles de réécriture. Ces règles seront exprimées par rapport à un problème de planification $\Pi=\langle F, A, I, B\rangle$ et un entier $k\geq 0$ qui représentera le nombre de niveaux des plans produits. Nous utiliserons également les sous-ensembles de $F$ suivants~: $F_p = \bigcup_{a\in   A} \mathrm{Prec}(A)$, $F_a = \bigcup_{a\in A} \mathrm{Add}(A)$, $F_d = \bigcup_{a\in A} \mathrm{Del}(A)$ dénotant respectivement les ensembles de fluents se trouvant en précondition, en ajout et en retrait des actions. Les règles des codages seront parfois exprimées sous forme non clausale pour des raisons de compacité, mais la transformation sous forme de clauses est immédiate.
+\begin{definition}
+L'application d'une action $\a$ à un état $s_{v}$ est possible si et seulement si $\Cond{a}\in s_{v}$. Elle est est alors définie par $s_{v}\uparrow \a=(s_{v} \setminus \Del{\a}) \cup \Add{\a}$.
+\end{definition}
 
-Soient $A=\{a_1, \ldots, a_n\}$ un ensemble fini quelconque et $f$ une règle de
-réécriture.  Pour une action $a\in A$, soit $P[a]$ une propriété que peut (ou
-non) vérifier $a$. Soit $P_A=\{a\in A \suchthat P[a]\
-\mathrm{vraie}\}=\{b_1,\ldots,b_m\}$~:
+\begin{definition}
+Un ensemble d'actions $\A$ est \emph{indépendant} si et seulement si pour tout couple d'actions $(\a,\b)\in\A$ on a $(\Cond{\a}\cup\Add{\a})\cap\Del{\b}=\emptyset$ et $\Del{\a}\cap(\Cond{\b}\cup\Add{\b})=\emptyset$.
+Autrement dit, $\a$ et $\b$ n'ont pas d'interactions négatives :
 \begin{itemize}
-\item $\biget{a\in A} f(a)$ dénote $F=f(a_1) \land\ldots\land f(a_n)$. Si $A=\emptyset$, alors $F=\top$.
-\item $\bigou{a\in A} f(a)$ dénote $F=f(a_1) \lor\ldots\lor f(a_n)$. Si $A=\emptyset$, alors $F=\bot$.
-\item $\biget{a\in A \suchthat P[a]} f(a)$ dénote $F=f(b_1) \land\ldots\land f(b_m)$. Si $P_A=\emptyset$, alors $F=\top$.
-\item $\bigou{a\in A \suchthat P[a]} f(a)$ dénote $F=f(b_1) \lor\ldots\lor f(b_m)$. Si $P_A=\emptyset$, alors $F=\bot$.
+    \item pas d'\emph{interférence} car $\Cond{\a}\cap\Del{\b}=\emptyset$ et $\Del{\a}\cap\Cond{\b}=\emptyset$ ; 
+    \item pas d'\emph{effets contradictoires} car $(\Add{\a}\cap\Del{\b}=\emptyset$ et $\Del{\a}\cap\Add{\b}=\emptyset$.
 \end{itemize}
-
-Pour deux formules $F_1$ et $F_2$ et une propriété $P$, la règle de réécriture
-« si $P$ est satisfaite, alors $F_1$ sinon $F_2$ » sera notée
-$\ifthen{P}{F_1}{F_2}$.
-}
+\end{definition}
 
 \fred{Ensemble des variables d'actions $X_{\A}$}
 
-
-\fred{A revoir:}
-Nous allons montrer que pour l'approche QBF, au-delà des améliorations sur les solveurs, d'autres travaux doivent être menés pour mettre au point des codages plus performants. Comme nous l'avons indiqué plus haut, cela a été réalisé pour SAT avec des améliorations significatives. Nous présentons ici deux nouveaux codages d'arbres compacts CTE (Compact Tree Encoding) de problèmes de planification en QBF: CTE-EFA basé sur des frame-axiomes explicatifs dans un espace d'états, et CTE-OPEN basé sur des liens de causalité dans un espace de plans. \fred{dans le chapitre EXPERIMENTATIONS:} Nous les comparons au codage de l'état de l'art CTE-NOOP basé sur des actions No-op et proposé dans \cite{DBLP:conf/ecai/CashmoreFG12}. En termes de temps d'exécution par rapport aux problèmes de référence, CTE-EFA et CTE-OPEN sont toujours plus efficaces que CTE-NOOP.
 
 
 %\begin{itemize}
@@ -91,7 +120,23 @@ Nous allons montrer que pour l'approche QBF, au-delà des améliorations sur les
 \subsection{Codages SAT de référence pour la planification classique}
 %
 
+\fred{figure or not figure ? à voir...}
+%\begin{figure}\label{steps:sat}
+%\begin{footnotesize}
+%%(a)\\[1em]
+%   \xymatrix@C=0.1pc@R=1pc{
+%   \text{S}_{0} (\textit{Init}) \ar@{->}[r] & \fbox{$x_{1}\equiv$ S$_{1}$} \ar@{>}[r]  & \fbox{$x_{2}\equiv$ S$_{2}$} \ar@{>}[r] & \fbox{$x_{3}\equiv$ S$_{3}$} \ar@{>}[r] & \fbox{$x_{4}\equiv$ S$_{4}$}
+%   \ar@{>}[r] & \fbox{$x_{5}\equiv$ S$_{5}$} \ar@{>}[r] & \fbox{$x_{6}\equiv$ S$_{6}$} \ar@{>}[r] & \fbox{$x_{7}\equiv$ S$_{7}$} \ar@{>}[r] & \text{S}_{8} (\textit{Goal})
+%   }
+%\end{footnotesize}
+%\vspace{1em}
+%\caption{Transitions of an 8-step plan in SAT/SMT encoding}
+%\end{figure}
+
+
 \input{codage-efa-sat.tex}
+
+\input{codage-noop-sat.tex}
 
 \input{codage-mk99plan.tex}
 
@@ -174,6 +219,8 @@ Dans la suite, nous proposons deux nouveaux codages de problèmes de planificati
 \section{Planification temporelle SMT}
 %
 
+Le cadre classique que nous avons considéré jusqu'à présent ne permet qu’une représentation limitée des aspects du monde réel. Certains aspects temporels incontournables des actions ont ainsi été intégrés au langage PDDL (Planning Domain Description Language). Le cadre temporel que définit actuellement le langage PDDL (version 2.1 et ultérieures) relâche certaines contraintes du cadre classique. On y suppose qu'à chaque action peut être associée une durée d'exécution. Les préconditions peuvent être requises au début de l'action (\texttt{at start}), tout au long de la durée de l'action (\texttt{over all}), ou à la fin de l'action (\texttt{at end}). Les effets peuvent se produire au début ou à la fin de l'action.
+
 
 %\subsection{Planification temporelle}
 \subsection{Définitions préliminaires}
@@ -200,7 +247,8 @@ Les contraintes inhérentes définissent la structure interne de chaque instance
 %τ (a → ¬EMPTY (m)) ≠ τ (b → EMPTY (m)).
 
 \begin{definition}
-Un problème de planification temporelle $\langle \I, \A, \G \rangle$ consiste en un ensemble d'actions $\A,$ un état initial $\I$ et un but $\G$, où $\I$ et $\G$ sont des ensembles de fluents.
+Un problème de planification temporelle $\langle \F, \I, \A, \G \rangle$ %consiste en un ensemble d'actions $\A,$ un état initial $\I$ et un but $\G$, où $\I$ et $\G$ sont des ensembles de fluents.
+où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
 \end{definition}
 \paragraph*{Notation} Si $\A$ est un ensemble d'instances d'actions, alors $\events{\A}$ est l'union des ensembles $\events{\a}$ (pour toutes les instances d'action $a\in \A$).
 

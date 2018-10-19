@@ -3,18 +3,26 @@
 %
 \subsection{Codages SAT de référence dans les espaces de plans}
 
-\fred{Présenter les codages MK99 espaces de plans}
+Les codages dans les espaces de plans ne traduisent pas uniquement les transitions entre niveaux successifs du plan. Ils expriment également les relations de causalité entre les actions qui le constituent. Dans les espaces d'états, l'application des actions est envisagée séquentiellement~: une action ne peut apparaître à un niveau du plan que lorsque ses préconditions sont satisfaites au niveau précédent.  Dans les espaces de plans, une action est présente à un niveau du plan parce qu'une action d'un niveau inférieur (pas forcément le précédent) établit ses préconditions et qu'une action d'un niveau supérieur nécessite l'un de ses effets.
+L'existence de différents codages découle de la traduction des différentes stratégies de recherche utilisées dans les espaces de plans. %Ces codages restent moins performants, en termes de compacité et de temps de résolution, que le meilleur codage dans les espaces d'états (celui avec frame-axiomes explicatifs)
+%\cite{MK99}.
 
-\fred{Attention, ici copier/coller ouvrage SAT 2008 Maris, Régnier, Vidal}
-{\color{red}
-Ces codages ne traduisent plus seulement les transitions qui s'opèrent entre niveaux successifs du plan, mais expriment maintenant les relations de causalité entre les actions qui le constituent. Dans les espaces d'états, l'application des actions est envisagée séquentiellement~: une action ne peut apparaître à un niveau du plan que lorsque ses préconditions sont satisfaites au niveau précédent.  Dans les espaces de plans, une action apparaît à un niveau du plan parce qu'une action d'un niveau antérieur (pas forcément le niveau précédent) établit ses préconditions et qu'une action qui suit requiert un de ses effets.
-L'existence de différents codages découle de la traduction des différentes
-stratégies de recherche utilisées dans les espaces de plans. Ces codages restent moins performants, en termes de compacité et de temps de résolution, que le meilleur codage dans les espaces d'états (celui avec frame-axiomes explicatifs)
-\cite{MK99}.
+Nous allons maintenant décrire la partie commune SAT-CL des codages de référence dans les espaces de plans avant de détailler les règles de codage complémentaires des trois codages proposés par ~\cite{MK99} :
+\begin{itemize}
+    \item SAT-CLPO : codage par liens causaux, protection d'intervalles et ordre partiel ;
+    \item SAT-CLCS : codage par lien causaux, protection d'intervalles et étapes contiguës ;
+    \item SAT-CLWK : codage du \enquote{chevalier blanc}.
+\end{itemize}
 
-Dans tous ces codages, les ensembles d'actions indépendants qui peuvent faire partie d'un plan sont associés à des symboles d'étapes. Un ordre sur ces étapes détermine un ordre total pour l'exécution des ensembles d'actions indépendants.
-Deux étapes particulières sont créées~: l'étape $\step{0}$ qui représente l'état initial du problème, et l'étape $\step{k+1}$ qui représente le but du problème. Ces deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement utilisées en planification dans les espaces de plans partiels. Pour prendre en
-compte ces deux étapes, l'ensemble $F_a$ des fluents présents dans les ajouts des actions est augmenté des fluents de l'état initial $I$. De même, l'ensemble $F_p$ des fluents présents dans les préconditions des actions est augmenté des fluents du but $B$. On peut produire des codages produisant moins de clauses en considérant les actions $Start$ et $End$ comme des cas particuliers \cite{Vid01}, mais pour des raisons de compacité dans l'écriture des codages nous les présentons ici de manière intégrée aux autres actions.
+Dans tous ces codages, des ensembles d'actions indépendants sont associés à des étapes d'un plan, notées $\step{i}$. Un ordre sur ces étapes permet de déterminer un ordre total pour l'exécution des ensembles d'actions indépendants.
+Deux étapes particulières qui ne contiennent aucune action sont créées~: l'étape $\step{0}$ qui représente l'état initial $\I$, et l'étape $\step{k+1}$ qui représente le but $\G$.
+%Ces deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement utilisées en planification dans les espaces de plans partiels. Pour prendre en compte ces deux étapes, l'ensemble $F_a$ des fluents présents dans les ajouts des actions est augmenté des fluents de l'état initial $I$. De même, l'ensemble $F_p$ des fluents présents dans les préconditions des actions est augmenté des fluents du but $B$. On peut produire des codages produisant moins de clauses en considérant les actions $Start$ et $End$ comme des cas particuliers \cite{Vid01}, mais pour des raisons de compacité dans l'écriture des codages nous les présentons ici de manière intégrée aux autres actions.
+
+
+\fred{L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\F} \cup \X_{\A} \cup \X_{\mathcal{N}}$, où $X_{\F}$ et $X_{\A}$ sont les ensembles de variables de fluents et d'actions identiques au codage SAT-EFA, et :
+\begin{itemize}
+    \item l'ensemble des variables de No-ops est défini par $\displaystyle\X_{\mathcal{N}}=\bigcup_{i=1}^{\length}\{\noop{f}{i}\mid \f\in\F\}$.
+\end{itemize}}
 
 Les règles des codages dans les espaces de plans produisent les propositions suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
 
@@ -33,6 +41,8 @@ Les règles des codages dans les espaces de plans produisent les propositions su
   Ces propositions traduisent un ordre partiel sur les étapes.
 \end{itemize}
 
+
+{\color{red}
 
 \subsubsection{Partie commune des codages dans les espaces de plans}
 

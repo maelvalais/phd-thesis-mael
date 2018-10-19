@@ -61,17 +61,17 @@ Si la valeur d'un fluent change entre deux états consécutifs, alors une action
 
 \begin{small}
 \[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
-\left(\left(\neg\f_{0} \wedge \f_{i} \wedge \leftselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{i}\right)\right)\]
+\left(\left(\neg\f_{0} \wedge \f_{i} \wedge \leftselect{i} \right) \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{i}\right)\]
 
 \[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
-\left(\left(\neg\f_{i} \wedge \f_{0} \wedge \rightselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{0}\right)\right)\]
+\left(\left(\neg\f_{i} \wedge \f_{0} \wedge \rightselect{i} \right) \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Add{\a}}} \a_{0}\right)\]
 \end{small}
 
 \begin{small}
 \[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
-\left(\left(\f_{0} \wedge \neg\f_{i} \wedge \leftselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{i}\right)\right)\]
+\left(\left(\f_{0} \wedge \neg\f_{i} \wedge \leftselect{i} \right) \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{i}\right)\]
 \[ \BigforallTwo{i=1}{\depth} \Bigforall{\f\in \F}
-\left(\left(\f_{i} \wedge \neg\f_{0} \wedge \rightselect{i} \right) \Rightarrow \left(\bigvee\limits_{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{0}\right)\right)\]
+\left(\left(\f_{i} \wedge \neg\f_{0} \wedge \rightselect{i} \right) \Rightarrow \Bigexists{\substack{\a \in \A \\ \f \in \Del{\a}}} \a_{0}\right)\]
 \end{small}
 
 Une règle supplémentaire est également requise pour décrire les frame-axiomes explicatifs pour la première transition du plan à partir de l'état initial (c'est-à-dire la feuille la plus à gauche de l'arbre):

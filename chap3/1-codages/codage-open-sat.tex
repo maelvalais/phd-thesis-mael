@@ -5,12 +5,12 @@
 
 \fred{A ajouter: complexité en espace meilleure par rapport à MK99}
 
-Les codages SAT dans les espaces de plans existants introduits par \cite{DBLP:conf/aaai/MaliK99} se réfèrent tous à trois étapes indexées (pas nécessairement consécutives) du plan.
+Les codages SAT dans les espaces de plans existants introduits par \cite{MK99} se réfèrent tous à trois étapes indexées (pas nécessairement consécutives) du plan.
 Dans notre nouveau codage, nous allons nous référer seulement à deux étapes consécutives.
-Pour chaque action $\a\in\A$ et chaque étape $i$, nous créons une variable propositionnelle $\a_{i}$ pour déterminer qu'une instance de $\a$ doit être planifiée à l'étape $i$.
-Pour chaque fluent $\f\in\F$ et chaque étape $i$, nous créons une variable propositionnelle $\open{\f}{i}$ pour exprimer que $\f$ se maintient à l'étape précédente $i-1$ et doit être protégé au moins jusqu'à l'étape $i$.
+Pour chaque action $\a\in\A$ et chaque étape $\step{i}$, nous créons une variable propositionnelle $\instep{a}{i}$ pour déterminer qu'une instance de $\a$ doit être planifiée à l'étape $\step{i}$.
+Pour chaque fluent $\f\in\F$ et chaque étape $\step{i}$, nous créons une variable propositionnelle $\open{\f}{i}$ pour exprimer que $\f$ se maintient à l'étape précédente $\step{i-1}$ et doit être protégé au moins jusqu'à l'étape $\step{i}$.
 
-\begin{figure}[hb!]\centering
+\begin{figure}[h!]\centering
 	\includegraphics[width=.5\textwidth]{figures/transitions}
     \caption{Lien causal: l'action $a'$ produit $\f$ à l'étape $S_{i-j}$ pour l'action $\a$ qui nécessite $\f$ à l'étape $S_{i}$.}
     \label{fig:causal-link-sat}
