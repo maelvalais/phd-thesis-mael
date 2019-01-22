@@ -3,7 +3,14 @@
 %
 \subsubsection{Nouveau codage QBF dans les espaces d'états: CTE-EFA}
 
-Dans ce codage, nous définissons l'ensemble des variables propositionnelles comme $\X = \A \cup \F$. Chaque étape est maintenant définie par une transition (comme dans CTE-OPEN) ainsi que par l'état résultant (valuation des fluents de $\F$). La formule est une adaptation au CTE des règles bien connues de codage SAT de \cite{KS92} basées sur des frame-axiomes explicatifs dans les espaces d'états.
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est donné par $\X = \X_{\F} \cup \X_{\A}$, où $X_{\A}$ est l'ensemble de variables d'actions identique au codage CTE-NOOP, et :
+\begin{itemize}
+    \item l'ensemble des variables de fluents est défini par $\displaystyle\X_{\F}=\bigcup_{i=0}^{\depth}\{\f_{i}\mid \f\in\F\}$.
+\end{itemize}
+
+
+%Dans ce codage, nous définissons l'ensemble des variables propositionnelles comme $\X = \A \cup \F$. 
+Chaque étape est maintenant définie par une transition (valuation des variables d'actions de $\X_{\A}$, comme dans CTE-OPEN) ainsi que par l'état résultant (valuation des variables de fluents de $\X_{\F}$). La formule est une adaptation au CTE des règles bien connues de codage SAT de \cite{KS92} basées sur des frame-axiomes explicatifs dans les espaces d'états que nous avons introduits dans la sous-section~\ref{chap:codages:satqbf:satefa}.
 
 \paragraph*{[CTE-EFA.0 -- Quantificateurs]}
 

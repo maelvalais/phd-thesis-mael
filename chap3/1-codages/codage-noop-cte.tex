@@ -33,12 +33,21 @@
 
 % }
 
-Tous les codages QBF étudiés dans cet article utilisent des variables propositionnelles pour les actions. Le codage d'arbre compact proposé dans \cite{DBLP:conf/ecai/CashmoreFG12} est basé sur le \textit{graphe de planification} introduit dans \cite{BF97} et utilise des actions No-op supplémentaires comme frame-axiomes. Nous nommerons ce codage CTE-NOOP.
-Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \{\noopSingle{f}\mid \f\in\F\}$.
+%Tous les codages QBF étudiés dans cet article utilisent des variables propositionnelles pour les actions. 
+Le codage d'arbre compact proposé dans \cite{DBLP:conf/ecai/CashmoreFG12} est basé sur le \textit{graphe de planification} introduit dans \cite{BF97} et utilise des actions No-op supplémentaires comme frame-axiomes. Nous nommerons ce codage CTE-NOOP.
+%Chaque action étant considérée comme une variable propositionnelle, nous définissons un ensemble de variables propositionnelles $\X$, donné par $\X = \A \cup \{\noopSingle{f}\mid \f\in\F\}$.
 
-Dans une formule CTE, il faut pouvoir sélectionner deux étapes consécutives du plan afin de définir des transitions (Figure~\ref{fig:plantree}). Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$.
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\A} \cup \X_{\mathcal{N}}$, où :
+\begin{itemize}
+    \item l'ensemble des variables d'actions est défini par $\displaystyle\X_{\A}=\bigcup_{i=1}^{\depth}\{\a_{i}\mid \a\in\A\}$ ;
+    \item l'ensemble des variables de No-ops est défini par $\displaystyle\X_{\mathcal{N}}=\bigcup_{i=1}^{\depth}\{\noop{f}{i}\mid \f\in\F\}$.
+\end{itemize}
 
-Pour CTE-NOOP, il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action et une seule variable $\noop{\f}{i}\in X_{i}$ (action No-op) pour chaque fluent utilisée pour déterminer une transition dans le plan. A la même profondeur $i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$. Pour plus de détails, on pourra se reporter aux explications données dans les transparents en ligne\footnote{\url{https://www.irit.fr/~Frederic.Maris/documents/coplas2018/slides.pdf}}.
+
+Dans une formule CTE, il faut pouvoir sélectionner deux étapes consécutives du plan afin de définir des transitions (Figure~\ref{fig:plantree}). Pour chaque profondeur $i$ de l'arbre, $\X_i=\{x_i\mid x_i\in \X\}$ dénote le sous-ensemble des variables de $\X$ indicées par $i$.
+%une copie de l'ensemble des variables $\X$.
+
+Pour CTE-NOOP, il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action et une seule variable $\noop{\f}{i}\in X_{i}$ (action No-op) pour chaque fluent utilisée pour déterminer une transition dans le plan. A la même profondeur $i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$. %Pour plus de détails, on pourra se reporter aux explications données dans les transparents en ligne\footnote{\url{https://www.irit.fr/~Frederic.Maris/documents/coplas2018/slides.pdf}}.
 
 Une limite supérieure à la longueur du plan est $2^{k+1}-1$, où $k$ est le nombre d'alternances de quantificateurs dans la formule booléenne quantifiée associée au problème de planification. Dans le cas d'un CTE, $k$ est aussi la profondeur de l'arbre compact. Le nombre d'états possibles pour un problème de planification donné est limité par $2^{\mid \F \mid}$. Ainsi, l'existence d'un plan peut être déterminée en utilisant un codage QBF linéaire avec au plus $k=\mid \F \mid$.
 
@@ -47,7 +56,8 @@ Une limite supérieure à la longueur du plan est $2^{k+1}-1$, où $k$ est le no
 \paragraph*{[CTE-NOOP.0 -- Quantificateurs]}
 
 %In a CTE formula, we want to select two consecutive steps in order to define transitions (Figure~\ref{fig:plantree}).
-Pour chaque profondeur $i$ de l'arbre, $\X_i$ dénote une copie de l'ensemble des variables $\X$. Il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\noop{\f}{i}\in X_{i}$ pour chaque action No-op correspondant au maintien du fluent $\f$. A la même profondeur~$i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
+Pour chaque profondeur $i$ de l'arbre, %$\X_i$ dénote une copie de l'ensemble des variables $\X$. 
+il existe une seule variable $\a_{i}\in X_{i}$ pour chaque action utilisée pour déterminer la dernière transition dans le plan et une seule variable $\noop{\f}{i}\in X_{i}$ pour chaque action No-op correspondant au maintien du fluent $\f$. A la même profondeur~$i$, la valeur de ces variables dépend du n\oe ud (correspondant à une étape du plan) sélectionné par les valeurs des variables universelles de branchement supérieures $b_{i+1}\ldots b_{\depth}$.
 
 \begin{small}
 \[

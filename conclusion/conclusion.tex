@@ -1,3 +1,34 @@
-\fred{Perspectives}
-Nous avons travaillé à l'extension du langage à DL-PA, en l'implémentant nous avons eu des premiers résultats intéressants.
+\section{Ce que nous avons réalisé}
 
+Dans cette thèse, nous avons présenté \touist, un outil de traduction automatique de problèmes en formules logique que nous avons développé. Cet outil permet d'utiliser facilement différents solveurs SAT, SMT ou QBF puisqu'il effectue lui même lorsque nécessaire, une mise en forme prénexe ou en forme normale conjonctive en utilisant la transformation de Tseitin avant de traduire la formule au format DIMACS, QDIMACS ou SMT-LIB en fonction du solveur externe utilisé. Il permet en retour, d'afficher les résultats renvoyés par le solveur dans un format directement lisible par l'utilisateur, en rapport avec les noms de variables définies par ce dernier.
+
+Nous avons montré comment utiliser le langage de \touist pour exprimer de manière simple des problèmes combinatoires statiques avec SAT, comme le Sudoku. Nous avons aussi montré qu'il est possible de coder aussi facilement des problèmes dynamiques, comme le jeu de Nim, pour lesquel l'utilisation d'un codage QBF nous permet de calculer un stratégie gagnante. Nous avons également montré comment utiliser SMT pour obtenir, grâce à des contraintes d'arithmétique linéaire, un codage plus compact et plus facile à exprimer pour le Takuzu.
+
+Afin d'utiliser \touist pour compiler des problèmes de planification en logique pour les résoudre, nous avons développé le module \touistplan qui intègre différentes méthodes de codage.
+Nous avons notamment proposé un nouveau codage SAT et deux nouveaux codages d'arbres compacts QBF pour la planification classique, ainsi qu'un nouveau codage SMT pour la planification temporelle en temps continu. Nous avons montré, par une étude expérimentale sur les benchmarks des compétitions IPC en utilisant \touistplan avec différents solveurs QBF, que nos nouveaux codages QBF sont en moyenne deux fois plus efficaces que le codage de l'état de l'art.
+
+\section{Ce qu'il reste à explorer}
+
+D'une part, de nombreuses perspectives sont ouvertes concernant l'extension de notre traducteur \touist, tant du point de vue des langages d'entrée et des modules de traduction automatique intégrés, que de des langages de sortie et des solveurs utilisés.
+
+L'une des perspectives immédiates serait d'implémenter de nouveaux modules d'entrée pour permettre d'utiliser \touist avec des langages spécifiques, comme nous l'avons fait pour le langage PDDL avec \touistplan.
+Nous avons notamment travaillé à l'extension du langage de \touist à DL-PA (Dynamic Logic of Propositional Assignments)~\cite{DBLP:conf/lics/BalbianiHT13} en intégrant une traduction des formules DL-PA vers QBF proposée par Andreas Herzig et Abdallah Saffidine. En l'implémentant nous avons eu des premiers résultats intéressants. Notre objectif est de pouvoir fournir, à terme, un prouveur automatique pour DL-PA.
+
+Une autre voie d'extension de \touist serait d'augmenter le langage d'entrée de \touist pour prendre en compte des atomes d'autres théories que QF-IDL, QF-RDL, QF-LIA ou QF-LRA. Ceci permettrait de l'interfacer avec des solveurs SMT prenant en charge ces nouvelles théories.
+
+Enfin, un travail exploratoire a été commencé sur l'interfaçage entre \touist et l'interface de production de sémantiques argumentatives SESAME (\url{https://www.irit.fr/SESAME/}). Celle-ci, développée au sein de l'équipe LILaC, permet de produire de manière interactive des sémantiques argumentatives dans un langage du premier ordre et domaine fini. L'idée serait de fournir à \touist :
+\begin{itemize}
+    \item une sémantique argumentative,
+    \item un arbre argumentatif dont les sommets sont des arguments et les liens entre ces sommets une relation d'attaque entre arguments,
+    \item et un ensemble d'arguments
+\end{itemize}
+afin que \touist détermine si, en fonction de la sémantique et de l'arbre argumentatif, cet ensemble d'argument constitue une extension possible de la sémantique.\\
+
+
+D'autre part, nous avons également ouvert des perspectives pour augmenter encore les performances de la planification par compilation.
+
+Dans la cadre de la planification classique, nous avons montré que pour l'approche QBF, au-delà des améliorations sur les solveurs, d'autres travaux doivent être menés pour mettre au point des codages plus performants. Comme nous l'avons indiqué, cela a déjà été réalisé pour SAT avec des améliorations significatives.
+
+Dans le cadre de la planification temporelle en temps continu, le codage SMT que nous avons proposé, bien que plus compact que le codage de référence existant, doit encore être amélioré pour permettre une meilleure efficacité en terme de temps de résolution des problèmes.
+
+%Nous présentons ici deux nouveaux codages d'arbres compacts CTE (Compact Tree Encoding) de problèmes de planification en QBF: CTE-EFA basé sur des frame-axiomes explicatifs dans un espace d'états, et CTE-OPEN basé sur des liens de causalité dans un espace de plans. \fred{dans le chapitre EXPERIMENTATIONS:} Nous les comparons au codage de l'état de l'art CTE-NOOP basé sur des actions No-op et proposé dans \cite{DBLP:conf/ecai/CashmoreFG12}. En termes de temps d'exécution par rapport aux problèmes de référence, CTE-EFA et CTE-OPEN sont toujours plus efficaces que CTE-NOOP.

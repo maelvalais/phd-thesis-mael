@@ -19,34 +19,32 @@ Deux étapes particulières qui ne contiennent aucune action sont créées~: l'�
 %Ces deux étapes ne contiendront aucune action. Elles sont équivalentes aux actions fictives $Start$ et $End$ qui servent à initialiser un plan partiel et sont généralement utilisées en planification dans les espaces de plans partiels. Pour prendre en compte ces deux étapes, l'ensemble $F_a$ des fluents présents dans les ajouts des actions est augmenté des fluents de l'état initial $I$. De même, l'ensemble $F_p$ des fluents présents dans les préconditions des actions est augmenté des fluents du but $B$. On peut produire des codages produisant moins de clauses en considérant les actions $Start$ et $End$ comme des cas particuliers \cite{Vid01}, mais pour des raisons de compacité dans l'écriture des codages nous les présentons ici de manière intégrée aux autres actions.
 
 
-\fred{L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\F} \cup \X_{\A} \cup \X_{\mathcal{N}}$, où $X_{\F}$ et $X_{\A}$ sont les ensembles de variables de fluents et d'actions identiques au codage SAT-EFA, et :
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\A} \cup \X_{\mathit{Adds}}\cup \X_{\mathit{Dels}}\cup \X_{\mathit{Needs}}$, où :
 \begin{itemize}
-    \item l'ensemble des variables de No-ops est défini par $\displaystyle\X_{\mathcal{N}}=\bigcup_{i=1}^{\length}\{\noop{f}{i}\mid \f\in\F\}$.
-\end{itemize}}
-
-Les règles des codages dans les espaces de plans produisent les propositions suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
-
-\begin{itemize}
-\item $(\a \in \step{i})$ est vraie ssi l'action $\a$ appartient à l'étape $\step{i}$.
-\item $\Adds{i}{\f}$, est vraie ssi l'étape $\step{i}$ contient une action qui ajoute le
-  fluent $\f$.
-\item $\Needs{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui a $f$ en
-  précondition.
-\item $\Dels{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui retire le
-  fluent $\f$.
-\item $\Linksteps{i}{\f}{j}$ représente un lien causal et est vraie ssi l'étape
-  $\step{i}$ produit le fluent $\f$ qui est une précondition de l'étape $\step{j}$.
-\item $\step{i} \prec \step{j}$ est vraie ssi l'étape $\step{i}$ précède l'étape $\step{j}$~; toutes les actions
-  associées à $\step{i}$ doivent donc être exécutées avant celles associées à $\step{j}$.
-  Ces propositions traduisent un ordre partiel sur les étapes.
+    \item les variables d'actions sont définies par $\displaystyle\X_{\A}=\bigcup_{i=1}^{\length}\{\instep{a}{i}\mid \a\in\A\}$ ;
+    \item les variables d'ajouts sont définies par $\displaystyle\X_{\mathit{Adds}}=\bigcup_{i=1}^{\length}\{\Adds{i}{f}\mid \f\in\F\}$ ;
+    \item les variables de retraits sont définies par $\displaystyle\X_{\mathit{Dels}}=\bigcup_{i=1}^{\length}\{\Dels{i}{f}\mid \f\in\F\}$ ;
+    \item les variables de préconditions sont définies par $\displaystyle\X_{\mathit{Needs}}=\bigcup_{i=1}^{\length}\{\Needs{i}{f}\mid \f\in\F\}$.
 \end{itemize}
 
+La proposition $(\a \in \step{i})$ représente le fait que l'action $\a$ appartient à l'étape $\step{i}$. Les propositions $\Adds{i}{\f}$, $\Dels{i}{\f}$ et $\Needs{i}{\f}$ représentent le fait que l'étape $\step{i}$ contient respectivement une action qui ajoute le fluent $\f$, une action qui retire le fluent $\f$ et une action qui a le fluent $f$ en précondition.
 
-{\color{red}
+%Les règles des codages dans les espaces de plans produisent les propositions suivantes, pour une action $\a$, un fluent $\f$, et deux étapes $\step{i}$ et $\step{j}$~:
+
+%\begin{itemize}
+%\item $(\a \in \step{i})$ est vraie ssi l'action $\a$ appartient à l'étape $\step{i}$.
+%\item $\Adds{i}{\f}$, est vraie ssi l'étape $\step{i}$ contient une action qui ajoute le fluent $\f$.
+%\item $\Needs{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui a $f$ en précondition.
+%\item $\Dels{i}{\f}$ est vraie ssi l'étape $\step{i}$ contient une action qui retire le fluent $\f$.
+%\item $\Linksteps{i}{\f}{j}$ représente un lien causal et est vraie ssi l'étape $\step{i}$ produit le fluent $\f$ qui est une précondition de l'étape $\step{j}$.
+%\item $\step{i} \prec \step{j}$ est vraie ssi l'étape $\step{i}$ précède l'étape $\step{j}$~; toutes les actions associées à $\step{i}$ doivent donc être exécutées avant celles associées à $\step{j}$.
+%  Ces propositions traduisent un ordre partiel sur les étapes.
+%\end{itemize}
+
 
 \subsubsection{Partie commune des codages dans les espaces de plans}
 
-Elle permet d'établir une correspondance entre toutes les actions disponibles et
+La partie commune SAT-CL des codages de référence dans les espaces de plans permet d'établir une correspondance entre toutes les actions disponibles et
 celles qui font partie des étapes des plans solutions. Elle est constituée
 de cinq règles~:
 
@@ -91,13 +89,21 @@ Si une action supprime un fluent qui est nécessaire ou est ajouté par une autr
 
 \subsubsection{Codage par liens causaux, protection d'intervalles et ordre partiel}
 
-La production des préconditions se fait par le codage direct des liens causaux.
+Dans le codage SAT-CLPO, la production des préconditions se fait par le codage direct des liens causaux.
+Pour ce codage, nous allons utiliser deux ensembles supplémentaires de variables :
+\begin{itemize}
+    \item les variables de liens causaux :
+$\displaystyle\X_{\mathit{Link}}=\bigcup_{i=1}^{\length}\bigcup_{j=1}^{\length}\{\Linksteps{i}{\f}{j}\mid \f\in\F\}$ ;
+    \item les variables d'ordre partiel sur les étapes :
+$\displaystyle\X_{\prec}=\bigcup_{i=1}^{\length}\bigcup_{j=1}^{\length}\{\step{i} \prec \step{j}\}$.
+\end{itemize}
+L'ensemble de variables propositionnelles $\X$ utilisées pour le codage SAT-CLPO est ainsi donné par $\X = \X_{\A} \cup \X_{\mathit{Adds}}\cup \X_{\mathit{Dels}}\cup \X_{\mathit{Needs}} \cup \X_{\mathit{Link}} \cup \X_{\prec}$.
 La proposition $\Linksteps{i}{\f}{j}$ traduit le fait que l'étape $\step{i}$ produit le fluent
 $\f$, précondition de l'étape $\step{j}$. La protection de $\f$ dans l'intervalle compris
 entre les deux étapes se fait par promotion (l'étape menaçant $\f$ est placée
 avant $\step{i}$), ou par rétrogradation (l'étape menaçant $\f$ est placée après $\step{j}$).
-L'ordre d'exécution des étapes  est donné par une relation de précédence de
-la forme $\step{i} \prec \step{j}$. Les quatre règles suivantes sont ajoutées à la partie commune~:
+L'ordre d'exécution des étapes  est donné par une relation d'ordre partiel sur les étapes : $\step{i} \prec \step{j}$ traduit le fait que toutes les actions associées à l'étape $\step{i}$ doivent être exécutées avant celles associées à l'étape $\step{j}$.
+Les quatre règles suivantes sont ajoutées à la partie commune~:
 
 %\begin{enumerate}
 %\item \codrule
@@ -123,29 +129,24 @@ la forme $\step{i} \prec \step{j}$. Les quatre règles suivantes sont ajoutées 
   \left( \step{q} \prec \step{i} \lor \step{j} \prec \step{q} \right) %\end{array}
   \right)}
 %\item \codrule
-\paragraph*{[SAT-CLPO.7 -- Propriétés de la relation de précédence]} transitive et
+\paragraph*{[SAT-CLPO.7 -- Propriétés de la relation d'ordre]} transitive et
   antisymétrique. L'irréflexivité est codée dans les autres règles par le biais
   des indices des étapes.
   \codage{\BigforallTwo{i=0}{k+1} \BigforallTwo{\substack{j=0\\j\neq i}}{k+1} \BigforallTwo{\substack{q=0\\q\neq i \land q\neq j}}{k+1} \left( \left( \step{i} \prec \step{j} \land \step{j} \prec \step{q} \right) \Rightarrow \step{i} \prec \step{q} \right)}
   \codage{\BigforallTwo{i=0}{k} \BigforallTwo{\substack{j=i+1\\j\neq i}}{ k+1} \lnot \left( \step{i} \prec \step{j} \right) \lor \lnot \left( \step{j} \prec \step{i} \right)}
 %\end{enumerate}
 
+
 \subsubsection{Codage par liens causaux, protection d'intervalles et étapes contiguës}
 
-Ce codage simplifie le précédent dans lequel plusieurs modèles correspondent au
-même plan solution, à la numérotation des étapes près. Les étapes doivent
-maintenant suivre un ordre prédéfini d'indice croissant, ce qui rend inutile la
-relation de précédence. La protection d'intervalles ne nécessite plus la
-promotion ou la rétrogradation avec un ordre partiel sur les étapes, mais se
-réalise en interdisant qu'une étape comprise dans un intervalle défini par un
-lien causal ne le menace. Les deux règles suivantes sont ajoutées à la partie
-commune~:
+Le codage SAT-CLCS simplifie le précédent dans lequel plusieurs modèles correspondent au même plan solution, à la numérotation des étapes près. Les étapes doivent maintenant suivre un ordre prédéfini d'indice croissant, ce qui rend inutile la relation d'ordre partiel utilisée dans le codage SAT-CLPO. La protection d'intervalles ne nécessite plus la promotion ou la rétrogradation avec cet ordre partiel sur les étapes, mais se
+réalise en interdisant qu'une étape comprise dans un intervalle défini par un lien causal ne le menace.
+L'ensemble de variables propositionnelles $\X$ utilisées pour le codage SAT-CLCS est ainsi donné par $\X = \X_{\A} \cup \X_{\mathit{Adds}}\cup \X_{\mathit{Dels}}\cup \X_{\mathit{Needs}} \cup \X_{\mathit{Link}}$.
+Les deux règles suivantes sont ajoutées à la partie commune~:
 
 %\begin{enumerate}
 %\item \codrule
-\paragraph*{[SAT-CLCS.4 -- Production des préconditions]} chaque fluent est supporté par un
-  lien causal entre l'étape qui le produit et l'étape qui l'utilise en tant que
-  précondition.
+\paragraph*{[SAT-CLCS.4 -- Production des préconditions]} chaque fluent $\f$ est supporté par un lien causal entre l'étape $\step{j}$ qui le produit et l'étape $\step{i}$ qui l'utilise en tant que précondition.
   \codage{\BigforallTwo{i=1}{k} \Bigforall{\f\in \F} \left( \Needs{i}{\f} \Rightarrow %\ifthen{\f \in \F_a}{
   \BigexistsTwo{j=1}{i-1} \Linksteps{j}{\f}{i}%}{\bot}
   \right)}
@@ -167,14 +168,7 @@ commune~:
 
 \subsubsection{Codage du \enquote{chevalier blanc}}
 
-Ce codage est actuellement le plus compact des codages dans les espaces de plans
-en nombre de variables et de clauses produites~; il est également le plus
-performant par son temps de résolution. Il exprime directement les liens
-causaux~: si une étape requiert un fluent, c'est qu'une étape précédente doit
-l'avoir créé. On n'utilise ainsi que les variables déjà présentes dans la partie
-commune. La protection d'intervalles se réalise en codant la technique du
-\enquote{chevalier blanc} introduite par le planificateur \textsc{Tweak}
-\cite{Cha87}. Les deux règles suivantes sont ajoutées à la partie commune~:
+Le codage SAT-CLWK est le plus compact des codages de référence dans les espaces de plans en nombre de variables et de clauses produites~; il est également le plus performant par son temps de résolution. Il exprime directement les liens causaux~: si une étape requiert un fluent, c'est qu'une étape précédente doit l'avoir créé. On n'utilise ainsi que les variables déjà présentes dans la partie commune $\X = \X_{\A} \cup \X_{\mathit{Adds}}\cup \X_{\mathit{Dels}}\cup \X_{\mathit{Needs}}$. La protection d'intervalles se réalise en codant la technique du \enquote{chevalier blanc} introduite par le planificateur \textsc{Tweak} \cite{Cha87}. Les deux règles suivantes sont ajoutées à la partie commune~:
 
 
 %\begin{enumerate}
@@ -200,4 +194,3 @@ commune. La protection d'intervalles se réalise en codant la technique du
         \right)}
 %\end{enumerate}
 
-} % FIN COLOR RED

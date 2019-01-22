@@ -1,5 +1,5 @@
 %\section{Planification par compilation}
-\section{Planification classique SAT et QBF}
+\section{Planification classique SAT et QBF}\label{chap:codages:satqbf}
 %
 
 Depuis une quarantaine d’années, une large part des travaux menés dans le domaine de la planification se situe dans un cadre restrictif appelé la planification classique. L’objectif essentiel consiste à chercher à développer des algorithmes indépendants du domaine qui soient performants pour des représentations simples de l'action.
@@ -12,7 +12,7 @@ Le cadre classique est basé sur les hypothèses restrictives suivantes :
 \item Les actions ont des effets déterministes : les effets d'une action sont seulement fonction de cette action et de l'état du monde.
 \end{itemize}
 
-Ce cadre doit ensuite pouvoir être étendu en enrichissant cette représentation, notamment avec des aspects temporels comme nous le présentons dans la section~\ref{section:smtplan}, tout en conservant une efficacité suffisante.
+Ce cadre doit ensuite pouvoir être étendu en enrichissant cette représentation, notamment avec des aspects temporels comme nous le présentons dans la section~\ref{chap:codages:smt}, tout en conservant une efficacité suffisante.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +52,8 @@ Un \emph{fluent} est une proposition atomique contruite à partir du langage $\m
 \end{definition}
 
 \begin{definition}
-Un \emph{problème de planification classique} STRIPS est un triplet $\langle \F, \I, \A , \G \rangle$ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques du langage $\mathcal{L}$), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
+Un \emph{problème de planification classique} %STRIPS 
+est un triplet $\langle \F, \I, \A , \G \rangle$ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques du langage $\mathcal{L}$), $\I \subseteq \F$ est l'ensemble initial de fluents, $\G \subseteq \F$ est l'ensemble des fluents buts et $\A$ est l'ensemble des actions.
 Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \rangle$ où
 
 \begin{itemize}
@@ -65,7 +66,7 @@ Une action $\a \in \A$ est un triplet $\langle \Cond{\a}, \Add{\a}, \Del{\a} \ra
 \end{definition}
 
 \begin{definition}
-L'application d'une action $\a$ à un état $s_{v}$ est possible si et seulement si $\Cond{a}\in s_{v}$. Elle est est alors définie par $s_{v}\uparrow \a=(s_{v} \setminus \Del{\a}) \cup \Add{\a}$.
+L'application d'une action $\a$ à un état $s_{v}$ est possible si et seulement si $\Cond{a}\subseteq s_{v}$. Elle est alors définie par $s_{v}\uparrow \a=(s_{v} \setminus \Del{\a}) \cup \Add{\a}$.
 \end{definition}
 
 \begin{definition}
@@ -77,7 +78,11 @@ Autrement dit, $\a$ et $\b$ n'ont pas d'interactions négatives :
 \end{itemize}
 \end{definition}
 
-\fred{Ensemble des variables d'actions $X_{\A}$}
+\begin{definition}
+L'application d'un ensemble d'action $\A$ à un état $s_{v}$ est possible si et seulement si $\left(\bigcup_{\a\in\A}\Cond{a}\right)\subseteq s_{v}$.\\ Elle est alors définie par $\displaystyle s_{v}\uparrow \A=\left(s_{v} \setminus \bigcup_{\a\in\A}\Del{a}\right) \cup \left(\bigcup_{\a\in\A}\Add{a}\right)$.
+\end{definition}
+
+%\fred{Ensemble des variables d'actions $X_{\A}$}
 
 
 
@@ -117,10 +122,10 @@ Autrement dit, $\a$ et $\b$ n'ont pas d'interactions négatives :
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLANIFICATION SAT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Codages SAT de référence pour la planification classique}
+\subsection{Codages SAT de référence dans les espaces d'états}%pour la planification classique}
 %
 
-\fred{figure or not figure ? à voir...}
+%\fred{figure or not figure ? à voir...}
 %\begin{figure}\label{steps:sat}
 %\begin{footnotesize}
 %%(a)\\[1em]
@@ -185,7 +190,8 @@ Ces deux codages de planification utilisent la structure de branchement de QBF p
 
 \subsection{Nouveaux codages d'arbres compacts QBF}\label{chap:codages:qbf:nouveaux}
 
-Dans la suite, nous proposons deux nouveaux codages de problèmes de planification en QBF. Le premier, noté CTE-OPEN, est basé sur des liens de causalité dans les espaces de plans. Il a été initialement introduit pour SAT par \cite{MK99} mais doit être adapté en utilisant des variables supplémentaires pour les conditions ouvertes\fred{Référence à la section sur codages MK99 espaces de plans}. Le second, noté CTE-EFA, est basé sur des frame-axiomes explicatifs dans les espaces d'états introduits initialement pour SAT par \cite{KS92} et utilise des variables pour les fluents et les actions.
+Dans la suite, nous proposons deux nouveaux codages de problèmes de planification en QBF. Le premier, noté CTE-OPEN, est basé sur des liens de causalité dans les espaces de plans. Il a été initialement introduit pour SAT par \cite{MK99} mais doit être adapté en utilisant des variables supplémentaires pour les conditions ouvertes. %\fred{Référence à la section sur codages MK99 espaces de plans}. 
+Le second, noté CTE-EFA, est basé sur des frame-axiomes explicatifs dans les espaces d'états introduits initialement pour SAT par \cite{KS92} et utilise des variables pour les fluents et les actions.
 
 
 % Définitions/intuitions retirées :
@@ -216,7 +222,7 @@ Dans la suite, nous proposons deux nouveaux codages de problèmes de planificati
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLANIFICATION SMT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Planification temporelle SMT}
+\section{Planification temporelle SMT}\label{chap:codages:smt}
 %
 
 Le cadre classique que nous avons considéré jusqu'à présent ne permet qu’une représentation limitée des aspects du monde réel. Certains aspects temporels incontournables des actions ont ainsi été intégrés au langage PDDL (Planning Domain Description Language). Le cadre temporel que définit actuellement le langage PDDL (version 2.1 et ultérieures) relâche certaines contraintes du cadre classique. On y suppose qu'à chaque action peut être associée une durée d'exécution. Les préconditions peuvent être requises au début de l'action (\texttt{at start}), tout au long de la durée de l'action (\texttt{over all}), ou à la fin de l'action (\texttt{at end}). Les effets peuvent se produire au début ou à la fin de l'action.
@@ -253,7 +259,7 @@ où $\F$ est un ensemble fini de \emph{fluents} (propositions atomiques), $\I \s
 \paragraph*{Notation} Si $\A$ est un ensemble d'instances d'actions, alors $\events{\A}$ est l'union des ensembles $\events{\a}$ (pour toutes les instances d'action $a\in \A$).
 
 \begin{definition}\label{def:plan-temporel}
-$P = \langle \A, \tau \rangle$, où $\A$ est un ensemble fini d'instances d'actions $\{a_1,\ldots, a_n\}$ et $\tau$ est une fonction à valeurs réelles sur $\events{\A}$, est un plan temporel pour le problème $\langle \I , \A^{\prime}, \G \rangle$ si
+$P = \langle \A, \tau \rangle$, où $\A$ est un ensemble fini d'instances d'actions $\{a_1,\ldots, a_n\}$ et $\tau$ est une fonction à valeurs réelles sur $\events{\A}$, est un plan temporel pour le problème $\langle \F, \I , \A^{\prime}, \G \rangle$ si
 \begin{enumerate}
 \item[(1)] $\A \subseteq \A^{\prime}$, et
 \item[(2)] $P$ vérifie les contraintes inhérentes et contradictoires sur $\A$;
@@ -275,7 +281,7 @@ De même, les fluents ne peuvent être détruits qu'après la fin de l'intervall
 Un problème de planification temporelle $\langle \I, \A, \G \rangle$ est positif s'il n'y a pas de fluents négatifs dans les conditions d'actions ni dans le but $\G$.
 \end{definition}
 
-Dans cet article, nous ne considèrerons que des problèmes de planification temporelle positifs $\langle \I, \A, \G \rangle$. Il est bien connu que tout problème de planification peut être transformé en un problème positif équivalent en temps linéaire par l'introduction, pour chaque fluent positif $\f$, d'un nouveau fluent pour remplacer les occurrences de $\neg\f$ dans les conditions d'actions \cite{DBLP:books/daglib/0014222}. %Il est important de noter, cependant, que cette transformation peut ne pas conserver d'autres propriétés de l'instance. 
+Dans cette thèse, nous ne considèrerons que des problèmes de planification temporelle positifs $\langle \I, \A, \G \rangle$. Il est bien connu que tout problème de planification peut être transformé en un problème positif équivalent en temps linéaire par l'introduction, pour chaque fluent positif $\f$, d'un nouveau fluent pour remplacer les occurrences de $\neg\f$ dans les conditions d'actions \cite{DBLP:books/daglib/0014222}. %Il est important de noter, cependant, que cette transformation peut ne pas conserver d'autres propriétés de l'instance. 
 En supposant que tous les problèmes sont positifs, $\G$ et $\cond{\a}$ (pour toute action $\a$) sont composés de fluents positifs. Par convention, $\add{\a}$ et $\del{a}$ sont aussi composés exclusivement de fluents positifs. L'état initial $\I$, cependant, peut contenir des fluents négatifs.
 %Pour simplifier la présentation, nous supposons dans cet article que l'ensemble des actions A a subi l'opération de filtrage consistant à éliminer les actions $\a$ de $\A$ qui ne peuvent être exécutées puisque $\cond{\a}$ n'est pas un sous-ensemble de $\I\cup\add{\a}$.
 
@@ -316,11 +322,26 @@ En supposant que tous les problèmes sont positifs, $\G$ et $\cond{\a}$ (pour to
 
 \subsection{Nouveau codage SMT pour la planification temporelle}
 
-Nous introduisons une adaptation SMT du codage SAT basé sur les conditions ouvertes que nous avons introduit dans la section \fred{ajout référence} pour la planification classique. Ici, les actions ne sont plus instantanées et des contraintes sur les instants $\tau(e)$ auxquels se produisent des événements $e\in\events{\A}$ doivent explicitement être ajoutées.
+Nous introduisons une adaptation SMT du codage SAT basé sur les conditions ouvertes que nous avons introduit dans la section~\ref{chap:codages:satqbf:satopen} pour la planification classique. Ici, les actions ne sont plus instantanées et des contraintes sur les instants $\tau(e)$ auxquels se produisent des événements $e\in\events{\A}$ doivent explicitement être ajoutées.
 
 
 Considérons donc maintenant un problème de planification temporelle positif $\langle \I, \A, \G \rangle$.
 Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous introduisons deux variables $\tau_{s}(\textit{open}_{f})$ et $\tau_{e}(\textit{open}_{f})$ qui nous permettent de définir un intervalle temporel de protection de lien causal depuis l'état initial ou une étape contenant une action qui produit $\f$ vers une étape qui contient l'instance d'action $\a$. Durant cet intervalle temporel, aucune action ne pourra détruire $\f$.
+
+
+L'ensemble de variables propositionnelles $\X$ utilisées pour ce codage est ainsi donné par $\X = \X_{\A} \cup \X_{\Delta}$, où :
+\begin{itemize}
+    \item $\displaystyle\X_{\A}=\bigcup_{i=1}^{\depth}\{\a_{i}\mid \a\in\A\}$ est l'ensemble des variables d'actions ;
+    \item $\displaystyle\X_{\Delta}=\bigcup_{i=1}^{\depth}\{\open{f}{i}\mid \f\in\F\}$ est l'ensemble des variables de conditions ouvertes.
+\end{itemize}
+
+L'ensemble des variables rationnelles $T$ utilisées pour les atomes de QF-RDL de ce codage est donné par $\displaystyle T=\{\tau_{\mathit{Init}}, \tau_{\mathit{Goal}}\} \cup T_{\mathit{Cond_{s}}} \cup T_{\mathit{Cond_{e}}} \cup T_{\mathit{Add}} \cup T_{\mathit{Del}} \cup T_{\Delta_{s}} \cup T_{\Delta_{e}}$, où :
+
+\begin{itemize}
+    \item $\displaystyle T_{\Delta_{s}}=\bigcup_{i=1}^{\depth}\{\tau_{s}(\open{f}{i})\mid \f\in\F\}$ est l'ensemble des variables de début d'intervalles de protection de liens causaux ;
+    \item $\displaystyle T_{\Delta_{e}}=\bigcup_{i=1}^{\depth}\{\tau_{e}(\open{f}{i})\mid \f\in\F\}$ est l'ensemble des variables de fin d'intervalles de protection de liens causaux ;
+    \item les autres ensembles sont ceux précédemment définis pour le codage SMT-LINK.
+\end{itemize}
 
 
 %%\paragraph*{Planning with Continuous Time}
@@ -349,7 +370,7 @@ Pour chaque instance d'action $\a$ et chaque fluent $\f\in \cond{a}$, nous intro
 %\end{frame}
 
 
-\paragraph*{[SMT-OPEN.1 -- Conditions ouvertes]} Si une action $\a$ est exécutée dans une étape du plan, alors chaque condition de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$.
+\paragraph*{[SMT-OPEN.1 -- Conditions ouvertes]} Si une action $\a$ est exécutée dans une étape $i$ du plan, alors chaque condition $\f$ de $\a$ doit être une condition ouverte à cette étape (c'est-à-dire qu'un lien causal est requis pour cette condition). De plus, le début de l'intervalle sur lequel cette condition est requise se trouve dans l'intervalle de protection du lien causal $[\tau_{s}(\open{f}{i});\tau_{e}(\open{f}{i})]$.
 
 \begin{small}
 \[
@@ -429,7 +450,7 @@ Toute condition ouverte $\f$ dans une étape doit à l'étape précédente : (1)
 
 \paragraph*{[SMT-OPEN.3 -- Protection des conditions ouvertes]}
 
-Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'intérieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\textit{open}_{f});\tau_{e}(\textit{open}_{f})]$. Cela garantit de ne rompre aucun lien de causalité dans le plan.
+Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'intérieur de l'intervalle de protection du lien causal correspondant $[\tau_{s}(\open{f}{i});\tau_{e}(\open{f}{i})]$. Cela garantit de ne rompre aucun lien de causalité dans le plan.
 
 \begin{small}
 \[
@@ -447,7 +468,7 @@ Une condition ouverte dans une étape donnée ne peut pas être supprimée à l'
 
 \paragraph*{[SMT-OPEN.4 -- Prévention des interactions négatives]}
 
-Si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est ajouté par une autre action $\a$ à un instant $\tau(\a\rightarrow\f)$, alors ces deux instants sont différents.
+Si une action $\b_{j}$ supprime, à un instant $\tau(\b_{j}\rightarrow\neg\f)$, un fluent $\f$ qui est ajouté par une autre action $\a_{i}$ à un instant $\tau(\a_{i}\rightarrow\f)$, alors ces deux instants sont différents.
 
 \begin{small}
 \[
@@ -465,7 +486,7 @@ Si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluen
 \]
 \end{small}
 
-De même, si une action $\b$ supprime, à un instant $\tau(\b\rightarrow\neg\f)$, un fluent $\f$ qui est nécessaire à une autre action $\a$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a), \tau(\f\rightarrow\mid\a)]$, alors cet instant ne peut être contenu dans cet intervalle.
+De même, si une action $\b_{j}$ supprime, à un instant $\tau(\b_{j}\rightarrow\neg\f)$, un fluent $\f$ qui est nécessaire à une autre action $\a_{i}$ sur un intervalle temporel $[\tau(\f\mid\rightarrow\a_{i}), \tau(\f\rightarrow\mid\a_{i})]$, alors cet instant ne peut être contenu dans cet intervalle.
 
 \begin{small}
 \[

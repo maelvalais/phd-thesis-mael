@@ -1,19 +1,44 @@
-\documentclass[a4paper,12pt,oneside]{extbook}
+%\documentclass[a4paper,12pt,oneside]{extbook}
+\documentclass[a4paper,12pt,twoside]{extbook}
 \input{macros.tex}
 
 
-\title{Traduction logique et résolution de problèmes -- Application à la planification}
+\title{Traduction logique et résolution de problèmes -- Application à la planification\\~\\Logic Translation and Problem Solving -- Application to Planning}
 \author{Maël Valais}
-\date{Septembre 2018}
+\date{Décembre 2018}
 
 
 
 \begin{document}
+
+\includepdf[pages={1}]{couverture_these.pdf}
+%\maketitle
+
+\begin{abstract}
+This thesis deals with logical translation and solving of problem using solvers.
+In particular, we are interested in solving planning problems in artificial intelligence.
+
+We present the automatic translator \touist that we developed and that allows us to use a simple language to generate logical formulas from a problem description. Our tool allows us to model many static or dynamic combinatorial problems as Sudoku, Takuzu or Nim game, and to benefit from the regular improvements to SAT, QBF or SMT solvers to solve them efficiently.
+
+We then present reference encodings to solve classical planning problems with SAT and QBF, or temporal planning problems with SMT. In each case, we introduce new encodings in plan-spaces based on open condition modeling to represent causal links.
+Finally, we show, thanks to an experimental study, that our encodings are more efficient than the existing ones on the reference problems of international planning competitions (IPC).
+
+\rule{\linewidth}{.5pt}
+
+Cette thèse s'inscrit dans le cadre de la traduction logique et la résolution de problèmes en utilisant des solveurs. En particulier, nous nous intéressons à la résolution de problèmes de planification de tâches en intelligence artificielle.
+
+Nous présentons le traducteur automatique \touist que nous avons développé et qui permet d'utiliser un langage simple pour générer des formules logiques à partir d'une description de problème. Notre outil permet de modéliser de nombreux problèmes combinatoires statiques ou dynamiques comme le Sudoku, le Takuzu ou le jeu de Nim, et de bénéficier des améliorations apportées régulièrement aux solveurs SAT, QBF ou SMT pour les résoudre efficacement.
+
+Nous présentons ensuite des codages de référence pour résoudre des problèmes de planification classique avec SAT et QBF ou des problèmes de planification temporelle avec SMT. Dans chaque cas, nous introduisons de nouveaux codages dans les espaces de plans basés sur une modélisation des conditions ouvertes pour représenter des liens causaux.
+Nous montrons enfin, grâce à une étude expérimentale, que nos codages sont plus efficaces que les codages existants sur les problèmes de référence des compétitions internationales de planification (IPC).
+\end{abstract}
+
 \tableofcontents
 
 %%%%%%%%%%%%%%%%%%%%
 % INTRODUCTION
 %%%%%%%%%%%%%%%%%%%%
+
 \chapter{Introduction}\label{chap:intro}
 \import{chap1/}{intro.tex}
 
@@ -22,24 +47,25 @@
 %%%%%%%%%%%%%%%%%%%%
 % CHAPITRE : CODAGES & TOUIST
 %%%%%%%%%%%%%%%%%%%%
-\chapter{Codages logiques de problèmes et traduction automatique avec \touist}
+\chapter{Codages logiques de problèmes et traduction automatique avec \touist}\label{chap:touist}
 %\section{Jeux avec QBF}
 %\fred{ajouter le jeu de Nim (JIAF2017), partie adaptation du solveur QBF pour résolution interactive à mettre dans le chapitre sur TouIST}
 
 %%%%%%%%%%%%%%%%%%%%%
 % SOUS-CHAPITRE : TouIST
 %%%%%%%%%%%%%%%%%%%%%
-\section{Traduction automatique avec \touist}\label{chap:touist}
+%\section{Traduction automatique avec \touist}
 \import{chap2/}{0-intro.tex}
 \import{chap2/}{1-vue-ensemble.tex}
-\import{chap2/}{2-tutoriel.tex}
-\import{chap2/}{3-nim.tex}
+\import{chap2/}{2-sat.tex}
+\import{chap2/}{3-qbf-nim.tex}
+\import{chap2/}{3bis-smt-takuzu.tex}
 \import{chap2/}{4-touistplan.tex}
 
 %%%%%%%%
 % CHAPITRE PLANIFICATION
 %%%%%%%%
-\chapter{Planification par satisfaction de formules logiques}
+\chapter{Planification par satisfaction de formules logiques}\label{chap:codages}
 \import{chap3/1-codages/}{codages-planification.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,12 +73,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\chapter{Éxpérimentations : application à la planification}
 %\chapter{Étude comparative des codages d'arbres compacts pour la planification}
-\section{Étude comparative des codages QBF avec \touist} %pour la planification}
+\section{Étude comparative des codages QBF avec \touist}\label{chap:codages:tests} %pour la planification}
 
-\subsection{Présentation des benchmarks utilisés}
-Bavardage sur problèmes pratiques car problèmes théoriques trop difficiles
+Nous allons maintenant présenter les résultats de notre étude comparative des codages d'arbres compacts CTE-NOOP, CTE-EFA et CTE-OPEN.
+Pour comparer ces trois codages sur une même base, nous avons utilisé le module \touistplan, introduit dans la section~\ref{chap:touist:touistplan}, de notre traducteur \touist %\footnote{\url{https://www.irit.fr/touist}} \cite{DBLP:journals/corr/SlimaneCGHLMV15} 
+qui peut faire appel à différents solveurs.
 
-\import{chap3/2-tests/}{tests-intro-benchmarks.tex}
+%\subsection{Présentation des benchmarks utilisés}
+
+%\fred{Présentation benchs : sous-section supprimée\ldots pas la peine de traduire $\rightarrow$ références aux sites IPC}
+%\import{chap3/2-tests/}{tests-intro-benchmarks.tex}
 \import{chap3/2-tests/}{tests-planification.tex}
 
 

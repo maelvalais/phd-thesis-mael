@@ -1,9 +1,14 @@
-\section{Le module \touistplan}
-\fred{Exemple PDDL (verbatim) + codage \touist + sortie SAT, QBF, SMT}
+\newpage
+\section{Le module \touistplan}\label{chap:touist:touistplan}
+
+
+%\fred{Exemple PDDL (verbatim) + codage \touist + sortie SAT, QBF, SMT}
+
+Le module \touistplan que nous avons développé pour \touist permet de résoudre automatiquement des problèmes de planification en utilisant les codages logiques que nous détaillons dans le chapitre~\ref{chap:codages}.
 
 \subsection{Le langage PDDL (Planning Domain Definition Language)}
 
-Le langage PDDL~\fred{citer McDermott98} permet d'une part de définir des domaines de planification, c'est à dire une modélisation d'ensembles d'actions, et d'autre part des problèmes de planification relatifs à un domaine particulier, c'est à dire un état initial et un but qui devra être satisfait après avoir exécuté un plan d'actions choisies parmi les actions du domaine.
+Le langage PDDL~\cite{mcdermott98pddl} permet d'une part de définir des domaines de planification, c'est à dire une modélisation d'ensembles d'actions, et d'autre part des problèmes de planification relatifs à un domaine particulier, c'est à dire un état initial et un but qui devra être satisfait après avoir exécuté un plan d'actions choisies parmi les actions du domaine.
 
 \paragraph*{Un exemple, le domaine Gripper :} Robby doit transporter des balles entre différentes salles. Les capacités du robot sont de pouvoir prendre une balle dans l'une de ses pinces, déposer une balle ou se déplacer d'une salle à une autre.%\\
 
@@ -19,32 +24,31 @@ Le langage PDDL~\fred{citer McDermott98} permet d'une part de définir des domai
   \end{minipage}
 \end{center}
 
-\newpage
+%\newpage
 
-\noindent Les fluents (non instanciés) de ce domaine peuvent être défini par :
+\noindent Les fluents (non instanciés), c'est à dire les propositions atomiques, de ce domaine peuvent être définis par :
 %$F=\{at-robby(x),at(x,y),free(x),carry(x,y)\}$\\
 %\noindent La sémantique de ces fluents est la suivante :
 \begin{itemize}
-	\item $at$-$robby(x)$: Robby est dans la salle $x$ ;
-	\item $at(x,y)$: La balle $x$ est dans la salle $y$ ;
-	\item $free(x)$: La pince $x$ est libre ;
-	\item $carry(x,y)$: Robby transporte la balle $x$ dans sa pince $y$.
+	\item $\mathit{at}$-$\mathit{robby}(x)$: Robby est dans la salle $x$ ;
+	\item $\mathit{at}(x,y)$: La balle $x$ est dans la salle $y$ ;
+	\item $\mathit{free}(x)$: La pince $x$ est libre ;
+	\item $\mathit{carry}(x,y)$: Robby transporte la balle $x$ dans sa pince $y$.
 \end{itemize}
 
-\noindent L'ensemble des opérateurs (actions non instanciées) de ce domaine peut être défini par :\\ $O=\{MOVE(x,y),PICK(x,y,z),DROP(x,y,z)\}$\\
+\noindent L'ensemble des opérateurs (actions non instanciées) de ce domaine peut être défini par :\\ $O=\{\mathit{MOVE}(x,y),\mathit{PICK}(x,y,z),\mathit{DROP}(x,y,z)\}$\\
 
-\noindent $Prec(MOVE(x,y)) = \{at$-$robby(x)\}$\\
-$Add(MOVE(x,y)) = \{at$-$robby(y)\}$\\
-$Del(MOVE(x,y)) = \{at$-$robby(x)\}$\\
+\noindent $\Cond{\mathit{MOVE}(x,y)} = \{\mathit{at}$-$\mathit{robby}(x)\}$\\
+$\Add{\mathit{MOVE}(x,y)} = \{\mathit{at}$-$\mathit{robby}(y)\}$\\
+$\Del{\mathit{MOVE}(x,y)} = \{\mathit{at}$-$\mathit{robby}(x)\}$\\
 
-\noindent $Prec(PICK(x,y,z)) = \{at(x,y),at$-$robby(y),free(z)\}$\\
-$Add(PICK(x,y,z)) = \{carry(x,z)\}$\\
-$Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
-
-
+\noindent $\Cond{\mathit{PICK}(x,y,z)} = \{\mathit{at}(x,y),\mathit{at}$-$\mathit{robby}(y),\mathit{free}(z)\}$\\
+$\Add{\mathit{PICK}(x,y,z)} = \{\mathit{carry}(x,z)\}$\\
+$\Del{\mathit{PICK}(x,y,z)} = \{\mathit{at}(x,y),\mathit{free}(z)\}$\\
 
 
-\paragraph{Définition du domaine en PDDL :}~\\
+
+\noindent{\bf Définition du domaine en PDDL :}
 
 \begin{lstlisting}[language=pddl,frame=single]
 (define (domain gripper-strips)
@@ -57,7 +61,8 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
 ...<@\fbox{Définition des actions}@>...)
 \end{lstlisting}
 
-\paragraph{Définition des actions en PDDL :}~\\
+\noindent{\bf Définition des actions en PDDL :}\\
+\noindent L'action \texttt{move} permet au robot de se déplacer d'une salle à une autre.
 
 \begin{lstlisting}[language=pddl,frame=single]
 (:action move
@@ -66,6 +71,8 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
     :effect (and  (at-robby ?to)
         (not (at-robby ?from))))
 \end{lstlisting}
+
+\noindent L'action \texttt{pick} permet au robot de prendre dans une salle une balle avec l'une de ses pinces.
 
 \begin{lstlisting}[language=pddl,frame=single]
 (:action pick
@@ -78,7 +85,7 @@ $Del(PICK(x,y,z)) = \{at(x,y),free(z)\}$
         (not (free ?g))))
 \end{lstlisting}
 
-L'action \texttt{pick} permet au robot de prendre dans une salle un balle avec l'une de ses pinces.
+\noindent L'action \texttt{drop} permet au robot de déposer dans une salle une balle qu'il tient dans l'une de ses pinces.
 
 \begin{lstlisting}[language=pddl,frame=single]
 (:action drop
@@ -90,24 +97,23 @@ L'action \texttt{pick} permet au robot de prendre dans une salle un balle avec l
         (free ?g)))
 \end{lstlisting}
 
-L'action \texttt{drop} permet au robot de déposer dans une salle un balle qu'il tient dans l'une de ses pinces.
 
-
-\paragraph{Définition d'un problème en PDDL :}~\\
+\noindent{\bf Définition d'un problème en PDDL (Gripper-7) :}
 
 \begin{lstlisting}[language=pddl,frame=single]
-(define (problem gripper-2)
+(define (problem gripper-7)
     (:domain gripper-strips)
     (:objects
         rooma roomb - room
         left right - gripper
-        ball1 ball2 - ball)
+        ball1 ball2 ball3 ball4 ball5 ball6 ball7 - ball)
     (:init
-        (free left) (free right)
-        (at ball1 rooma) (at ball2 rooma)
-        (at-robby rooma))
+        (at-robby rooma) (free left) (free right)
+        (at ball1 rooma) (at ball2 rooma) (at ball3 rooma) (at ball4 rooma)
+        (at ball5 rooma) (at ball6 rooma) (at ball7 rooma))
     (:goal
-        (and (at ball1 roomb) (at ball2 roomb))))
+        (and (at ball1 roomb) (at ball2 roomb) (at ball3 roomb) (at ball4 roomb)
+             (at ball5 roomb) (at ball6 roomb) (at ball7 roomb))))
 \end{lstlisting}
 
 
@@ -214,71 +220,73 @@ L'action \texttt{drop} permet au robot de déposer dans une salle un balle qu'il
 
 \subsubsection{Codage SAT dans les espaces d'états avec frame-axiomes explicatifs pour le problème Gripper-7}
 
-\begin{scriptsize}
-\begin{verbatim}
-Select TouIST 3.5.2
-Select [LANGUAGE] EncodingRules: [SAT] Explanatory Frame-axioms
-Select SAT SOLVER: Glucose
+Nous donnons figure~\ref{gripper7:sat-efa} le plan solution retourné par \touistplan en utilisant le codage SAT que nous présenterons dans la sous-section~\ref{chap:codages:satqbf:satefa} du prochain chapitre. La lecture du plan s'effectue de manière linéaire en suivant les flèches d'une étape à l'autre.\\
 
-Searching solution with SATPLAN (Explanatory Frame-Axioms)...
+%\begin{scriptsize}
+%\begin{verbatim}
+%Select TouIST 3.5.2
+%Select [LANGUAGE] EncodingRules: [SAT] Explanatory Frame-axioms
+%Select SAT SOLVER: Glucose
+%
+%Searching solution with SATPLAN (Explanatory Frame-Axioms)...
+%
+%Maximum plan length: 2^|Fluents|=256.
+%Searching solution with length 1...
+%--- TouIST solve (SAT) / length = 1 ---
+%Searching solution with length 2...
+%--- TouIST solve (SAT) / length = 2 ---
+%Searching solution with length 3...
+%--- TouIST solve (SAT) / length = 3 ---
+%Searching solution with length 4...
+%--- TouIST solve (SAT) / length = 4 ---
+%Searching solution with length 5...
+%--- TouIST solve (SAT) / length = 5 ---
+%Searching solution with length 6...
+%--- TouIST solve (SAT) / length = 6 ---
+%Searching solution with length 7...
+%--- TouIST solve (SAT) / length = 7 ---
+%Searching solution with length 8...
+%--- TouIST solve (SAT) / length = 8 ---
+%Searching solution with length 9...
+%--- TouIST solve (SAT) / length = 9 ---
+%Searching solution with length 10...
+%--- TouIST solve (SAT) / length = 10 ---
+%Searching solution with length 11...
+%--- TouIST solve (SAT) / length = 11 ---
+%Searching solution with length 12...
+%--- TouIST solve (SAT) / length = 12 ---
+%Searching solution with length 13...
+%--- TouIST solve (SAT) / length = 13 ---
+%Searching solution with length 14...
+%--- TouIST solve (SAT) / length = 14 ---
+%Searching solution with length 15...
+%--- TouIST solve (SAT) / length = 15 ---
+%Solution found at length 15.
+%1 A_PICK_ball2_rooma_left(1)
+%1 A_PICK_ball3_rooma_right(1)
+%1 A_MOVE_rooma_roomb(2)
+%1 A_DROP_ball3_roomb_right(3)
+%1 A_DROP_ball2_roomb_left(3)
+%1 A_MOVE_roomb_rooma(4)
+%1 A_PICK_ball7_rooma_left(5)
+%1 A_PICK_ball6_rooma_right(5)
+%1 A_MOVE_rooma_roomb(6)
+%1 A_DROP_ball6_roomb_right(7)
+%1 A_DROP_ball7_roomb_left(7)
+%1 A_MOVE_roomb_rooma(8)
+%1 A_PICK_ball1_rooma_right(9)
+%1 A_PICK_ball5_rooma_left(9)
+%1 A_MOVE_rooma_roomb(10)
+%1 A_DROP_ball5_roomb_left(11)
+%1 A_MOVE_roomb_rooma(12)
+%1 A_PICK_ball4_rooma_left(13)
+%1 A_MOVE_rooma_roomb(14)
+%1 A_DROP_ball1_roomb_right(15)
+%1 A_DROP_ball4_roomb_left(15)
+%\end{verbatim}
+%\end{scriptsize}
 
-Maximum plan length: 2^|Fluents|=256.
-Searching solution with length 1...
---- TouIST solve (SAT) / length = 1 ---
-Searching solution with length 2...
---- TouIST solve (SAT) / length = 2 ---
-Searching solution with length 3...
---- TouIST solve (SAT) / length = 3 ---
-Searching solution with length 4...
---- TouIST solve (SAT) / length = 4 ---
-Searching solution with length 5...
---- TouIST solve (SAT) / length = 5 ---
-Searching solution with length 6...
---- TouIST solve (SAT) / length = 6 ---
-Searching solution with length 7...
---- TouIST solve (SAT) / length = 7 ---
-Searching solution with length 8...
---- TouIST solve (SAT) / length = 8 ---
-Searching solution with length 9...
---- TouIST solve (SAT) / length = 9 ---
-Searching solution with length 10...
---- TouIST solve (SAT) / length = 10 ---
-Searching solution with length 11...
---- TouIST solve (SAT) / length = 11 ---
-Searching solution with length 12...
---- TouIST solve (SAT) / length = 12 ---
-Searching solution with length 13...
---- TouIST solve (SAT) / length = 13 ---
-Searching solution with length 14...
---- TouIST solve (SAT) / length = 14 ---
-Searching solution with length 15...
---- TouIST solve (SAT) / length = 15 ---
-Solution found at length 15.
-1 A_PICK_ball2_rooma_left(1)
-1 A_PICK_ball3_rooma_right(1)
-1 A_MOVE_rooma_roomb(2)
-1 A_DROP_ball3_roomb_right(3)
-1 A_DROP_ball2_roomb_left(3)
-1 A_MOVE_roomb_rooma(4)
-1 A_PICK_ball7_rooma_left(5)
-1 A_PICK_ball6_rooma_right(5)
-1 A_MOVE_rooma_roomb(6)
-1 A_DROP_ball6_roomb_right(7)
-1 A_DROP_ball7_roomb_left(7)
-1 A_MOVE_roomb_rooma(8)
-1 A_PICK_ball1_rooma_right(9)
-1 A_PICK_ball5_rooma_left(9)
-1 A_MOVE_rooma_roomb(10)
-1 A_DROP_ball5_roomb_left(11)
-1 A_MOVE_roomb_rooma(12)
-1 A_PICK_ball4_rooma_left(13)
-1 A_MOVE_rooma_roomb(14)
-1 A_DROP_ball1_roomb_right(15)
-1 A_DROP_ball4_roomb_left(15)
-\end{verbatim}
-\end{scriptsize}
-
-\begin{figure}[h]\label{gripper7:sat-efa}
+\begin{figure}[h]
 \begin{footnotesize}
   \xymatrix@C=-6.1pc@R=0.5pc{
    *+[F]+{\substack{\gripperpick{2}{a}{left}\\\gripperpick{3}{a}{right}}} \ar@{>}[rd] \\
@@ -300,66 +308,70 @@ Solution found at length 15.
   }
  \end{footnotesize}
 \caption{Représentation linéaire du plan en 15 étapes retourné par \touistplan pour le problème Gripper-7 (codage SAT de longueur 15 dans les espaces d'états avec frame-axiomes explicatifs)}
+\label{gripper7:sat-efa}
 \end{figure}
 
+\newpage
 \subsubsection{Codage d'arbre compact QBF dans les espaces d'états avec frame-axiomes explicatifs pour le problème Gripper-7}
 
-\begin{scriptsize}
-\begin{verbatim}
-Select TouIST 3.5.2
-Select [LANGUAGE] EncodingRules: [QBF] Explanatory Frame-axioms
-Select QBF SOLVER: RAReQS
+Nous donnons figure~\ref{gripper7:qbf-efa} le plan solution retourné par \touistplan en utilisant le codage d'arbre compact QBF que nous présenterons dans la sous-section~\ref{chap:codages:qbf:nouveaux} du prochain chapitre. La lecture du plan s'effectue par un parcours de l'arbre compact développé de gauche à droite en suivant les flèches d'une étape à l'autre.\\
 
-Searching solution with QBFPLAN (Explanatory Frame-Axioms)...
+%\begin{scriptsize}
+%\begin{verbatim}
+%Select TouIST 3.5.2
+%Select [LANGUAGE] EncodingRules: [QBF] Explanatory Frame-axioms
+%Select QBF SOLVER: RAReQS
+%
+%Searching solution with QBFPLAN (Explanatory Frame-Axioms)...
+%
+%Maximum tree depth: |Fluents|=32.
+%Searching solution at depth 1...
+%--- TouIST solve (QBF) / branch atom =  ---
+%Searching solution at depth 2...
+%--- TouIST solve (QBF) / branch atom =  ---
+%Searching solution at depth 3...
+%--- TouIST solve (QBF) / branch atom =  ---
+%Plan existence time (PLANSAT): 1.41
+%Solution found at depth 3.
+%and A_MOVE_roomb_rooma(3)
+%--- TouIST solve (QBF) / branch atom = and not b(3) ---
+%and A_MOVE_roomb_rooma(2)
+%--- TouIST solve (QBF) / branch atom = and not b(2) ---
+%and A_MOVE_rooma_roomb(1)
+%--- TouIST solve (QBF) / branch atom = and not b(1) ---
+%and A_PICK_ball4_rooma_left(0)
+%and A_PICK_ball3_rooma_right(0)
+%--- TouIST solve (QBF) / branch atom = and b(1) ---
+%and A_DROP_ball4_roomb_left(0)
+%and A_DROP_ball3_roomb_right(0)
+%--- TouIST solve (QBF) / branch atom = and b(2) ---
+%and A_MOVE_rooma_roomb(1)
+%--- TouIST solve (QBF) / branch atom = and not b(1) ---
+%and A_PICK_ball2_rooma_right(0)
+%and A_PICK_ball1_rooma_left(0)
+%--- TouIST solve (QBF) / branch atom = and b(1) ---
+%and A_DROP_ball2_roomb_right(0)
+%and A_DROP_ball1_roomb_left(0)
+%--- TouIST solve (QBF) / branch atom = and b(3) ---
+%and A_MOVE_roomb_rooma(2)
+%--- TouIST solve (QBF) / branch atom = and not b(2) ---
+%and A_MOVE_rooma_roomb(1)
+%--- TouIST solve (QBF) / branch atom = and not b(1) ---
+%and A_PICK_ball7_rooma_right(0)
+%and A_PICK_ball6_rooma_left(0)
+%--- TouIST solve (QBF) / branch atom = and b(1) ---
+%and A_DROP_ball6_roomb_left(0)
+%and A_DROP_ball7_roomb_right(0)
+%--- TouIST solve (QBF) / branch atom = and b(2) ---
+%and A_MOVE_rooma_roomb(1)
+%--- TouIST solve (QBF) / branch atom = and not b(1) ---
+%and A_PICK_ball5_rooma_left(0)
+%--- TouIST solve (QBF) / branch atom = and b(1) ---
+%and A_DROP_ball5_roomb_left(0)
+%\end{verbatim}
+%\end{scriptsize}
 
-Maximum tree depth: |Fluents|=32.
-Searching solution at depth 1...
---- TouIST solve (QBF) / branch atom =  ---
-Searching solution at depth 2...
---- TouIST solve (QBF) / branch atom =  ---
-Searching solution at depth 3...
---- TouIST solve (QBF) / branch atom =  ---
-Plan existence time (PLANSAT): 1.41
-Solution found at depth 3.
-and A_MOVE_roomb_rooma(3)
---- TouIST solve (QBF) / branch atom = and not b(3) ---
-and A_MOVE_roomb_rooma(2)
---- TouIST solve (QBF) / branch atom = and not b(2) ---
-and A_MOVE_rooma_roomb(1)
---- TouIST solve (QBF) / branch atom = and not b(1) ---
-and A_PICK_ball4_rooma_left(0)
-and A_PICK_ball3_rooma_right(0)
---- TouIST solve (QBF) / branch atom = and b(1) ---
-and A_DROP_ball4_roomb_left(0)
-and A_DROP_ball3_roomb_right(0)
---- TouIST solve (QBF) / branch atom = and b(2) ---
-and A_MOVE_rooma_roomb(1)
---- TouIST solve (QBF) / branch atom = and not b(1) ---
-and A_PICK_ball2_rooma_right(0)
-and A_PICK_ball1_rooma_left(0)
---- TouIST solve (QBF) / branch atom = and b(1) ---
-and A_DROP_ball2_roomb_right(0)
-and A_DROP_ball1_roomb_left(0)
---- TouIST solve (QBF) / branch atom = and b(3) ---
-and A_MOVE_roomb_rooma(2)
---- TouIST solve (QBF) / branch atom = and not b(2) ---
-and A_MOVE_rooma_roomb(1)
---- TouIST solve (QBF) / branch atom = and not b(1) ---
-and A_PICK_ball7_rooma_right(0)
-and A_PICK_ball6_rooma_left(0)
---- TouIST solve (QBF) / branch atom = and b(1) ---
-and A_DROP_ball6_roomb_left(0)
-and A_DROP_ball7_roomb_right(0)
---- TouIST solve (QBF) / branch atom = and b(2) ---
-and A_MOVE_rooma_roomb(1)
---- TouIST solve (QBF) / branch atom = and not b(1) ---
-and A_PICK_ball5_rooma_left(0)
---- TouIST solve (QBF) / branch atom = and b(1) ---
-and A_DROP_ball5_roomb_left(0)
-\end{verbatim}
-\end{scriptsize}
-
-\begin{figure}[h]\label{gripper7:qbf-efa}
+\begin{figure}[h]
 \begin{scriptsize}
    %\hspace{0.8em}
    \xymatrix@C=-3.2pc@R=3pc{
@@ -377,4 +389,5 @@ and A_DROP_ball5_roomb_left(0)
   }
  \end{scriptsize}
 \caption{Représentation de l'arbre compact développé (sous-arbre gauche pour $b_{3}=\bot$ et sous-arbre droit pour $b_{3}=\top$) permettant d'extraire le plan en 15 étapes retourné par \touistplan pour le problème Gripper-7 (codage d'arbre compact QBF (CTE) de profondeur 3 dans les espaces d'états avec frame-axiomes explicatifs).}
+\label{gripper7:qbf-efa}
 \end{figure}

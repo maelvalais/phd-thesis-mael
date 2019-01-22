@@ -46,15 +46,22 @@
 \usepackage{setspace}
 \usepackage{enumitem}
 \usepackage{import}
+\usepackage{fancybox}
 
 \usepackage{fancyhdr}
 \setstretch{1.3}
 \renewcommand{\headrulewidth}{1pt}
 
-\fancyhead[LE,RO]{\thepage}
-\fancyhead[LO]{\leftmark }
-\fancyhead[RE]{\rightmark }
-\fancyfoot[LE,RO]{}
+%Fred
+\fancyheadoffset{0 cm} 
+
+%\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE,LO]{}
+\fancyhead[RO]{\leftmark }
+\fancyhead[LE]{\rightmark }
+%\fancyhead[RE]{}
+%\fancyfoot[LE,RO]{}
+\fancyfoot[LE,RO]{\thepage}
 \fancyfoot[LO,C,RE]{}
 
 \pagestyle{fancy}

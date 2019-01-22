@@ -2,11 +2,36 @@
 % SMT TLP-GP
 %
 
-Plusieurs codages SMT pour la planification temporelle ont déjà été proposés. La plupart d'entre eux sont basés sur une représentation discrète du temps \cite{DBLP:journals/ai/ShinD05,DBLP:conf/aaai/Rintanen15}. Malheureusement, cette représentation ne permet pas de résoudre tous les problèmes de planification temporelle, et c'est pour cette raison que nous ne présentons ici que le codage de référence de TLP-GP \cite{DBLP:conf/ictai/MarisR08} basé sur une représentation continue du temps et l'utilisation d'atomes de QF-RDL (Quantifier Free Rational Difference Logic). Le codage que nous détaillons, et que nous noterons SMT-LINK, est en réalité une réécriture plus générique du codage original qui nous permet d'éviter de faire référence aux différents arcs d'un graphe de planification \cite{BF95,BF97}.
+Plusieurs codages SMT pour la planification temporelle ont déjà été proposés. La plupart d'entre eux sont basés sur une représentation discrète du temps \cite{DBLP:journals/ai/ShinD05,DBLP:conf/aaai/Rintanen15}. Malheureusement, cette représentation ne permet pas de résoudre tous les problèmes de planification temporelle~\cite{DBLP:journals/ci/CooperMR13}, et c'est pour cette raison que nous ne présentons ici que le codage de référence de TLP-GP \cite{DBLP:conf/ictai/MarisR08} basé sur une représentation continue du temps et l'utilisation d'atomes de QF-RDL (Quantifier Free Rational Difference Logic). Le codage que nous détaillons, et que nous noterons SMT-LINK, est en réalité une réécriture plus générique du codage original qui nous permet d'éviter de faire référence aux différents arcs d'un graphe de planification \cite{BF95,BF97}.
+
+Ici, contrairement aux codages de problèmes de planification classique, les actions ne sont plus instantanées et des contraintes sur les instants $\tau(e)$ auxquels se produisent des événements $e\in\events{\A}$ doivent explicitement être ajoutées.
+Considérons donc maintenant un problème de planification temporelle positif $\langle \I, \A, \G \rangle$.
+L'ensemble de variables propositionnelles $\X$ utilisées pour le codage SMT-LINK est donné par $\X = \X_{\A} \cup \X_{\mathit{Link}}$, où :
+\begin{itemize}
+    \item $\displaystyle\X_{\A}=\{\mathit{Init}, \mathit{Goal}\} \cup \bigcup_{i=1}^{\length}\{\a_{i}\mid \a\in\A\}$ est l'ensemble des variables d'actions ;
+    \item $\displaystyle\X_{\mathit{Link}}=\bigcup_{i=1}^{\length}\bigcup_{j=1}^{\length}\{\Link{\b_{i}}{\f}{\a_{j}}\mid (\b,\a)\in \A^{2} \wedge \f\in\add{\b}\cap\cond{\a}\}$ est l'ensemble des variables de liens causaux.
+\end{itemize}
+
+Dans ce codage, nous utilisons une action factice $\mathit{Init}$ qui produit les fluents de l'état initial et une action factice $\mathit{Goal}$ qui nécessite les fluents du but. La proposition $\Link{\b_{i}}{\f}{\a_{j}}$ traduit le fait que l'action $\b_{i}$ produit le fluent
+$\f$, condition de l'action $\a_{j}$.
+
+L'ensemble des variables rationnelles $T$ utilisées pour les atomes de QF-RDL de ce codage est donné par $\displaystyle T=\{\tau_{\mathit{Init}}, \tau_{\mathit{Goal}}\} \cup T_{\mathit{Cond_{s}}} \cup T_{\mathit{Cond_{e}}} \cup T_{\mathit{Add}} \cup T_{\mathit{Del}}$, où :
+
+\begin{itemize}
+\item $\tau_{\mathit{Init}}$ est la variable d'instant de début du plan auquel l'état initial doit être vérifié et $\tau_{\mathit{Goal}}$ est la variable d'instant de fin du plan auquel le but doit être obtenu ;
+\item $\displaystyle T_{\mathit{Cond_{s}}}=\bigcup_{i=1}^{\length}\{\tau(\f\mid\rightarrow\a_{i})\mid \a\in\A\ \wedge \f\in\cond{\a}\}$ est l'ensemble des variables de début d'intervalles de conditions requises par les actions ;
+\item $\displaystyle T_{\mathit{Cond_{e}}}=\bigcup_{i=1}^{\length}\{\tau(\f\rightarrow\mid\a_{i})\mid \a\in\A\ \wedge \f\in\cond{\a}\}$ est l'ensemble des variables de fin d'intervalles de conditions requises par les actions ;
+\item $\displaystyle T_{\mathit{Add}}=\bigcup_{i=1}^{\length}\{\tau(\a_{i}\rightarrow\f)\mid \a\in\A\ \wedge \f\in\add{\a}\}$ est l'ensemble des variables d'instants d'ajouts de fluents par les actions ;
+\item $\displaystyle T_{\mathit{Del}}=\bigcup_{i=1}^{\length}\{\tau(\a_{i}\rightarrow\neg\f)\mid \a\in\A\ \wedge \f\in\del{\a}\}$ est l'ensemble des variables d'instants de retraits de fluents par les actions.
+\end{itemize}
 
 \paragraph*{[SMT-LINK.1 -- Etat initial et But]}
 
 Les nœuds d'actions factices Init (produisant l'état initial) et Goal (nécessitant le but) sont tous deux vrais.
+
+\[
+\mathit{Init} \wedge \mathit{Goal}
+\]
 
 \paragraph*{[SMT-LINK.2 -- Production des préconditions par liens causaux]}
 

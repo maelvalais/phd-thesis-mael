@@ -1,8 +1,18 @@
-\fred{Intro à faire}
-
 \section{Introduction générale au domaine}
 
-\fred{La compilation de problèmes en logique bla bla résolution avec des solveurs bla bla}
+%\fred{La compilation de problèmes en logique bla bla résolution avec des solveurs bla bla}
+
+L'utilisation de la logique pour résoudre des problèmes n'est pas neuve. Dans l'antiquité, Aristote utilisait des syllogismes pour raisonner et déduire des conclusions à partir de prémisses. La syllogistique perdurera jusqu'au Moyen Age. La "Dissertatio de arte combinatoria" publiée en 1666 par Gottfried Leibniz introduit l'idée novatrice de l’art de dériver des vérités de manière calculatoire, basé sur une \emph{characteristica universalis}, un langage mathématique non-ambigu et un \emph{calculus ratiocinator}, un calcul ou une machine manipulant la \emph{characteristica}.
+En 1854, George Boole publie "An Investigation of the Laws of Thought on Which are Founded the Mathematical Theories of Logic and Probabilities". Dans son ouvrage, il propose un traitement algébrique, ainsi qu'une procédure de décision pour la logique propositionnelle.
+En 1879, Gottlob Frege, que l'on peut considérer comme le fondateur de la logique moderne, publie le "Begriffsschrift". Il introduit les connecteurs essentiels de la logique des propositions $\rightarrow$ et $\neg$, les quantificateurs de la logique des prédicats et un calcul formel. Il fait la distinction entre une formule, qui représente une proposition
+(qui peut être vraie ou fausse), et un jugement, qui est une formule dont on constate la vérité (dans un calcul donné).
+Se basant sur ces travaux, les "Principia Mathematica", publiés en 1910-1913 par Alfred N. Whitehead et Bertrand Russell ont pour but de formaliser les mathématiques avec quelques notions élémentaires. Cependant, Kurt Gödel démontre en 1931 ses théorèmes d'incomplétude dans l'article "Sur les propositions formellement indécidables des Principia Mathematica et des systèmes apparentés". Toutefois, il prouve également la complétude de la logique du premier ordre.
+
+En 1936, la thèse de Curch-Turing formalise la notion de calculabilité et permet d'envisager la conception des premiers ordinateurs Turing-complets. L'architecture d'un ordinateur entièrement électronique est élaborée par John von Neumann en juin 1945 dans le cadre du projet EDVAC (Electronic Discrete Variable Automatic Computer).
+Lors de la conférence fondatrice de l'intelligence artificielle au Dartmouth College en 1956,  Allen Newell, Herbert A. Simon et Cliff Shaw présentent le premier prouveur automatique de théorèmes, le "Logic Theorist".
+
+En 1960, Martin Davis et Hilary Putnam développent un algorithme basé sur le principe de résolution qui permet de déterminer la satisfiabilité d'une formule propositionnelle en forme normale conjonctive. En 1962, Martin Davis, Hilary Putnam, George Logemann et Donald Loveland proposent une extension appelée DPLL. C'est une procédure très efficace dont des implémentation modernes sont toujours aujourd'hui, 50 ans après, à la base d'une large majorité des solveurs SAT, QBF ou SMT (SAT Modulo Theories).
+La performance des ces solveurs modernes nous permet aujourd'hui de les utiliser pour résoudre efficacement des problèmes modélisés par des formules logiques.
 
 \section{Le cadre de travail}
 
@@ -11,6 +21,11 @@
 \subsubsection{SAT : satisfaction de formules booléennes}
 
 Le problème de satisfiabilité de formules booléennes (SAT) est connu comme étant le problème de référence pour la classe de complexité NP \cite{DBLP:conf/stoc/Cook71}.
+Etant donné une formule propositionnelle en forme normale conjonctive (FNC), le problème SAT consiste à déterminer s'il existe un modèle de cette formule, c'est à dire une valuation pour chacune des variables de la formule.
+
+Par exemple, si nous prenons un ensemble de variables propositionnelles $\{a,b,c\}$ et la formule $\Phi = (a \vee b) \wedge (\neg a \vee b \vee c) \wedge (\neg a \vee \neg b \vee \neg c)$, nous pouvons remarquer que $\Phi$ est satisfiable. En effet, il suffit que les variables $a$ et $b$ aient la valeur vrai ($\top$) et la variable $c$ ait la valeur faux ($\bot$), ce qui nous donne un modèle de $\Phi$.
+
+Il est possible, comme nous le verrons dans le chapitre~\ref{chap:touist}, d'encoder de nombreux problèmes pour se ramener, pour les résoudre, à un problème de satisfiabilité de formule propositionnelle.
 
 \subsubsection{SMT : SAT Modulo Theories}
 \input{intro-sat-smt-qbf.tex}
@@ -22,11 +37,12 @@ Par exemple, $\forall p \exists q.p \leftrightarrow q$ se lit : pour toute valeu
 
 De fait, à toute formule QBF peut être associée une formule propositionnelle sans variables car par définition : 
 $\forall p.\Phi$ est vraie ssi $\Phi_{[p:=\top]} \wedge \Phi_{[p:=\bot]}$ l'est, et $\exists p.\Phi$ est vraie ssi $\Phi_{[p:=\top]} \vee \Phi_{[p:=\bot]}$. 
-
-La formule QBF peut être exponentiellement plus compacte que la formule propositionnelle correspondante. 
-
-Par exemple à la formule $\forall p \exists q.p \leftrightarrow q$ correspond la formule propositionnelle \\
-$\Big ( (\top \leftrightarrow \top)\vee (\top \leftrightarrow \bot) \Big ) \wedge \Big ( (\bot \leftrightarrow \top)\vee (\bot \leftrightarrow \bot) \Big )$
+La formule QBF peut être exponentiellement plus compacte que la formule propositionnelle correspondante. Par exemple à la formule $\forall p \exists q.p \leftrightarrow q$ correspond la formule propositionnelle %\\
+$(%\Big ( 
+(\top \leftrightarrow \top)\vee (\top \leftrightarrow \bot) )%\Big ) 
+\wedge (%\Big ( 
+(\bot \leftrightarrow \top)\vee (\bot \leftrightarrow \bot) )%\Big )
+$.
 
 \subsection{La planification par compilation automatique}
 \input{intro-planif.tex}
@@ -35,14 +51,18 @@ $\Big ( (\top \leftrightarrow \top)\vee (\top \leftrightarrow \bot) \Big ) \wedg
 
 Dans cette thèse, nous nous sommes intéressés aux codages de problèmes en logique et tout particulièrement aux codages et à la résolution automatique de problèmes de planification en utilisant des solveurs.
 
-\fred{chapitre TouIST \ref{chap:touist}}
-
-Dans le chapitre~\ref{chap:codages}, nous présentons tout d'abord les langages logiques que nous allons utiliser avant d'illustrer leur utilisation au travers d'un exemple de codage du jeu de Nim. Nous présentons ensuite différents codages de problèmes de planification en logique. Nous nous plaçons dans un premier temps dans le cadre classique de la planification. Nous présentons des codages SAT de référence dans les espaces d'états \cite{KS92,KS95} et dans les espaces de plans \cite{MK99} avant d'introduire un nouveau codage dans les espaces de plans basé sur le découpage des liens causaux en modélisant la notion de condition ouverte. Nous présentons ensuite un codage QBF de référence basé sur l'utilisation d'une représentation d'arbre compact et des actions No-ops comme frame-axiomes \cite{DBLP:conf/ecai/CashmoreFG12,DBLP:phd/ethos/Cashmore13}. Nous introduisons alors deux nouveaux codages QBF compacts inspirés par les codages SAT précédemment introduits. Enfin, nous nous plaçons dans le cadre étendu de la planification temporelle et détaillons un codage SMT de référence \cite{MarisRegnier08} avant d'en présenter une adaptation plus compacte basée sur le découpage des liens causaux que nous avons proposé pour la planification classique.
-
-Dans le chapitre~\ref{chap:touist} \fred{$\rightarrow$ Maël}
-Nous comparons ensuite les performances des codages QBF de référence de problèmes de planification présentés dans la section~\ref{chap:codages:qbf:reference} et de nos nouveaux codages introduits dans la section~\ref{chap:codages:qbf:nouveaux}. Après avoir présenté le module \touistplan et les problèmes de planification de référence issus de différentes compétitions internationales de planification (IPC), nous montrons que nos codages sont plus efficace en terme de temps de résolution.
+Dans le chapitre~\ref{chap:touist}, nous présentons notre traducteur automatique \touist qui permet de coder des problèmes en formules logiques et de les résoudre en utilisant un solveur SAT, QBF ou SMT.
+Dans la section~\ref{chap:touist:historique}, nous présentons un historique et une vue d'ensemble de \touist. Ensuite, nous introduisons les différentes fonctionnalités de notre traducteur dans la section~\ref{chap:touist:touist}. Nous introduisons tout d'abord dans la sous-section~\ref{chap:touist:touist:sat-statique} comment modéliser des problèmes combinatoires statiques, comme le Sudoku, avec SAT. Ensuite, dans la sous-section~\ref{chap:touist:touist:sat-dynamique} nous montrons comment prendre en compte des aspects dynamiques avec une modélisation du jeu de Nim avec SAT. Nous montrons alors, dans la sous-section~\ref{chap:touist:touist:qbf}, comment trouver une stratégie gagnante pour le jeu de Nim en utilisant QBF. Ensuite, dans la sous-section~\ref{chap:touist:touist:smt}, nous donnons un exemple de modélisation du jeu de Takuzu en utilisant SMT avec des contraintes linéaires.
+%Nous présentons tout d'abord les langages logiques que nous allons utiliser avant d'illustrer leur utilisation au travers d'un exemple de codage du jeu de Nim.
+Nous présentons enfin, dans la section~\ref{chap:touist:touistplan}, le module \touistplan que nous avons implémenté pour résoudre automatiquement des problèmes de planification en utilisant les codages que nous détaillons dans le chapitre~\ref{chap:codages} avec notre traducteur \touist.
 
 
+Dans le chapitre~\ref{chap:codages}, nous présentons différents codages de problèmes de planification en logique. Dans la section~\ref{chap:codages:satqbf}, nous nous plaçons dans un premier temps dans le cadre classique de la planification. Nous présentons des codages SAT de référence dans les espaces d'états \cite{KS92,KS95} et dans les espaces de plans \cite{MK99} avant d'introduire un nouveau codage dans les espaces de plans basé sur le découpage des liens causaux en modélisant la notion de condition ouverte. Nous présentons ensuite un codage QBF de référence basé sur l'utilisation d'une représentation d'arbre compact (CTE) et des actions No-ops comme frame-axiomes \cite{DBLP:conf/ecai/CashmoreFG12,DBLP:phd/ethos/Cashmore13}. Nous introduisons alors deux nouveaux codages QBF compacts inspirés par les codages SAT précédemment introduits. Dans la section~\ref{chap:codages:smt}, nous nous plaçons dans le cadre étendu de la planification temporelle et détaillons un codage SMT de référence \cite{DBLP:conf/ictai/MarisR08} avant d'en présenter une adaptation plus compacte basée sur le découpage des liens causaux que nous avons proposé pour la planification classique.
+Dans la section~\ref{chap:codages:tests}, après avoir présenté les problèmes de planification de référence issus de différentes compétitions internationales de planification (IPC), nous comparons à l'aide du module \touistplan les performances du codage QBF de référence présenté dans la sous-section~\ref{chap:codages:qbf:reference} et de nos nouveaux codages introduits dans la sous-section~\ref{chap:codages:qbf:nouveaux}.
+Nous montrons ainsi que nos codages sont deux fois plus efficaces en terme de temps de résolution.
+%Puis, nous  Après avoir présenté le module \touistplan et les problèmes de planification de référence issus de différentes compétitions internationales de planification (IPC), nous montrons que nos codages sont plus efficace en terme de temps de résolution.
 
-\fred{A revoir:}
-Nous allons montrer que pour l'approche QBF, au-delà des améliorations sur les solveurs, d'autres travaux doivent être menés pour mettre au point des codages plus performants. Comme nous l'avons indiqué plus haut, cela a été réalisé pour SAT avec des améliorations significatives. Nous présentons ici deux nouveaux codages d'arbres compacts CTE (Compact Tree Encoding) de problèmes de planification en QBF: CTE-EFA basé sur des frame-axiomes explicatifs dans un espace d'états, et CTE-OPEN basé sur des liens de causalité dans un espace de plans. \fred{dans le chapitre EXPERIMENTATIONS:} Nous les comparons au codage de l'état de l'art CTE-NOOP basé sur des actions No-op et proposé dans \cite{DBLP:conf/ecai/CashmoreFG12}. En termes de temps d'exécution par rapport aux problèmes de référence, CTE-EFA et CTE-OPEN sont toujours plus efficaces que CTE-NOOP.
+
+
+%\fred{A revoir:}
+%Nous allons montrer que pour l'approche QBF, au-delà des améliorations sur les solveurs, d'autres travaux doivent être menés pour mettre au point des codages plus performants. Comme nous l'avons indiqué plus haut, cela a été réalisé pour SAT avec des améliorations significatives. Nous présentons ici deux nouveaux codages d'arbres compacts CTE (Compact Tree Encoding) de problèmes de planification en QBF: CTE-EFA basé sur des frame-axiomes explicatifs dans un espace d'états, et CTE-OPEN basé sur des liens de causalité dans un espace de plans. \fred{dans le chapitre EXPERIMENTATIONS:} Nous les comparons au codage de l'état de l'art CTE-NOOP basé sur des actions No-op et proposé dans \cite{DBLP:conf/ecai/CashmoreFG12}. En termes de temps d'exécution par rapport aux problèmes de référence, CTE-EFA et CTE-OPEN sont toujours plus efficaces que CTE-NOOP.

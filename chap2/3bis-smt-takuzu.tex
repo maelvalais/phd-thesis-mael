@@ -1,0 +1,157 @@
+\subsection{Arithmétique linéaire avec SMT : le jeu de Takuzu}\label{chap:touist:touist:smt}
+
+Le Takuzu (aussi appelé Binairo) est un jeu qui consiste à remplir une grille par déduction, de façon similaire au sudoku.
+%\fred{On présente le codage SMT, mais si on voulait l'écrire en se limitant à SAT, on utiliserait "exact" mais ceci mènerait à une explosion combinatoire \mael{à vérifier}. Ici, cela nous permet d'avoir un codage (calculer la complexité en espace).}
+Il est possible de le modéliser en utilisant un codage SAT mais, afin d'obtenir un codage plus compact, nous pouvons utiliser un codage SMT avec des atomes de QF-LIA (arithmétique linéaire sur les nombres entiers). Notons que \touist permet également d'utiliser SMT avec les logiques QF-IDL, QF-RDL (différences logiques sur les nombres entiers/rationnels) et QF-RDL (artihmétique linéaire sur les nombres rationnels). %Il est possible de se référer au manuel utilisateur (Chapitre~\ref{chap:reference-manual}, page~\pageref{chap:reference-manual}) pour davantage de détail sur l'utilisation de ces logiques.
+
+
+Chaque grille de Takuzu, qui peut éventuellement avoir un nombre différent de lignes ($N_L$) et de colonnes ($N_C$), ne contient que des 0 et des 1.
+Si l'on considère que $x_{i,j}\in\{0,1\}$ représente le nombre contenu dans la cellule de coordonnées $(i,j)$, cette contrainte peut se coder de la façon suivante :
+\[
+\BigforallTwo{i=1}{N_L} \BigforallTwo{j=1}{N_C} \left( (x_{i,j}=0) \lor (x_{i,j}=1) \right)
+\]
+
+\noindent La grille doit être complétée en respectant les trois règles suivantes :
+
+\begin{itemize}
+\item il doit y avoir autant de 0 et de 1 sur chaque ligne et sur chaque colonne :
+\[
+\BigforallTwo{i=1}{N_L} \left( \sum\limits_{j=1}^{N_C} x_{i,j} = \frac{N_C}{2} \right)
+\land \BigforallTwo{j=1}{N_C} \left( \sum\limits_{i=1}^{N_L} x_{i,j} = \frac{N_L}{2} \right)
+\]
+\item il ne doit pas y avoir plus de deux chiffres identiques côte à côte :
+\[
+\BigforallTwo{i=1}{N_L} \BigforallTwo{j=1}{N_C-2} \left( \left( \BigexistsTwo{k=0}{2} (x_{i,j+k}\neq 0)\right) \land \left( \BigexistsTwo{k=0}{2} (x_{i,j+k}\neq 1)\right) \right)
+\]
+\[
+\BigforallTwo{j=1}{N_C} \BigforallTwo{i=1}{N_L-2} \left( \left( \BigexistsTwo{k=0}{2} (x_{i+k,j}\neq 0)\right) \land \left( \BigexistsTwo{k=0}{2} (x_{i+k,j}\neq 1)\right) \right)
+\]
+\item il ne doit pas y avoir deux lignes ou deux colonnes identiques :
+\[
+\left( \BigforallTwo{i_1=1}{N_L} \BigforallTwo{\substack{i_2=1\\i_1\neq i_2}}{N_L} \BigexistsTwo{j=1}{N_C} (x_{i_1,j}\neq x_{i_2,j}) \right)
+\land \left( \BigforallTwo{j_1=1}{N_C} \BigforallTwo{\substack{j_2=1\\j_1\neq j_2}}{N_C} \BigexistsTwo{i=1}{N_L} (x_{i,j_1}\neq x_{i,j_2}) \right)
+\]
+\end{itemize}
+
+Nous présentons maintenant un exemple de jeu de Takuzu sur une grille $4\times4$ :
+
+
+%\[
+%\BigforallTwo{i=1}{4} \BigforallTwo{j=1}{4} \Bigforall{v\in x_{i,j}} x_{i,j}=v
+%\]
+
+
+
+\begin{center}
+\texttt{
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	~ & 1 & ~ & 0 \\ \hline
+	~ & ~ & 0 & ~ \\ \hline
+	~ & 0 & ~ & ~ \\ \hline
+	1 & 1 & ~ & 0 \\ \hline
+\end{tabular}
+}\\
+\end{center}
+
+Le codage \touist pour la résolution de cette grille est détaillé figure~\ref{fig:takuzu4x4-touist} et le modèle retourné, ainsi que la grille correspondante sont donnés figure~\ref{fig:modele-touist-cmd-line}.
+
+%\[
+%\bigwedge\limits_{\substack{\mathbf{i},\mathbf{j},\mathbf{value}\in [1..4],[1..4],\mathbf{x}_{\mathbf{i},\mathbf{j}}}}\left(x_{\mathbf{i},\mathbf{j}} = \mathbf{value}\right)\\
+%\bigwedge\limits_{\substack{\mathbf{i},\mathbf{j}\in \mathbf{N},\mathbf{N}}}\left(\left(x_{\mathbf{i},\mathbf{j}} = 0\right) \vee \left(x_{\mathbf{i},\mathbf{j}} = 1\right)\right)\\
+%\bigwedge\limits_{\substack{\mathbf{i}\in \mathbf{N}}}\left(\left(x_{\mathbf{i},1} + x_{\mathbf{i},2} + x_{\mathbf{i},3} + x_{\mathbf{i},4} = 2\right) \wedge \left(x_{1,\mathbf{i}} + x_{2,\mathbf{i}} + x_{3,\mathbf{i}} + x_{4,\mathbf{i}} = 2\right)\right)\\
+%\bigwedge\limits_{\substack{\mathbf{i},\mathbf{j}\in \mathbf{N\_2},\mathbf{N}}}\left(\left(\neg \left(\left(x_{\mathbf{i},\mathbf{j}} = 0\right) \wedge \left(x_{\mathbf{i} + 1,\mathbf{j}} = 0\right) \wedge \left(x_{\mathbf{i} + 2,\mathbf{j}} = 0\right)\right)\right) \wedge \left(\neg \left(\left(x_{\mathbf{i},\mathbf{j}} = 1\right) \wedge \left(x_{\mathbf{i} + 1,\mathbf{j}} = 1\right) \wedge \left(x_{\mathbf{i} + 2,\mathbf{j}} = 1\right)\right)\right) \wedge \left(\neg \left(\left(x_{\mathbf{j},\mathbf{i}} = 0\right) \wedge \left(x_{\mathbf{j},\mathbf{i} + 1} = 0\right) \wedge \left(x_{\mathbf{j},\mathbf{i} + 2} = 0\right)\right)\right) \wedge \left(\neg \left(\left(x_{\mathbf{j},\mathbf{i}} = 1\right) \wedge \left(x_{\mathbf{j},\mathbf{i} + 1} = 1\right) \wedge \left(x_{\mathbf{j},\mathbf{i} + 2} = 1\right)\right)\right)\right)\\
+%\bigwedge\limits_{\substack{\mathbf{i},\mathbf{j}\in \mathbf{N},\mathbf{N}\\ \mathbf{i} \neq \mathbf{j}}}\left(\bigvee\limits_{\substack{\mathbf{k}\in \mathbf{N}}}\left(x_{\mathbf{i},\mathbf{k}} \neq x_{\mathbf{j},\mathbf{k}}\right) \wedge \bigvee\limits_{\substack{\mathbf{k}\in \mathbf{N}}}\left(x_{\mathbf{k},\mathbf{i}} \neq x_{\mathbf{k},\mathbf{j}}\right)\right)
+%\]
+
+
+\begin{figure}
+\begin{lstlisting}
+;; SMT2 logic used: QF_LIA
+$n=4
+$N=[1..$n]
+$N_2=[1..$n-2]
+
+;; Define the initial grid here
+$x(1,1)=[ ]	$x(1,2)=[1]	$x(1,3)=[ ]	$x(1,4)=[0]
+$x(2,1)=[ ]	$x(2,2)=[ ]	$x(2,3)=[0]	$x(2,4)=[ ]
+$x(3,1)=[ ]	$x(3,2)=[0]	$x(3,3)=[ ]	$x(3,4)=[ ]
+$x(4,1)=[1]	$x(4,2)=[1]	$x(4,3)=[ ]	$x(4,4)=[0]
+
+;; Initialize values with defined sets
+bigand $i,$j,$value in [1..4],[1..4],$x($i,$j):
+  x($i,$j)==$value
+end
+
+;; Each cell contains either 0 or 1
+bigand $i,$j in $N,$N:
+  (x($i,$j)==0) or (x($i,$j)==1)
+end
+
+;; There is an equal number of 1s and 0s in each row and column
+bigand $i in $N:
+  (x($i,1)+x($i,2)+x($i,3)+x($i,4)==2)
+  and (x(1,$i)+x(2,$i)+x(3,$i)+x(4,$i)==2)
+end
+
+;; There is no more than two of either number adjacent to each other
+bigand $i,$j in $N_2,$N:
+      (not ((x($i,$j)==0) and (x($i+1,$j)==0) and (x($i+2,$j)==0)))
+  and (not ((x($i,$j)==1) and (x($i+1,$j)==1) and (x($i+2,$j)==1)))
+  and (not ((x($j,$i)==0) and (x($j,$i+1)==0) and (x($j,$i+2)==0)))
+  and (not ((x($j,$i)==1) and (x($j,$i+1)==1) and (x($j,$i+2)==1)))
+end
+
+;; There can be no identical rows or columns
+bigand $i,$j in $N,$N when $i!=$j:
+    bigor $k in $N:
+      (x($i,$k)!=x($j,$k))
+    end
+  and
+    bigor $k in $N:
+      (x($k,$i)!=x($k,$j))
+    end
+end
+\end{lstlisting}
+\caption{Codage d'un Takuzu $4\times 4$ en \touist.}% À droite, la grille à résoudre.}
+    \label{fig:takuzu4x4-touist}
+\end{figure}
+
+
+\begin{figure}
+\begin{minipage}[c]{.60\linewidth}
+\begin{center}
+\texttt{
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	0 & 1 & 1 & 0 \\ \hline
+	1 & 0 & 0 & 1 \\ \hline
+	0 & 0 & 1 & 1 \\ \hline
+	1 & 1 & 0 & 0 \\ \hline
+\end{tabular}}\\
+\end{center}
+\end{minipage} \hfill
+\begin{minipage}[c]{.38\linewidth}
+\begin{lstlisting}
+0 x(1,1)
+0 x(1,4)
+0 x(2,2)
+0 x(2,3)
+0 x(3,1)
+0 x(3,2)
+0 x(4,3)
+0 x(4,4)
+1 x(1,2)
+1 x(1,3)
+1 x(2,1)
+1 x(2,4)
+1 x(3,3)
+1 x(3,4)
+1 x(4,1)
+1 x(4,2)
+\end{lstlisting}
+\end{minipage}
+\caption{Grille remplie correspondant au modèle retourné par \touist. À droite, le modèle tel que retourné par \texttt{touist} en ligne de commande.}
+    \label{fig:modele-touist-cmd-line}
+\end{figure}
+

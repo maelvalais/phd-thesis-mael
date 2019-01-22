@@ -1,6 +1,6 @@
 
-\section{Un exemple de codage : le jeu de Nim}
-\subsection{Description du jeu de Nim}
+%\subsection{Un exemple de codage dynamique : le jeu de Nim}
+%\subsection{Description du jeu de Nim}
 
 Le principe du \game est le suivant : on dispose au départ d'un nombre $\nbAllumettes$ non nul d'allumettes
 % IL EST IMPORTANT DE SPECIFIER QUE LE NB D'ALLUMETTES EST NON NUL CAR NOTRE DEF DE 0_PERD NE DEFINIT CETTE NOTION QUE POUR t>0 !!!
@@ -20,13 +20,15 @@ Dans la version présentée ici du \game, on limite également le nombre des act
 Ainsi :
 \begin{align}
 %\begin{split} TODO
-\bigwedge_{\substack{t \in \turnsSet%\\
-n \in \matchesSet%\\
+\bigwedge_{\substack{t \in \turnsSet\\
+n \in \matchesSet\\
 n \geq 2}}
     \bigg ( & \Big ( \rest{t}{n} \land \takes{t} \limp%\\
-    & \hspace{1.5cm}\rest{t+1}{n-2} \ \Big ) \; \land \\
+    %& %\hspace{1.5cm}
+    \rest{t+1}{n-2} \ \Big ) \; \land \\
     & \Big ( \rest{t}{n} \land \neg \takes{t} \limp %\\
-    & \hspace{1.5cm}\rest{t+1}{n-1} \Big ) \bigg )
+    %& %\hspace{1.5cm}
+    \rest{t+1}{n-1} \Big ) \bigg )
 %\end{split}
 \end{align}
 capture le fait que si au tour $t$ il reste au moins $2$ allumettes et qu'un joueur en prend $2$ alors au tour suivant il en reste $2$ de moins, et que si il n'en prend qu'une alors au tour suivant il en reste $1$ de moins.
@@ -70,7 +72,7 @@ Finalement, à chaque tour $t$, ce n'est pas au joueur $0$ de jouer ssi c'est à
     \neg \turn{t} \lequiv \turn{t+1}
 \Big )
 \label{eq:turnChange}
-\end{gather}
+\end{gather}~\\[-1em]
 
 \noindent
 Le code \touist complet est donc :
@@ -118,7 +120,10 @@ bigand $t,$n1 in $T,$A:
   reste($t,$n1) => bigand $n2 in $A when $n1!=$n2: not reste($t,$n2) end
 end \\
 and
+\end{lstlisting}
 
+\newpage
+\begin{lstlisting}
 ;; Si le joueur j ne peut pas prendre au temps t et qu'au coup precedent, joueur j-1
 ;; a pu prendre une allumette, alors le joueur j a perdu.
 ;; Le morceau
@@ -139,7 +144,7 @@ bigand $t in $T:
 end
 \end{lstlisting}
 
-\subsection{Formalisation d'une stratégie gagnante à l'aide de QBF}
+\subsection{Formalisation d'une stratégie gagnante à l'aide de QBF}\label{chap:touist:touist:qbf}
 
 Dans cette section, nous allons présenter à l'aide de notre exemple du \game l'extension de \touist à QBF.
 
@@ -147,10 +152,10 @@ Le langage de QBF permet d'exprimer naturellement et de manière concise l'exist
 
 \touist a été étendu pour être compatible avec le solveur QBF \emph{Quantor 3.2} \cite{Biere:2004:RE:2103144.2103150}. La sélection de ce prouveur dans \touist autorise \emph{de facto} l'utilisation des quantificateurs $\forall$ et $\exists$ (respectivement définis par \verb+exists+ et \verb+forall+ dans \touist).
 
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \input{figures/graphiqueAllumettes.tex}
-\caption{Solutions pour le \game (4 all./2 joueurs), en rouge : stratégie gagnante du joueur 0}
+\caption{Solutions pour le \game (4 allumettes/2 joueurs), en rouge : stratégie gagnante du joueur 0}
 \label{fig:solutions}
 \vspace{-0.5cm}\end{figure}
 
@@ -160,7 +165,8 @@ Le langage de QBF permet d'exprimer naturellement et de manière concise l'exist
 }
 
 
-\figurename~\ref{fig:solutions} présente l'ensemble exhaustif des solutions de notre exemple. La racine de l'arbre représente le nombre initial d'allumettes, et chaque flèche l'action de retirer $1$ (\tikz{\draw[prend1] (0,0) -- (1,0)}) ou $2$ (\tikz{\draw[prend2] (0,0) -- (1,0)}) allumette(s). Au bout de la flèche, le nombre d'allumettes après exécution de l'action concernée. D'après cette figure, on voit que si le joueur $0$ commence (ce qui est imposé par (\ref{eq:initialState})) et qu'il retire une seule allumette (il en reste donc 3) on voit qu'il a une stratégie gagnante : 
+%\figurename
+La figure~\ref{fig:solutions} présente l'ensemble exhaustif des solutions de notre exemple. La racine de l'arbre représente le nombre initial d'allumettes, et chaque flèche l'action de retirer $1$ (\tikz{\draw[prend1] (0,0) -- (1,0)}) ou $2$ (\tikz{\draw[prend2] (0,0) -- (1,0)}) allumette(s). Au bout de la flèche, le nombre d'allumettes après exécution de l'action concernée. D'après cette figure, on voit que si le joueur $0$ commence (ce qui est imposé par (\ref{eq:initialState})) et qu'il retire une seule allumette (il en reste donc 3) on voit qu'il a une stratégie gagnante : 
 \begin{itemize}
 \item si le joueur $1$ retire ensuite $2$ allumettes il en restera $1$ seule que le joueur $0$ peut retirer pour gagner (puisque le joueur $1$ ne pourra ensuite plus retirer d'allumette) ;
 
@@ -203,7 +209,7 @@ où $c_0$ est soit $\takes{0}$ soit $\neg \takes{0}$ en fonction du coup du joue
 %\end{gather*}
 %qui se lit : pour que le joueur $0$ gagne il doit prendre $1$ allumette, le joueur $1$ en prend $2$, puis le joueur $0$ en prend $1$.
 
-Au final, voici le code \touist qu'il faut simplement rajouter au début du code donné en \ref{lst:allumettes-simple}.
+Au final, voici le code \touist qu'il faut simplement rajouter au début du code donné dans la sous-section~\ref{chap:touist:touist:sat-dynamique}.% en \ref{lst:allumettes-simple}.
 
 \begin{lstlisting}[language=touist]
 ;; reste(t,n) = il reste n allumettes au temps t
